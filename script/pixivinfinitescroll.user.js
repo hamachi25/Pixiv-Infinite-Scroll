@@ -3,7 +3,7 @@
 // @namespace      https://github.com/chimaha/Pixiv-Infinite-Scroll
 // @match          https://www.pixiv.net/*
 // @grant          none
-// @version        1.0
+// @version        1.0.1
 // @author         chimaha
 // @description    Pixivの「フォロー中」で無限スクロールできるようにします。
 // @license        MIT license
@@ -20,13 +20,24 @@ function mainProcess() {
 
         let resultFollow;
         let followClass;
-        if(following){
+        let followStyle;
+        if (following) {
             resultFollow = "フォロー中";
             followClass = "cnpwVx";
+            followStyle = "background-color: var(--charcoal-surface3); color: var(--charcoal-text2); font-weight: bold; padding-right: 24px; padding-left: 24px; border-radius: 999999px; height: 40px;"
         } else {
             resultFollow = "フォローする";
             followClass = "fOWAlD";
         }
+        function escapleHtml(escapeText) {
+            return escapeText
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        const escapedText = escapleHtml(userComment);
         const div = `
     <div class="sc-1y4z60g-5 cPVjJh">
     <div class="sc-11m5zdr-0 bbJBkV">
@@ -40,11 +51,11 @@ function mainProcess() {
                 <div class="sc-19z9m4s-4 fYGGbS">
                     <div class="sc-19z9m4s-5 iqZEnZ"><a class="sc-d98f2c-0 sc-19z9m4s-2 QHGGh" data-gtm-value="${userId}"
                             href="/users/${userId}">${userName}</a></div>
-                    <div class="sc-19z9m4s-3 isEYuz">${userComment}</div>
+                    <div class="sc-19z9m4s-3 isEYuz">${escapedText}</div>
                     <div class="sc-19z9m4s-1 qjElz"><button
                             class="sc-bdnxRM jvCTkj sc-dlnjwi ${followClass} sc-1obql3d-0 Rlftz gtm-undefined sc-1obql3d-0 Rlftz gtm-undefined"
                             data-gtm-user-id="${userId}" data-click-action="click" data-click-label="follow"
-                            height="40">${resultFollow}</button>
+                            height="40" style="${followStyle}">${resultFollow}</button>
                         <div aria-current="false" class="sc-125tkm8-0 sc-125tkm8-3 ka-dhPl eZXKAK">
                             <div class="sc-1ij5ui8-0 QihHO sc-125tkm8-2 gUcOiA" role="button"><pixiv-icon
                                     name="24/Dot"></pixiv-icon></div>
@@ -264,11 +275,11 @@ function mainProcess() {
 
     // https://www.pixiv.net/ajax/user/*/following?offset=24&limit=24&rest=show
     // https://www.pixiv.net/users/*/following?p=2
-    if(document.querySelectorAll(".sc-1y4z60g-5.cPVjJh").length < 24) { return; }
+    if (document.querySelectorAll(".sc-1y4z60g-5.cPVjJh").length < 24) { return; }
     const regex = /https:\/\/www\.pixiv\.net\/users\/[0-9]+\/following(?:\?p=([0-9]+))?/;
     const matches = window.location.href.match(regex);
     let offset;
-    if(matches[1]){
+    if (matches[1]) {
         offset = matches[1] * 24 + pageNumber++ * 24;
     } else {
         offset = 24 + pageNumber++ * 24;
