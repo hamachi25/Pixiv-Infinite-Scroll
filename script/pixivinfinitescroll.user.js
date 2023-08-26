@@ -1,12 +1,15 @@
 // ==UserScript==
 // @name                 Pixiv Infinite Scroll
+// @name:ja              Pixiv Infinite Scroll
+// @name:zh-CN           Pixiv Infinite Scroll
+// @name:zh-TW           Pixiv Infinite Scroll
 // @namespace            https://github.com/chimaha/Pixiv-Infinite-Scroll
 // @match                https://www.pixiv.net/*
 // @grant                none
 // @version              1.1
 // @author               chimaha
 // @description          Allow infinite scrolling with "Following" and "Bookmarks" on Pixiv.
-// @description:ja       Pixivの「フォロー」と「ブックマーク」で無限スクロールできるようにします。
+// @description:ja       Pixivの「フォロー」と「ブックマーク」で無限スクロールができるようにします。
 // @description:zh-CN    Pixiv"关注"和"收藏"可实现无限滚动。
 // @description:zh-TW    Pixiv的"關注"和"收藏"功能可實現無限捲動。
 // @license              MIT license
