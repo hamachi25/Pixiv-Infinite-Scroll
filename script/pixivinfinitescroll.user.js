@@ -8,10 +8,10 @@
 // @grant                none
 // @version              1.2
 // @author               chimaha
-// @description          Allow infinite scrolling with "Following" and "Bookmarks" on Pixiv.
-// @description:ja       Pixivの「フォロー」と「ブックマーク」で無限スクロールができるようにします。
-// @description:zh-CN    Pixiv"关注"和"收藏"可实现无限滚动。
-// @description:zh-TW    Pixiv的"關注"和"收藏"功能可實現無限捲動。
+// @description          Add infinite scroll feature to Pixiv.
+// @description:ja       Pixivに無限スクロール機能を追加します。
+// @description:zh-CN    为 Pixiv 添加无限滚动功能。
+// @description:zh-TW    因為Pixiv有無限移動功能。
 // @license              MIT license
 // @icon                 https://www.pixiv.net/favicon.ico
 // @downloadURL          https://github.com/chimaha/Pixiv-Infinite-Scroll/raw/main/script/pixivinfinitescroll.user.js
