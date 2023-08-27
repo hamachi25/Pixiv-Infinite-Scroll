@@ -21,26 +21,34 @@
 
 /*! Pixiv Infinite Scroll | MIT license | https://github.com/chimaha/Pixiv-Infinite-Scroll/blob/main/LICENSE */
 
-
+// フォロー--------------------------------------------------------------------------------
 function followingProcess() {
-    function createDiv(userId, userName, profileImage, userComment, following, illustId, illustTitle, illustUrl, bookmarkData, illustAlt) {
+    function createDiv(userId, userName, profileImage, userComment, following, illustId, illustTitle, illustUrl, bookmarkData, illustAlt, r18, pageCount) {
+
+        // langの値によって言語を変更する
+        const followLanguage = [];
+        const currentLanguage = document.querySelector("html").getAttribute("lang");
+        switch (currentLanguage) {
+            case "ja":
+                followLanguage.push("フォロー中", "フォローする");
+                break;
+            case "ko":
+                followLanguage.push("팔로우 중", "팔로우하기");
+                break;
+            case "zh-CN":
+                followLanguage.push("已关注", "加关注");
+                break;
+            case "zh-TW":
+                followLanguage.push("關注中", "加關注");
+                break;
+            default:
+                followLanguage.push("Following", "Follow");
+        }
+
+        // フォロー中、フォローするを切り替え
         let resultFollow;
         let followClass;
         let followStyle = "";
-        const followLanguage = [];
-        const currentLanguage = document.querySelector("html").getAttribute("lang");
-        if(currentLanguage == "ja") {
-            followLanguage.push("フォロー中", "フォローする");
-        } else if (currentLanguage == "ko") {
-            followLanguage.push("팔로우 중", "팔로우하기");
-        } else if (currentLanguage == "zh-CN") {
-            followLanguage.push("已关注", "加关注");
-        } else if (currentLanguage == "zh-TW") {
-            followLanguage.push("關注中", "加關注");
-        } else {
-            followLanguage.push("Following", "Follow");
-        }
-
         if (following) {
             resultFollow = followLanguage[0];
             followClass = "cnpwVx";
@@ -49,16 +57,18 @@ function followingProcess() {
             resultFollow = followLanguage[1];
             followClass = "fOWAlD";
         }
+        // ブックマークを切り替え
         let bookmarkClass = [];
         let bookmarkStyle = [];
         for (const resultBookmark of bookmarkData) {
-            if(resultBookmark) {
+            if (resultBookmark) {
                 bookmarkClass.push("bXjFLc");
                 bookmarkStyle.push('style="color: rgb(255, 64, 96); fill: currentcolor;"');
             } else {
                 bookmarkClass.push("dxYRhf");
             }
         }
+        // コメントに特定の記号が入っていた場合にエスケープ
         function escapleHtml(escapeText) {
             return escapeText
                 .replace(/&/g, "&amp;")
@@ -69,8 +79,47 @@ function followingProcess() {
         }
         const escapedText = escapleHtml(userComment);
 
+        // R18マーク
+        let r18div = [];
+        for (const nsfw of r18) {
+            if (nsfw == "R-18") {
+                r18div.push('<div class="sc-rp5asc-15 cIllir"><div class="sc-1ovn4zb-0 bfWaOT">R-18</div></div>');
+            } else {
+                r18div.push("");
+            }
+        }
+
+        // うごくイラスト再生マーク、イラスト数表示
+        let ugokuira = [];
+        let pageCountHtml = [];
+        pageCount.forEach((page, i) => {
+            if (illustAlt[i].slice(-4) == "うごイラ") {
+                ugokuira.push('<svg viewBox="0 0 24 24" style="width: 48px; height: 48px;" class="sc-192k5ld-0 etaMpt sc-rp5asc-8 kSDUsv"><circle cx="12" cy="12" r="10" class="sc-192k5ld-1 lajlxF"></circle><path d="M9,8.74841664 L9,15.2515834 C9,15.8038681 9.44771525,16.2515834 10,16.2515834 C10.1782928,16.2515834 10.3533435,16.2039156 10.5070201,16.1135176 L16.0347118,12.8619342 C16.510745,12.5819147 16.6696454,11.969013 16.3896259,11.4929799 C16.3034179,11.3464262 16.1812655,11.2242738 16.0347118,11.1380658 L10.5070201,7.88648243 C10.030987,7.60646294 9.41808527,7.76536339 9.13806578,8.24139652 C9.04766776,8.39507316 9,8.57012386 9,8.74841664 Z" class="sc-192k5ld-2 jwyUTl"></path></svg>');
+            } else {
+                ugokuira.push("");
+                if (page > 2) {
+                    pageCountHtml.push(`
+                    <div class="sc-rp5asc-5 hHNegy">
+                        <div class="sc-1mr081w-0 kZlOCw">
+                            <span class="sc-1mr081w-1 gODLwk">
+                                <span class="sc-14heosd-0 gbNjFx">
+                                    <svg viewBox="0 0 9 10" size="9" class="sc-14heosd-1 fArvVr">
+                                        <path d="M8,3 C8.55228475,3 9,3.44771525 9,4 L9,9 C9,9.55228475 8.55228475,10 8,10 L3,10 C2.44771525,10 2,9.55228475 2,9 L6,9 C7.1045695,9 8,8.1045695 8,7 L8,3 Z M1,1 L6,1 C6.55228475,1 7,1.44771525 7,2 L7,7 C7,7.55228475 6.55228475,8 6,8 L1,8 C0.44771525,8 0,7.55228475 0,7 L0,2 C0,1.44771525 0.44771525,1 1,1 Z" transform=""></path>
+                                    </svg>
+                                </span>
+                            </span>
+                            <span>${page}</span>
+                        </div>
+                    </div>`);
+                } else {
+                    pageCountHtml.push("");
+                }
+            }
+        });
+
+        // "div+="で一括追加にすると、なぜかundefinedが追加され続けるので一つずつ追加
         const div = `
-        <div class="sc-1y4z60g-5 cPVjJh">
+        <div class="sc-1y4z60g-5 cPVjJh nextPage">
             <div class="sc-11m5zdr-0 bbJBkV">
                 <div class="sc-11m5zdr-1 clrYBQ">
                     <div class="sc-19z9m4s-0 fbLOpg"><a class="sc-d98f2c-0" data-gtm-value="${userId}" href="/users/${userId}">
@@ -110,9 +159,11 @@ function followingProcess() {
                                                                     <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY sc-eWnToP khjDVZ" data-gtm-value="${illustId[0]}" data-gtm-user-id="${userId}" href="/artworks/${illustId[0]}">
                                                                         <div radius="4" class="sc-rp5asc-9 cYUezH">
                                                                             <img src="${illustUrl[0]}" style="object-fit: cover; object-position: center center;" alt="${illustAlt[0]}" class="sc-rp5asc-10 erYaF">
+                                                                            ${ugokuira[0]}
                                                                         </div>
                                                                         <div class="sc-rp5asc-12 Sxcoo">
-                                                                            <div class="sc-rp5asc-13 liXhix"></div>
+                                                                            <div class="sc-rp5asc-13 liXhix">${r18div[0]}</div>
+                                                                            ${pageCountHtml[0]}
                                                                         </div>
                                                                     </a>
                                                                     <div class="sc-iasfms-4 iHfghO">
@@ -141,9 +192,11 @@ function followingProcess() {
                                                                     <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY sc-eWnToP khjDVZ" data-gtm-value="${illustId[1]}" data-gtm-user-id="${userId}" href="/artworks/${illustId[1]}">
                                                                         <div radius="4" class="sc-rp5asc-9 cYUezH">
                                                                             <img src="${illustUrl[1]}" style="object-fit: cover; object-position: center center;" alt="${illustAlt[1]}" class="sc-rp5asc-10 erYaF">
+                                                                            ${ugokuira[1]}
                                                                         </div>
                                                                         <div class="sc-rp5asc-12 Sxcoo">
-                                                                            <div class="sc-rp5asc-13 liXhix"></div>
+                                                                            <div class="sc-rp5asc-13 liXhix">${r18div[1]}</div>
+                                                                            ${pageCountHtml[1]}
                                                                         </div>
                                                                     </a>
                                                                     <div class="sc-iasfms-4 iHfghO">
@@ -172,9 +225,11 @@ function followingProcess() {
                                                                     <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY sc-eWnToP khjDVZ" data-gtm-value="${illustId[2]}" data-gtm-user-id="${userId}" href="/artworks/${illustId[2]}">
                                                                         <div radius="4" class="sc-rp5asc-9 cYUezH">
                                                                             <img src="${illustUrl[2]}" style="object-fit: cover; object-position: center center;" alt="${illustAlt[2]}" class="sc-rp5asc-10 erYaF">
+                                                                            ${ugokuira[2]}
                                                                         </div>
                                                                         <div class="sc-rp5asc-12 Sxcoo">
-                                                                            <div class="sc-rp5asc-13 liXhix"></div>
+                                                                            <div class="sc-rp5asc-13 liXhix">${r18div[2]}</div>
+                                                                            ${pageCountHtml[2]}
                                                                         </div>
                                                                     </a>
                                                                     <div class="sc-iasfms-4 iHfghO">
@@ -203,9 +258,11 @@ function followingProcess() {
                                                                     <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY sc-eWnToP khjDVZ" data-gtm-value="${illustId[3]}" data-gtm-user-id="${userId}" href="/artworks/${illustId[3]}">
                                                                         <div radius="4" class="sc-rp5asc-9 cYUezH">
                                                                             <img src="${illustUrl[3]}" style="object-fit: cover; object-position: center center;" alt="${illustAlt[3]}" class="sc-rp5asc-10 erYaF">
+                                                                            ${ugokuira[3]}
                                                                         </div>
                                                                         <div class="sc-rp5asc-12 Sxcoo">
-                                                                            <div class="sc-rp5asc-13 liXhix"></div>
+                                                                            <div class="sc-rp5asc-13 liXhix">${r18div[3]}</div>
+                                                                            ${pageCountHtml[3]}
                                                                         </div>
                                                                     </a>
                                                                     <div class="sc-iasfms-4 iHfghO">
@@ -258,15 +315,19 @@ function followingProcess() {
 
     // https://www.pixiv.net/ajax/user/*/following?offset=24&limit=24&rest=show
     // https://www.pixiv.net/users/*/following?p=2
+
     if (document.querySelectorAll(".sc-1y4z60g-5.cPVjJh").length < 24) { return; }
-    const matches = window.location.href.match(regex);
+
+    // URL作成
+    const matches = window.location.href.match(followingregex);
     let offset;
     if (matches[2]) {
-        offset = matches[1] * 24 + pageNumber++ * 24;
+        offset = matches[2] * 24 + pageNumber++ * 24;
     } else {
         offset = 24 + pageNumber++ * 24;
     }
     const url = `https://www.pixiv.net/ajax/user/${matches[1]}/following?offset=${offset}&limit=24&rest=show`;
+
     const pageAsync = async () => {
         const response = await fetch(url);
         const json = await response.json();
@@ -282,6 +343,8 @@ function followingProcess() {
             const illustUrl = [];
             const bookmarkData = [];
             const illustAlt = [];
+            const r18 = [];
+            const pageCount = [];
             for (let j = 0; j < Object.keys(json.body.users[i].illusts).length; j++) {
                 const illusts = json.body.users[i].illusts[j];
                 illustId.push(illusts.id);
@@ -289,52 +352,78 @@ function followingProcess() {
                 illustUrl.push(illusts.url);
                 bookmarkData.push(illusts.bookmarkData);
                 illustAlt.push(illusts.alt);
+                r18.push(illusts.tags[0]);
+                pageCount.push(illusts.pageCount);
             }
-            createDiv(userId, userName, profileImage, userComment, following, illustId, illustTitle, illustUrl, bookmarkData, illustAlt);
+            createDiv(userId, userName, profileImage, userComment, following, illustId, illustTitle, illustUrl, bookmarkData, illustAlt, r18, pageCount);
         }
     };
     pageAsync();
 }
+// -----------------------------------------------------------------------------------------
 
-function bookmarkProcess() {
-    function createDiv(worksId, worksTitle, worksUrl, userId, userName, pageCount, bookmarkData, worksAlt, profileImageUrl) {
 
-        let pageCountHtml = "";
-        if (pageCount > 2) {
-            pageCountHtml = `
-            <div class="sc-rp5asc-5 hHNegy">
-                <div class="sc-1mr081w-0 kZlOCw">
-                    <span class="sc-1mr081w-1 gODLwk">
-                        <span class="sc-14heosd-0 gbNjFx">
-                            <svg viewBox="0 0 9 10" size="9" class="sc-14heosd-1 fArvVr">
-                                <path d="M8,3 C8.55228475,3 9,3.44771525 9,4 L9,9 C9,9.55228475 8.55228475,10 8,10 L3,10 C2.44771525,10 2,9.55228475 2,9 L6,9 C7.1045695,9 8,8.1045695 8,7 L8,3 Z M1,1 L6,1 C6.55228475,1 7,1.44771525 7,2 L7,7 C7,7.55228475 6.55228475,8 6,8 L1,8 C0.44771525,8 0,7.55228475 0,7 L0,2 C0,1.44771525 0.44771525,1 1,1 Z" transform=""></path>
-                            </svg>
-                        </span>
-                    </span>
-                    <span>${pageCount}</span>
-                </div>
-            </div>`;
-        }
+
+// ブックマーク、フォローユーザーの作品、タグ---------------------------------------------------
+function anyoneProcess(changeMode) {
+    function createDiv(worksId, worksTitle, worksUrl, userId, userName, pageCount, bookmarkData, worksAlt, profileImageUrl, modeClass, modeOtherClass, r18) {
+
+        // ブックマークを切り替え
         let bookmarkClass = "";
         let bookmarkStyle = "";
-        if(bookmarkData) {
+        if (bookmarkData) {
             bookmarkClass = "bXjFLc";
-            bookmarkStyle = 'style="color: rgb(255, 64, 96); fill: currentcolor;"'
+            bookmarkStyle = 'style="color: rgb(255, 64, 96); fill: currentcolor;"';
         } else {
             bookmarkClass = "dxYRhf";
         }
 
-        const div = `
-        <li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq CgxkO" style="display: block">
+        // R18マーク
+        let r18div = "";
+        if (r18 == "R-18") {
+            r18div = `
+            <div class="sc-rp5asc-15 cIllir">
+                <div class="sc-1ovn4zb-0 bfWaOT">R-18</div>
+            </div>`;
+        }
+
+        // うごくイラスト再生マーク、イラスト数表示
+        let ugokuira = "";
+        let pageCountHtml = "";
+        if (worksAlt.slice(-4) == "うごイラ") {
+            ugokuira = '<svg viewBox="0 0 24 24" style="width: 48px; height: 48px;" class="sc-192k5ld-0 etaMpt sc-rp5asc-8 kSDUsv"><circle cx="12" cy="12" r="10" class="sc-192k5ld-1 lajlxF"></circle><path d="M9,8.74841664 L9,15.2515834 C9,15.8038681 9.44771525,16.2515834 10,16.2515834 C10.1782928,16.2515834 10.3533435,16.2039156 10.5070201,16.1135176 L16.0347118,12.8619342 C16.510745,12.5819147 16.6696454,11.969013 16.3896259,11.4929799 C16.3034179,11.3464262 16.1812655,11.2242738 16.0347118,11.1380658 L10.5070201,7.88648243 C10.030987,7.60646294 9.41808527,7.76536339 9.13806578,8.24139652 C9.04766776,8.39507316 9,8.57012386 9,8.74841664 Z" class="sc-192k5ld-2 jwyUTl"></path></svg>';
+        } else {
+            if (pageCount > 2) {
+                pageCountHtml = `
+                <div class="sc-rp5asc-5 hHNegy">
+                    <div class="sc-1mr081w-0 kZlOCw">
+                        <span class="sc-1mr081w-1 gODLwk">
+                            <span class="sc-14heosd-0 gbNjFx">
+                                <svg viewBox="0 0 9 10" size="9" class="sc-14heosd-1 fArvVr">
+                                    <path d="M8,3 C8.55228475,3 9,3.44771525 9,4 L9,9 C9,9.55228475 8.55228475,10 8,10 L3,10 C2.44771525,10 2,9.55228475 2,9 L6,9 C7.1045695,9 8,8.1045695 8,7 L8,3 Z M1,1 L6,1 C6.55228475,1 7,1.44771525 7,2 L7,7 C7,7.55228475 6.55228475,8 6,8 L1,8 C0.44771525,8 0,7.55228475 0,7 L0,2 C0,1.44771525 0.44771525,1 1,1 Z" transform=""></path>
+                                </svg>
+                            </span>
+                        </span>
+                        <span>${pageCount}</span>
+                    </div>
+                </div>`;
+            }
+        }
+
+        div += `
+        ${modeClass}
             <div class="sc-iasfms-5 liyNwX">
                 <div type="illust" size="184" class="sc-iasfms-3 iIcDMF">
                     <div width="184" height="184" class="sc-rp5asc-0 fxGVAF">
-                        <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY sc-eWnToP khjDVZ" data-gtm-value="${worksId}" data-gtm-user-id="${userId}" href="/artworks/${worksId}">
+                        <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY ${modeOtherClass} sc-eWnToP khjDVZ" data-gtm-value="${worksId}" data-gtm-user-id="${userId}" href="/artworks/${worksId}">
                             <div radius="4" class="sc-rp5asc-9 cYUezH">
                                 <img src="${worksUrl}" style="object-fit: cover; object-position: center center;" alt="${worksAlt}" class="sc-rp5asc-10 erYaF">
+                                ${ugokuira}
                             </div>
                             <div class="sc-rp5asc-12 Sxcoo">
-                                <div class="sc-rp5asc-13 liXhix"></div>
+                                <div class="sc-rp5asc-13 liXhix">
+                                ${r18div}
+                                </div>
                                 ${pageCountHtml}
                             </div>
                         </a>
@@ -367,56 +456,221 @@ function bookmarkProcess() {
                 </div>
             </div>
         </li>`;
-
-        document.querySelector(".sc-9y4be5-1.jtUPOE").insertAdjacentHTML("beforeend", div);
     }
 
-    // https://www.pixiv.net/ajax/user/*/illusts/bookmarks?tag=&offset=0&limit=48&rest=show
-    // https://www.pixiv.net/users/*/bookmarks/artworks?p=2
-    if (document.querySelectorAll(".sc-9y4be5-2.kFAPOq").length < 48) { return; }
-    const matches = window.location.href.match(bookmarkRegex);
-    let offset;
-    if (matches[2]) {
-        offset = matches[1] * 48 + pageNumber++ * 48;
-    } else {
-        offset = 48 + pageNumber++ * 48;
-    }
-    const url = `https://www.pixiv.net/ajax/user/${matches[1]}/illusts/bookmarks?tag=&offset=${offset}&limit=48&rest=show`;
-    const pageAsync = async () => {
-        const response = await fetch(url);
-        const json = await response.json();
-        for (let i = 0; i < Object.keys(json.body.works).length; i++) {
-            const works = json.body.works[i];
-            const worksId = works.id;
-            const worksTitle = works.title;
-            const worksUrl = works.url;
-            const userId = works.userId;
-            const userName = works.userName;
-            const pageCount = works.pageCount;
-            const bookmarkData = works.bookmarkData;
-            const worksAlt = works.alt;
-            const profileImageUrl = works.profileImageUrl;
-            createDiv(worksId, worksTitle, worksUrl, userId, userName, pageCount, bookmarkData, worksAlt, profileImageUrl);
+    let div = "";
+    if (changeMode == "bookmark") {
+        // ブックマーク
+        // https://www.pixiv.net/ajax/user/*/illusts/bookmarks?tag=&offset=0&limit=48&rest=show
+        // https://www.pixiv.net/users/*/bookmarks/artworks?p=2
+
+        if (document.querySelectorAll(".sc-9y4be5-2.kFAPOq").length < 48) { return; }
+
+        // URL作成
+        const matches = window.location.href.match(bookmarkRegex);
+        let offset;
+        if (matches[2]) {
+            offset = matches[1] * 48 + pageNumber++ * 48;
+        } else {
+            offset = 48 + pageNumber++ * 48;
         }
-    };
-    pageAsync();
+        const url = `https://www.pixiv.net/ajax/user/${matches[1]}/illusts/bookmarks?tag=&offset=${offset}&limit=48&rest=show`;
+
+        const pageAsync = async () => {
+            const response = await fetch(url);
+            const json = await response.json();
+            for (let i = 0; i < Object.keys(json.body.works).length; i++) {
+                const works = json.body.works[i];
+                const worksId = works.id;
+                const worksTitle = works.title;
+                const worksUrl = works.url;
+                const userId = works.userId;
+                const userName = works.userName;
+                const pageCount = works.pageCount;
+                const bookmarkData = works.bookmarkData;
+                const worksAlt = works.alt;
+                const profileImageUrl = works.profileImageUrl;
+                const modeClass = '<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq CgxkO nextPage" style="display: block">';
+                const modeOtherClass = "";
+                const r18 = works.tags[0];
+                createDiv(worksId, worksTitle, worksUrl, userId, userName, pageCount, bookmarkData, worksAlt, profileImageUrl, modeClass, modeOtherClass, r18);
+            }
+            document.querySelector(".sc-9y4be5-1.jtUPOE").insertAdjacentHTML("beforeend", div);
+        };
+        pageAsync();
+    } else if (changeMode == "follow") {
+        // フォローユーザーの作品
+        // https://www.pixiv.net/ajax/follow_latest/illust?p=2&mode=all
+        // https://www.pixiv.net/bookmark_new_illust.php?p=2
+
+        if (document.querySelectorAll(".sc-9y4be5-2.kFAPOq").length < 60) { return; }
+
+        // URL作成
+        const matches = window.location.href.match(followUserRegex);
+        let offset;
+        if (matches[2]) {
+            offset = matches[2] + ++pageNumber;
+        } else {
+            offset = 1 + ++pageNumber;
+        }
+        let mode = "";
+        if (matches[1]) {
+            mode = "r18";
+        } else {
+            mode = "all";
+        }
+        const url = `https://www.pixiv.net/ajax/follow_latest/illust?p=${offset}&mode=${mode}`;
+
+        const pageAsync = async () => {
+            const response = await fetch(url);
+            const json = await response.json();
+            for (let i = 0; i < Object.keys(json.body.thumbnails.illust).length; i++) {
+                const illust = json.body.thumbnails.illust[i];
+                const illustId = illust.id;
+                const illustTitle = illust.title;
+                const illustUrl = illust.url;
+                const userId = illust.userId;
+                const userName = illust.userName;
+                const pageCount = illust.pageCount;
+                const bookmarkData = illust.bookmarkData;
+                const illustAlt = illust.alt;
+                const profileImageUrl = illust.profileImageUrl;
+                const modeClass = '<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq wHEbW nextPage" style="display: block">';
+                const modeOtherClass = "gtm-followlatestpage-thumbnail-link";
+                const r18 = illust.tags[0];
+                createDiv(illustId, illustTitle, illustUrl, userId, userName, pageCount, bookmarkData, illustAlt, profileImageUrl, modeClass, modeOtherClass, r18);
+            }
+            document.querySelector(".sc-9y4be5-1.jtUPOE").insertAdjacentHTML("beforeend", div);
+        };
+        pageAsync();
+    } else if (changeMode == "tag") {
+        // タグ
+        // https://www.pixiv.net/ajax/search/artworks/*?word=*&order=date_d&mode=all&p=1&s_mode=s_tag_full&type=all
+        // https://www.pixiv.net/tags/*/artworks?p=2
+
+        if (document.querySelectorAll(".sc-l7cibp-2.gpVAva").length < 60) { return; }
+
+        // URL作成
+        const matches = window.location.href.match(tagRegex);
+        let offset;
+        if (matches[7]) {
+            offset = matches[7] + ++pageNumber;
+        } else {
+            offset = 1 + ++pageNumber;
+        }
+
+        let type = "";
+        let illustType;
+        if (matches[2] == "manga") {
+            type = "type=manga";
+            illustType = "manga";
+        } else if (matches[2] == "artworks") {
+            type = "type=all";
+            illustType = "illustManga";
+        } else if (matches[9] == "illust") {
+            type = "type=illust";
+            illustType = "illust";
+        } else if (matches[9] == "ugoira") {
+            type = "type=ugoira";
+            illustType = "illust";
+        } else if (matches[2] == "illustrations") {
+            type = "type=illust_and_ugoira";
+            illustType = "illust";
+        }
+
+        let scd = "";
+        if (matches[5]) {
+            scd = `&${matches[5]}`;
+        }
+        let ecd = "";
+        if (matches[6]) {
+            ecd = `&${matches[6]}`;
+        }
+        let othertag = "";
+        if (matches[10]) {
+            othertag = `&${matches[10]}`;
+        }
+
+        let mode = "";
+        if (matches[4] == "mode=safe" || matches[4] == "mode=r18") {
+            mode = matches[4];
+        } else {
+            mode = "mode=all";
+        }
+
+        let order = "";
+        if (matches[3] == "order=date") {
+            order = matches[3];
+        } else {
+            order = "order=date_d";
+        }
+
+        let tagMode = "";
+        if (matches[8] == "s_mode=s_tag" || matches[8] == "s_mode=s_tc") {
+            tagMode = matches[8];
+        } else {
+            tagMode = "s_mode=s_tag_full";
+        }
+        const url = `https://www.pixiv.net/ajax/search/${matches[2]}/${matches[1]}?word=${matches[1]}&${order}&${mode}&p=${offset}&${tagMode}&${type}${scd}${ecd}${othertag}`;
+
+        const pageAsync = async () => {
+            const response = await fetch(url);
+            const json = await response.json();
+            for (let i = 0; i < Object.keys(json.body[illustType].data).length; i++) {
+                // jsonファイルに、なぜか必ず1つだけ欠けている部分があるのでスキップする
+                if (!json.body[illustType].data[i].id) { continue; } 
+                const illust = json.body[illustType].data[i];
+                const illustId = illust.id;
+                const illustTitle = illust.title;
+                const illustUrl = illust.url;
+                const userId = illust.userId;
+                const userName = illust.userName;
+                const pageCount = illust.pageCount;
+                const bookmarkData = illust.bookmarkData;
+                const illustAlt = illust.alt;
+                const profileImageUrl = illust.profileImageUrl;
+                const modeClass = '<li class="sc-l7cibp-2 gpVAva nextPage" style="display: block">';
+                const modeOtherClass = "";
+                const r18 = illust.tags[0];
+                createDiv(illustId, illustTitle, illustUrl, userId, userName, pageCount, bookmarkData, illustAlt, profileImageUrl, modeClass, modeOtherClass, r18);
+            }
+            document.querySelector(".sc-l7cibp-1.krFoBL").insertAdjacentHTML("beforeend", div);
+        };
+        pageAsync();
+    }
 }
+// -----------------------------------------------------------------------------------------
+
 
 let confirmProcess = false;
 let currentLocation;
 let pageNumber = 0;
-const regex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/([0-9]+)\/following(?:\?p=([0-9]+))?/;
-const bookmarkRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/([0-9]+)\/bookmarks\/artworks(?:\?p=([0-9]+))?/;
+const followingregex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/following(?:\?p=(\d+))?/;
+const bookmarkRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/bookmarks\/artworks(?:\?p=(\d+))?/;
+const followUserRegex = /https:\/\/www\.pixiv\.net\/bookmark_new_illust(_r18)?\.php(?:\?p=(\d+))?/;
+const tagRegex = /https:\/\/www\.pixiv\.net\/tags\/(.+)\/(artworks|illustrations|manga)(?:\?(order=date))?(?:(?:&|\?)(mode=(?:r18|safe)))?(?:(?:&|\?)(scd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)(ecd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)p=(\d+))?(?:(?:&|\?)(s_mode=(?:s_tag|s_tc)))?(?:(?:&|\?)type=([^&]+))?(?:(?:&|\?)(.+))?/;
 
 const observer = new MutationObserver(() => {
+    // URLが変更された際の処理
     if (window.location.href != currentLocation) {
         confirmProcess = false;
         pageNumber = 0;
+        // タグページで条件を変更した際に、追加した要素を削除する
+        if (tagRegex.test(window.location.href)) {
+            const addPictures = document.querySelectorAll(".nextPage");
+            for (const addPicture of addPictures) {
+                addPicture.remove();
+            }
+        }
     }
-    if (regex.test(window.location.href) && !confirmProcess) {
-        const targetElement = document.querySelector(".sc-1y4z60g-4.cqwgCG");
+
+    if (followingregex.test(window.location.href)) {
+        // フォロー
         currentLocation = window.location.href;
-        if (targetElement) {
+        const targetElement = document.querySelector(".sc-1y4z60g-4.cqwgCG");
+
+        if (targetElement && !confirmProcess) {
+            confirmProcess = true;
             const scrollObserver = new IntersectionObserver(entries => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
@@ -427,24 +681,49 @@ const observer = new MutationObserver(() => {
                 })
             });
             scrollObserver.observe(document.querySelector(".sc-1y4z60g-5.cPVjJh:last-child").previousElementSibling);
-            confirmProcess = true;
         }
-    }
-    if (bookmarkRegex.test(window.location.href) && !confirmProcess) {
-        const targetElement = document.querySelector(".sc-9y4be5-1.jtUPOE");
+    } else if (bookmarkRegex.test(window.location.href) || followUserRegex.test(window.location.href) || tagRegex.test(window.location.href)) {
+        // ブックマーク、フォローユーザーの作品、タグ
         currentLocation = window.location.href;
-        if (targetElement) {
+
+        let changeMode;
+        if (bookmarkRegex.test(window.location.href)) {
+            changeMode = "bookmark";
+        } else if (followUserRegex.test(window.location.href)) {
+            changeMode = "follow";
+        } else {
+            changeMode = "tag";
+        }
+
+        let targetElement;
+        if (bookmarkRegex.test(window.location.href) || followUserRegex.test(window.location.href)) {
+            targetElement = document.querySelector(".sc-9y4be5-1.jtUPOE");
+        } else {
+            targetElement = document.querySelector(".sc-l7cibp-1.krFoBL img");
+        }
+
+        if (targetElement && !confirmProcess) {
+            confirmProcess = true;
+
+            const options = { rootMargin: "0px 0px 300px 0px" };
             const scrollObserver = new IntersectionObserver(entries => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        bookmarkProcess();
+                        anyoneProcess(changeMode);
                         confirmProcess = false;
                         scrollObserver.unobserve(entry.target);
                     }
                 })
-            });
-            scrollObserver.observe(document.querySelector(".sc-9y4be5-2.kFAPOq:last-child"));
-            confirmProcess = true;
+            }, options);
+
+            if (bookmarkRegex.test(window.location.href) || followUserRegex.test(window.location.href)) {
+                scrollObserver.observe(document.querySelector(".sc-9y4be5-2.kFAPOq:last-child"));
+            } else {
+                // タグページで条件を切り替えた際に、うまく動作しないのでsetTimeoutを使用。おそらく要素を取得するタイミングの問題
+                setTimeout(() => {
+                    scrollObserver.observe(document.querySelector(".sc-l7cibp-2.gpVAva:last-child"));
+                }, 400);
+            }
         }
     }
 });
