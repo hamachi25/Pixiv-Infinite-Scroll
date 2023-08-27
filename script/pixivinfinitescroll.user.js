@@ -6,7 +6,7 @@
 // @namespace            https://github.com/chimaha/Pixiv-Infinite-Scroll
 // @match                https://www.pixiv.net/*
 // @grant                none
-// @version              1.1
+// @version              1.2
 // @author               chimaha
 // @description          Allow infinite scrolling with "Following" and "Bookmarks" on Pixiv.
 // @description:ja       Pixivの「フォロー」と「ブックマーク」で無限スクロールができるようにします。
