@@ -6,7 +6,7 @@
 // @namespace            https://github.com/chimaha/Pixiv-Infinite-Scroll
 // @match                https://www.pixiv.net/*
 // @grant                none
-// @version              1.2
+// @version              1.2.1
 // @author               chimaha
 // @description          Add infinite scroll feature to Pixiv.
 // @description:ja       Pixivに無限スクロール機能を追加します。
@@ -322,10 +322,11 @@ function followingProcess() {
     const matches = window.location.href.match(followingregex);
     let offset;
     if (matches[2]) {
-        offset = matches[2] * 24 + pageNumber++ * 24;
+        offset = (matches[2] * 24) + (pageNumber * 24);
     } else {
-        offset = 24 + pageNumber++ * 24;
+        offset = 24 + (pageNumber * 24);
     }
+    pageNumber++;
     const url = `https://www.pixiv.net/ajax/user/${matches[1]}/following?offset=${offset}&limit=24&rest=show`;
 
     const pageAsync = async () => {
@@ -470,10 +471,11 @@ function anyoneProcess(changeMode) {
         const matches = window.location.href.match(bookmarkRegex);
         let offset;
         if (matches[2]) {
-            offset = matches[1] * 48 + pageNumber++ * 48;
+            offset = (matches[1] * 48) + (pageNumber * 48);
         } else {
-            offset = 48 + pageNumber++ * 48;
+            offset = 48 + (pageNumber * 48);
         }
+        pageNumber++
         const url = `https://www.pixiv.net/ajax/user/${matches[1]}/illusts/bookmarks?tag=&offset=${offset}&limit=48&rest=show`;
 
         const pageAsync = async () => {
@@ -508,10 +510,11 @@ function anyoneProcess(changeMode) {
         // URL作成
         const matches = window.location.href.match(followUserRegex);
         let offset;
+        ++pageNumber;
         if (matches[2]) {
-            offset = matches[2] + ++pageNumber;
+            offset = matches[2] + pageNumber;
         } else {
-            offset = 1 + ++pageNumber;
+            offset = 1 + pageNumber;
         }
         let mode = "";
         if (matches[1]) {
@@ -553,10 +556,11 @@ function anyoneProcess(changeMode) {
         // URL作成
         const matches = window.location.href.match(tagRegex);
         let offset;
+        ++pageNumber;
         if (matches[7]) {
-            offset = matches[7] + ++pageNumber;
+            offset = matches[7] + pageNumber;
         } else {
-            offset = 1 + ++pageNumber;
+            offset = 1 + pageNumber;
         }
 
         let type = "";
