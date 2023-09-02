@@ -6,7 +6,7 @@
 // @namespace            https://github.com/chimaha/Pixiv-Infinite-Scroll
 // @match                https://www.pixiv.net/*
 // @grant                none
-// @version              1.3
+// @version              1.3.1
 // @author               chimaha
 // @description          Add infinite scroll feature to Pixiv.
 // @description:ja       Pixivに無限スクロール機能を追加します。
@@ -239,7 +239,7 @@ function following_process() {
     const matches = window.location.href.match(followingRegex);
     let offset;
     if (matches[2]) {
-        offset = (matches[2] * 24) + (scrollPageCount * 24);
+        offset = (Number(matches[2]) * 24) + (scrollPageCount * 24);
     } else {
         offset = 24 + (scrollPageCount * 24);
     }
@@ -287,7 +287,7 @@ function following_process() {
 
 
 // ブックマーク・フォローユーザーの作品・タグ検索の無限スクロール--------------------------------
-function bookmarkAndTag_process(checkType) {
+function bookmarkAndTag_process(checkType, matches) {
     function createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason) {
 
         // langの値によって言語を変更する
@@ -355,7 +355,7 @@ function bookmarkAndTag_process(checkType) {
 
         let illustContainer = "";
         let userNameContainer = "";
-        let addBookmarkClass ="";
+        let addBookmarkClass = "";
         let illustTitleElement;
         if (illustTitle == "-----") {
             if (illustMaskReason == "r18" || illustMaskReason == "r18g") {
@@ -477,10 +477,9 @@ function bookmarkAndTag_process(checkType) {
         if (document.querySelectorAll(".sc-9y4be5-2.kFAPOq").length < 48) { return; }
 
         // URL作成
-        const matches = window.location.href.match(bookmarkRegex);
         let offset;
         if (matches[2]) {
-            offset = (matches[2] * 48) + (scrollPageCount * 48);
+            offset = (Number(matches[2]) * 48) + (scrollPageCount * 48);
         } else {
             offset = 48 + (scrollPageCount * 48);
         }
@@ -521,11 +520,10 @@ function bookmarkAndTag_process(checkType) {
         if (document.querySelectorAll(".sc-9y4be5-2.kFAPOq").length < 60) { return; }
 
         // URL作成
-        const matches = window.location.href.match(followUserWorkRegex);
         let offset;
         scrollPageCount++;
         if (matches[2]) {
-            offset = matches[2] + scrollPageCount;
+            offset = Number(matches[2]) + scrollPageCount;
         } else {
             offset = 1 + scrollPageCount;
         }
@@ -571,11 +569,10 @@ function bookmarkAndTag_process(checkType) {
         if (document.querySelectorAll(".sc-l7cibp-2.gpVAva").length < 60) { return; }
 
         // URL作成
-        const matches = window.location.href.match(tagRegex);
         let offset;
-        ++scrollPageCount;
+        scrollPageCount++;
         if (matches[7]) {
-            offset = matches[7] + scrollPageCount;
+            offset = Number(matches[7]) + scrollPageCount;
         } else {
             offset = 1 + scrollPageCount;
         }
@@ -650,7 +647,7 @@ function bookmarkAndTag_process(checkType) {
                 const illustBookmarkData = illust.bookmarkData;
                 const illustAlt = illust.alt;
                 const userProfileImage = illust.profileImageUrl;
-                const typeElement = '<li class="sc-l7cibp-2 gpVAva addElement page${scrollPageCount + 1}" style="display: block">';
+                const typeElement = `<li class="sc-l7cibp-2 gpVAva addElement page${scrollPageCount + 1}" style="display: block">`;
                 const typeClass = "";
                 const illustR18 = illust.tags[0];
                 const illustMaskReason = illust.maskReason;
@@ -928,12 +925,16 @@ const observer = new MutationObserver(mutationsList => {
         currentUrl = window.location.href;
 
         let checkType;
+        let matches;
         if (bookmarkRegex.test(window.location.href)) {
             checkType = "bookmark";
+            matches = window.location.href.match(bookmarkRegex);
         } else if (followUserWorkRegex.test(window.location.href)) {
             checkType = "follow";
+            matches = window.location.href.match(followUserWorkRegex);
         } else {
             checkType = "tag";
+            matches = window.location.href.match(tagRegex);
         }
 
         let intersectionTarget;
@@ -945,12 +946,11 @@ const observer = new MutationObserver(mutationsList => {
 
         if (intersectionTarget && !isProcessed) {
             isProcessed = true;
-
             const options = { rootMargin: "0px 0px 300px 0px" };
             const scrollObserver = new IntersectionObserver(entries => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        bookmarkAndTag_process(checkType);
+                        bookmarkAndTag_process(checkType, matches);
                         isProcessed = false;
                         scrollObserver.unobserve(entry.target);
                     }
