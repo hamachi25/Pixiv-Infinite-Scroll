@@ -6,7 +6,7 @@
 // @namespace            https://github.com/chimaha/Pixiv-Infinite-Scroll
 // @match                https://www.pixiv.net/*
 // @grant                none
-// @version              1.3.1
+// @version              1.3.2
 // @author               chimaha
 // @description          Add infinite scroll feature to Pixiv.
 // @description:ja       Pixivに無限スクロール機能を追加します。
@@ -138,7 +138,7 @@ function following_process() {
                                         ${pageCountElement[i]}
                                     </div>
                                 </a>
-                                <div class="sc-iasfms-4 iHfghO">
+                                <div class="sc-iasfms-4 iHfghO" style="position: absolute; bottom: 0px; right: 0px;">
                                     <div class="">
                                         <button type="button" class="sc-kgq5hw-0 fgVkZi">
                                             <svg viewBox="0 0 32 32" width="32" height="32" class="sc-j89e3c-1 ${bookmarkClass[i]}" ${bookmarkStyle[i]}>
@@ -373,7 +373,7 @@ function bookmarkAndTag_process(checkType, matches) {
                         </div>
                     </div>
                 </span>
-                <div class="sc-iasfms-4 iHfghO">
+                <div class="sc-iasfms-4 iHfghO" style="position: absolute; bottom: 0px; right: 0px;">
                     <div class=""><button type="button" class="sc-kgq5hw-0 fgVkZi" disabled="">
                         <svg viewBox="0 0 32 32" width="32" height="32" class="sc-j89e3c-1 dxYRhf">
                                 <path d="M21,5.5 C24.8659932,5.5 28,8.63400675 28,12.5 C28,18.2694439 24.2975093,23.1517313 17.2206059,27.1100183 C16.4622493,27.5342993 15.5379984,27.5343235 14.779626,27.110148 C7.70250208,23.1517462 4,18.2694529 4,12.5 C4,8.63400691 7.13400681,5.5 11,5.5 C12.829814,5.5 14.6210123,6.4144028 16,7.8282366 C17.3789877,6.4144028 19.170186,5.5 21,5.5 Z"></path>
@@ -398,7 +398,7 @@ function bookmarkAndTag_process(checkType, matches) {
                         </div>
                     </div>
                 </span>
-                <div class="sc-iasfms-4 iHfghO">
+                <div class="sc-iasfms-4 iHfghO" style="position: absolute; bottom: 0px; right: 0px;">
                     <div class="">
                         <button type="button" class="sc-kgq5hw-0 fgVkZi" disabled="">
                             <svg viewBox="0 0 32 32" width="32" height="32" class="sc-j89e3c-1 dxYRhf">
@@ -415,8 +415,8 @@ function bookmarkAndTag_process(checkType, matches) {
             // ノーマル
             illustContainer = `
             <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY ${typeClass} sc-eWnToP khjDVZ" data-gtm-value="${illustId}" data-gtm-user-id="${userId}" href="/artworks/${illustId}">
-                <div radius="4" class="sc-rp5asc-9 cYUezH">
-                    <img src="${illustUrl}" style="object-fit: cover; object-position: center center;" alt="${illustAlt}" class="sc-rp5asc-10 erYaF">
+                <div radius="4" class="sc-rp5asc-9 cYUezH" style="position: relative; display: flex; width: 100%; height: 100%;">
+                    <img src="${illustUrl}" style="object-fit: cover; object-position: center center;" alt="${illustAlt}" class="sc-rp5asc-10 erYaF" style="width: 100%; height: 100%;">
                     ${ugoiraElement}
                 </div>
                 <div class="sc-rp5asc-12 Sxcoo">
@@ -426,7 +426,7 @@ function bookmarkAndTag_process(checkType, matches) {
                     ${pageCountElement}
                 </div>
             </a>
-            <div class="sc-iasfms-4 iHfghO">
+            <div class="sc-iasfms-4 iHfghO" style="position: absolute; bottom: 0px; right: 0px;">
                 <div class="">
                     <button type="button" class="sc-kgq5hw-0 fgVkZi">
                         <svg viewBox="0 0 32 32" width="32" height="32" class="sc-j89e3c-1 ${bookmarkClass}" ${bookmarkStyle}>
@@ -454,9 +454,9 @@ function bookmarkAndTag_process(checkType, matches) {
 
         appendElements += `
         ${typeElement}
-            <div class="sc-iasfms-5 liyNwX">
+            <div class="sc-iasfms-5 liyNwX" style="width: 184px;">
                 <div type="illust" size="184" class="sc-iasfms-3 iIcDMF">
-                    <div width="184" height="184" class="sc-rp5asc-0 fxGVAF${addBookmarkClass}">
+                    <div width="184" height="184" class="sc-rp5asc-0 fxGVAF${addBookmarkClass}" style="position: relative; z-index: 0; width: 184px; height: 184px;">
                         ${illustContainer}
                     </div>
                 </div>
@@ -478,13 +478,17 @@ function bookmarkAndTag_process(checkType, matches) {
 
         // URL作成
         let offset;
-        if (matches[2]) {
-            offset = (Number(matches[2]) * 48) + (scrollPageCount * 48);
+        if (matches[3]) {
+            offset = (Number(matches[3]) * 48) + (scrollPageCount * 48);
         } else {
             offset = 48 + (scrollPageCount * 48);
         }
+        let tag = "";
+        if (matches[2]) {
+            tag = matches[2]
+        }
         scrollPageCount++;
-        const url = `https://www.pixiv.net/ajax/user/${matches[1]}/illusts/bookmarks?tag=&offset=${offset}&limit=48&rest=show`;
+        const url = `https://www.pixiv.net/ajax/user/${matches[1]}/illusts/bookmarks?tag=${tag}&offset=${offset}&limit=48&rest=show`;
 
         const fetchData = async () => {
             const response = await fetch(url);
@@ -884,8 +888,8 @@ let isProcessed = false;
 let currentUrl;
 let scrollPageCount = 0;
 const followingRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/following(?:\?p=(\d+))?/;
-const bookmarkRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/bookmarks\/artworks(?:\?p=(\d+))?/;
-const followUserWorkRegex = /https:\/\/www\.pixiv\.net\/bookmark_new_illust(_r18)?\.php(?:\?p=(\d+))?/;
+const bookmarkRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/bookmarks\/artworks(?:\/([^?]+))?(?:\?p=(\d+))?/;
+const followUserWorkRegex = /https:\/\/www\.pixiv\.net\/bookmark_new_illust(_r18)?\.php(?:\?p=(\d+))?(?:(?:&|\?)(tag=.*))?/;
 const tagRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/tags\/(.+)\/(artworks|illustrations|manga)(?:\?(order=date))?(?:(?:&|\?)(mode=(?:r18|safe)))?(?:(?:&|\?)(scd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)(ecd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)p=(\d+))?(?:(?:&|\?)(s_mode=(?:s_tag|s_tc)))?(?:(?:&|\?)type=([^&]+))?(?:(?:&|\?)(.+))?/;
 
 const observer = new MutationObserver(mutationsList => {
@@ -932,6 +936,10 @@ const observer = new MutationObserver(mutationsList => {
         } else if (followUserWorkRegex.test(window.location.href)) {
             checkType = "follow";
             matches = window.location.href.match(followUserWorkRegex);
+            if (matches[3]) { 
+                observer.disconnect();
+                return;
+            }
         } else {
             checkType = "tag";
             matches = window.location.href.match(tagRegex);
