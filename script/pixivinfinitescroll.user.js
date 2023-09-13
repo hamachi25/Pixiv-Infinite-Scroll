@@ -6,7 +6,7 @@
 // @namespace            https://github.com/chimaha/Pixiv-Infinite-Scroll
 // @match                https://www.pixiv.net/*
 // @grant                none
-// @version              1.3.2
+// @version              1.3.3
 // @author               chimaha
 // @description          Add infinite scroll feature to Pixiv.
 // @description:ja       Pixivに無限スクロール機能を追加します。
@@ -129,8 +129,8 @@ function following_process() {
                         <div type="illust" size="184" class="sc-iasfms-3 iIcDMF">
                             <div width="184" height="184" class="sc-rp5asc-0 fxGVAF addBookmark">
                                 <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY sc-eWnToP khjDVZ" data-gtm-value="${illustId[i]}" data-gtm-user-id="${userId}" href="/artworks/${illustId[i]}">
-                                    <div radius="4" class="sc-rp5asc-9 cYUezH">
-                                        <img src="${illustUrl[i]}" style="object-fit: cover; object-position: center center;" alt="${illustAlt[i]}" class="sc-rp5asc-10 erYaF">
+                                    <div radius="4" class="sc-rp5asc-9 cYUezH" style="position: relative; width: 100%; height: 100%;">
+                                        <img src="${illustUrl[i]}" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${illustAlt[i]}" class="sc-rp5asc-10 erYaF">
                                         ${ugoiraElement[i]}
                                     </div>
                                     <div class="sc-rp5asc-12 Sxcoo">
@@ -198,7 +198,7 @@ function following_process() {
 
         // "appendElements+="で一括追加にすると、なぜかundefinedが追加され続けるので一つずつ追加
         const appendElements = `
-        <div class="sc-1y4z60g-5 cPVjJh addElement page${scrollPageCount + 1}">
+        <div class="sc-1y4z60g-5 iVLXCu addElement page${scrollPageCount + 1}">
             <div class="sc-11m5zdr-0 bbJBkV">
                 <div class="sc-11m5zdr-1 clrYBQ">
                     <div class="sc-19z9m4s-0 fbLOpg">
@@ -233,7 +233,7 @@ function following_process() {
     // https://www.pixiv.net/ajax/user/*/following?offset=24&limit=24&rest=show
     // https://www.pixiv.net/users/*/following?p=2
 
-    if (document.querySelectorAll(".sc-1y4z60g-5.cPVjJh").length < 23) { return; }
+    if (document.querySelectorAll(".sc-1y4z60g-5.iVLXCu").length < 23) { return; }
 
     // URL作成
     const matches = window.location.href.match(followingRegex);
@@ -416,7 +416,7 @@ function bookmarkAndTag_process(checkType, matches) {
             illustContainer = `
             <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY ${typeClass} sc-eWnToP khjDVZ" data-gtm-value="${illustId}" data-gtm-user-id="${userId}" href="/artworks/${illustId}">
                 <div radius="4" class="sc-rp5asc-9 cYUezH" style="position: relative; display: flex; width: 100%; height: 100%;">
-                    <img src="${illustUrl}" style="object-fit: cover; object-position: center center;" alt="${illustAlt}" class="sc-rp5asc-10 erYaF" style="width: 100%; height: 100%;">
+                    <img src="${illustUrl}" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${illustAlt}" class="sc-rp5asc-10 erYaF">
                     ${ugoiraElement}
                 </div>
                 <div class="sc-rp5asc-12 Sxcoo">
@@ -922,7 +922,7 @@ const observer = new MutationObserver(mutationsList => {
                     }
                 })
             });
-            scrollObserver.observe(document.querySelector(".sc-1y4z60g-5.cPVjJh:last-child").previousElementSibling);
+            scrollObserver.observe(document.querySelector(".sc-1y4z60g-5.iVLXCu:last-child").previousElementSibling);
         }
     } else if (bookmarkRegex.test(window.location.href) || followUserWorkRegex.test(window.location.href) || tagRegex.test(window.location.href)) {
         // ブックマーク・フォローユーザーの作品・タグ検索
