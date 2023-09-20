@@ -6,7 +6,7 @@
 // @namespace            https://github.com/chimaha/Pixiv-Infinite-Scroll
 // @match                https://www.pixiv.net/*
 // @grant                none
-// @version              1.4
+// @version              1.4.1
 // @author               chimaha
 // @description          Add infinite scroll feature to Pixiv.
 // @description:ja       Pixivに無限スクロール機能を追加します。
@@ -382,7 +382,7 @@ function bookmarkAndTag_process(checkType, matches) {
                         </button>
                     </div>
                 </div>`;
-                illustTitleElement = `<a class="sc-iasfms-6 hvLYiR" to="/artworks/${illustId}">${setDeletedLanguage[2]}</a>`
+                illustTitleElement = `<span class="sc-iasfms-6 hvLYiR" to="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(133, 133, 133); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${setDeletedLanguage[2]}</a>`
             } else {
                 // 削除・非公開
                 illustContainer = `
@@ -408,7 +408,7 @@ function bookmarkAndTag_process(checkType, matches) {
                         </button>
                     </div>
                 </div>`;
-                illustTitleElement = `<a class="sc-iasfms-6 gqlfsh" to="/artworks/${illustId}">${illustTitle}</a>`
+                illustTitleElement = `<span class="sc-iasfms-7 kocGIc" to="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(30, 30, 30); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${illustTitle}</a>`
             }
 
         } else {
