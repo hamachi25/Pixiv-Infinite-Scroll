@@ -2,7 +2,7 @@
 
 [UserScriptをダウンロード](https://github.com/chimaha/Pixiv-Infinite-Scroll/raw/main/script/pixivinfinitescroll.user.js)  
 
-Pixivに無限スクロール機能を追加します。「タグ検索」「フォロー」「フォローユーザーの作品」「ブックマーク」で使用することができます。  
+Pixivに無限スクロール機能を追加します。「タグ検索」「ユーザープロフィール」「フォロー」「フォローユーザーの作品」「ブックマーク」で使用することができます。  
 
 小説の場合は正しく表示できません。  
 
