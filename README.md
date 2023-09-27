@@ -1,5 +1,7 @@
 # Pixiv Infinite Scroll
 
+[Firefox拡張機能をダウンロード](https://addons.mozilla.org/ja/firefox/addon/pixiv-infinite-scroll/)  
+
 [UserScriptをダウンロード](https://github.com/chimaha/Pixiv-Infinite-Scroll/raw/main/script/pixivinfinitescroll.user.js)  
 
 Pixivに無限スクロール機能を追加します。「タグ検索」「ユーザープロフィール」「フォロー」「フォローユーザーの作品」「ブックマーク」で使用することができます。  
