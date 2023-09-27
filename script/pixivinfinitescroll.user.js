@@ -6,7 +6,7 @@
 // @namespace            https://github.com/chimaha/Pixiv-Infinite-Scroll
 // @match                https://www.pixiv.net/*
 // @grant                none
-// @version              1.4.1
+// @version              1.4.2
 // @author               chimaha
 // @description          Add infinite scroll feature to Pixiv.
 // @description:ja       Pixivに無限スクロール機能を追加します。
@@ -20,6 +20,19 @@
 // ==/UserScript==
 
 /*! Pixiv Infinite Scroll | MIT license | https://github.com/chimaha/Pixiv-Infinite-Scroll/blob/main/LICENSE */
+
+// エスケープHTML
+function escapleText(str) {
+    if (typeof str != "string") {
+        return str;
+    }
+    return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
 
 // フォロー中の無限スクロール-----------------------------------------------------------------
 function following_process() {
@@ -69,16 +82,6 @@ function following_process() {
                 bookmarkClass.push("dxYRhf");
             }
         }
-        // コメントに特定の記号が入っていた場合にエスケープ
-        function escapleText(userComment) {
-            return userComment
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-        const escapedComment = escapleText(userComment);
 
         // R18マーク
         let r18Element = [];
@@ -95,7 +98,7 @@ function following_process() {
         let pageCountElement = [];
         illustPageCount.forEach((pageCount, i) => {
             if (illustAlt[i].slice(-4) == "うごイラ") {
-                ugoiraElement.push('<svg viewBox="0 0 24 24" style="width: 48px; height: 48px; position: absolute;" class="sc-192k5ld-0 etaMpt sc-rp5asc-8 kSDUsv"><circle cx="12" cy="12" r="10" class="sc-192k5ld-1 lajlxF" style="fill: rgba(0, 0, 0, 0.32);"></circle><path d="M9,8.74841664 L9,15.2515834 C9,15.8038681 9.44771525,16.2515834 10,16.2515834 C10.1782928,16.2515834 10.3533435,16.2039156 10.5070201,16.1135176 L16.0347118,12.8619342 C16.510745,12.5819147 16.6696454,11.969013 16.3896259,11.4929799 C16.3034179,11.3464262 16.1812655,11.2242738 16.0347118,11.1380658 L10.5070201,7.88648243 C10.030987,7.60646294 9.41808527,7.76536339 9.13806578,8.24139652 C9.04766776,8.39507316 9,8.57012386 9,8.74841664 Z" class="sc-192k5ld-2 jwyUTl" style="fill: rgb(255, 255, 255);"></path></svg>');
+                ugoiraElement.push('<svg viewBox="0 0 24 24" class="sc-192k5ld-0 etaMpt sc-rp5asc-8 kSDUsv" style="width: 48px; height: 48px; position: absolute";><circle cx="12" cy="12" r="10" class="sc-192k5ld-1 lajlxF" style="fill: rgba(0, 0, 0, 0.32);"></circle><path d="M9,8.74841664 L9,15.2515834 C9,15.8038681 9.44771525,16.2515834 10,16.2515834 C10.1782928,16.2515834 10.3533435,16.2039156 10.5070201,16.1135176 L16.0347118,12.8619342 C16.510745,12.5819147 16.6696454,11.969013 16.3896259,11.4929799 C16.3034179,11.3464262 16.1812655,11.2242738 16.0347118,11.1380658 L10.5070201,7.88648243 C10.030987,7.60646294 9.41808527,7.76536339 9.13806578,8.24139652 C9.04766776,8.39507316 9,8.57012386 9,8.74841664 Z" class="sc-192k5ld-2 jwyUTl" style="fill: rgb(255, 255, 255);"></path></svg>');
                 pageCountElement.push("");
             } else {
                 ugoiraElement.push("");
@@ -130,7 +133,7 @@ function following_process() {
                             <div width="184" height="184" class="sc-rp5asc-0 fxGVAF addBookmark">
                                 <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY sc-eWnToP khjDVZ" data-gtm-value="${illustId[i]}" data-gtm-user-id="${userId}" href="/artworks/${illustId[i]}">
                                     <div radius="4" class="sc-rp5asc-9 cYUezH" style="position: relative; width: 100%; height: 100%;">
-                                        <img src="${illustUrl[i]}" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${illustAlt[i]}" class="sc-rp5asc-10 erYaF">
+                                        <img src="${illustUrl[i]}" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${escapleText(illustAlt[i])}" class="sc-rp5asc-10 erYaF">
                                         ${ugoiraElement[i]}
                                     </div>
                                     <div class="sc-rp5asc-12 Sxcoo">
@@ -151,7 +154,7 @@ function following_process() {
                             </div>
                         </div>
                         <div class="sc-iasfms-0 jtpclu">
-                            <a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh" href="/artworks/${illustId[i]}">${illustTitle[i]}</a>
+                            <a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh" href="/artworks/${illustId[i]}">${escapleText(illustTitle[i])}</a>
                         </div>
                     </div>
                 </div>
@@ -203,15 +206,15 @@ function following_process() {
                 <div class="sc-11m5zdr-1 clrYBQ">
                     <div class="sc-19z9m4s-0 fbLOpg">
                         <a class="sc-d98f2c-0" data-gtm-value="${userId}" href="/users/${userId}">
-                            <div size="80" title="${userName}" role="img" class="sc-1asno00-0 deMagM">
-                                <img src="${userProfileImage}" style="object-fit: cover; object-position: center top;" width="80" height="80" alt="${userName}">
+                            <div size="80" title="${escapleText(userName)}" role="img" class="sc-1asno00-0 deMagM">
+                                <img src="${userProfileImage}" style="object-fit: cover; object-position: center top;" width="80" height="80" alt="${escapleText(userName)}">
                             </div>
                         </a>
                         <div class="sc-19z9m4s-4 fYGGbS">
                             <div class="sc-19z9m4s-5 iqZEnZ">
-                                <a class="sc-d98f2c-0 sc-19z9m4s-2 QHGGh" data-gtm-value="${userId}" href="/users/${userId}">${userName}</a>
+                                <a class="sc-d98f2c-0 sc-19z9m4s-2 QHGGh" data-gtm-value="${userId}" href="/users/${userId}">${escapleText(userName)}</a>
                             </div>
-                            <div class="sc-19z9m4s-3 isEYuz">${escapedComment}</div>
+                            <div class="sc-19z9m4s-3 isEYuz">${escapleText(userComment)}</div>
                             <div class="sc-19z9m4s-1 qjElz">
                                 <button class="sc-bdnxRM jvCTkj sc-dlnjwi ${followClass} sc-1obql3d-0 Rlftz gtm-undefined sc-1obql3d-0 Rlftz gtm-undefined follow" data-gtm-user-id="${userId}" data-click-action="click" data-click-label="follow" height="40" ${followStyle}>${changeFollowLanguage}</button>
                                 <div aria-current="false" class="sc-125tkm8-0 sc-125tkm8-3 ka-dhPl eZXKAK">
@@ -333,7 +336,7 @@ function bookmarkAndTag_process(checkType, matches) {
         let ugoiraElement = "";
         let pageCountElement = "";
         if (illustAlt.slice(-4) == "うごイラ") {
-            ugoiraElement = '<svg viewBox="0 0 24 24" style="width: 48px; height: 48px;" class="sc-192k5ld-0 etaMpt sc-rp5asc-8 kSDUsv"><circle cx="12" cy="12" r="10" class="sc-192k5ld-1 lajlxF"></circle><path d="M9,8.74841664 L9,15.2515834 C9,15.8038681 9.44771525,16.2515834 10,16.2515834 C10.1782928,16.2515834 10.3533435,16.2039156 10.5070201,16.1135176 L16.0347118,12.8619342 C16.510745,12.5819147 16.6696454,11.969013 16.3896259,11.4929799 C16.3034179,11.3464262 16.1812655,11.2242738 16.0347118,11.1380658 L10.5070201,7.88648243 C10.030987,7.60646294 9.41808527,7.76536339 9.13806578,8.24139652 C9.04766776,8.39507316 9,8.57012386 9,8.74841664 Z" class="sc-192k5ld-2 jwyUTl"></path></svg>';
+            ugoiraElement = '<svg viewBox="0 0 24 24" class="sc-192k5ld-0 etaMpt sc-rp5asc-8 kSDUsv"  style="width: 48px; height: 48px; position: absolute";><circle cx="12" cy="12" r="10" class="sc-192k5ld-1 lajlxF" style="fill: rgba(0, 0, 0, 0.32);"></circle><path d="M9,8.74841664 L9,15.2515834 C9,15.8038681 9.44771525,16.2515834 10,16.2515834 C10.1782928,16.2515834 10.3533435,16.2039156 10.5070201,16.1135176 L16.0347118,12.8619342 C16.510745,12.5819147 16.6696454,11.969013 16.3896259,11.4929799 C16.3034179,11.3464262 16.1812655,11.2242738 16.0347118,11.1380658 L10.5070201,7.88648243 C10.030987,7.60646294 9.41808527,7.76536339 9.13806578,8.24139652 C9.04766776,8.39507316 9,8.57012386 9,8.74841664 Z" class="sc-192k5ld-2 jwyUTl" style="fill: rgb(255, 255, 255);></path></svg>';
         } else {
             if (illustPageCount > 2) {
                 pageCountElement = `
@@ -364,12 +367,12 @@ function bookmarkAndTag_process(checkType, matches) {
                 <span to="/artworks/${illustId}" class="sc-rp5asc-16 iUsZyY sc-eWnToP khjDVZ" data-gtm-value="${illustId}" data-gtm-user-id="${userId}">
                     <div class="sc-7i69t-2 wDRGm">
                         <div class="sc-7i69t-0 lmTlVI">
-                            <div class="sc-7i69t-6 jjBwSZ">
-                                <svg viewBox="0 0 24 24" style="width: 72px; height: 72px;" class="sc-11k840d-0 hgKsyL">
+                            <div class="sc-7i69t-6 jjBwSZ" style="color: var(--charcoal-text4); justify-self: center;">
+                                <svg viewBox="0 0 24 24" class="sc-11k840d-0 hgKsyL" style="width: 72px; height: 72px; fill: currentcolor;">
                                     <path d="M5.26763775,4 L9.38623853,11.4134814 L5,14.3684211 L5,18 L13.0454155,18 L14.1565266,20 L5,20 C3.8954305,20 3,19.1045695 3,18 L3,6 C3,4.8954305 3.8954305,4 5,4 L5.26763775,4 Z M9.84347336,4 L19,4 C20.1045695,4 21,4.8954305 21,6 L21,18 C21,19.1045695 20.1045695,20 19,20 L18.7323623,20 L17.6212511,18 L19,18 L19,13 L16,15 L15.9278695,14.951913 L9.84347336,4 Z M16,7 C14.8954305,7 14,7.8954305 14,9 C14,10.1045695 14.8954305,11 16,11 C17.1045695,11 18,10.1045695 18,9 C18,7.8954305 17.1045695,7 16,7 Z M7.38851434,1.64019979 L18.3598002,21.3885143 L16.6114857,22.3598002 L5.64019979,2.61148566 L7.38851434,1.64019979 Z"></path>
                                 </svg>
                             </div>
-                            <div class="sc-7i69t-4 hEKLCY">${setDeletedLanguage[0]}<br>${setDeletedLanguage[1]}</div>
+                            <div class="sc-7i69t-4 hEKLCY" style="color: var(--charcoal-text4); text-align: center; font-size: 16px; line-height: 24px; font-weight: bold;">${setDeletedLanguage[0]}<br>${setDeletedLanguage[1]}</div>
                         </div>
                     </div>
                 </span>
@@ -408,7 +411,7 @@ function bookmarkAndTag_process(checkType, matches) {
                         </button>
                     </div>
                 </div>`;
-                illustTitleElement = `<span class="sc-iasfms-7 kocGIc" to="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(30, 30, 30); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${illustTitle}</a>`
+                illustTitleElement = `<span class="sc-iasfms-7 kocGIc" to="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(30, 30, 30); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapleText(illustTitle)}</a>`
             }
 
         } else {
@@ -416,7 +419,7 @@ function bookmarkAndTag_process(checkType, matches) {
             illustContainer = `
             <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY ${typeClass} sc-eWnToP khjDVZ" data-gtm-value="${illustId}" data-gtm-user-id="${userId}" href="/artworks/${illustId}" style="transition: opacity 0.2s ease 0s;">
                 <div radius="4" class="sc-rp5asc-9 cYUezH" style="position: relative; display: flex; width: 100%; height: 100%;">
-                    <img src="${illustUrl}" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${illustAlt}" class="sc-rp5asc-10 erYaF">
+                    <img src="${illustUrl}" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${escapleText(illustAlt)}" class="sc-rp5asc-10 erYaF">
                     ${ugoiraElement}
                 </div>
                 <div class="sc-rp5asc-12 Sxcoo">
@@ -441,14 +444,14 @@ function bookmarkAndTag_process(checkType, matches) {
             <div aria-haspopup="true" class="sc-1rx6dmq-0 icsUdQ">
                 <div class="sc-1rx6dmq-1 eMfHJB">
                     <a class="sc-d98f2c-0" data-gtm-value="${userId}" href="/users/${userId}">
-                        <div size="24" title="${userName}" role="img" class="sc-1asno00-0 hMqBzA">
-                            <img src="${userProfileImage}" style="object-fit: cover; object-position: center top;" width="24" height="24" alt="${userName}">
+                        <div size="24" title="${escapleText(userName)}" role="img" class="sc-1asno00-0 hMqBzA">
+                            <img src="${userProfileImage}" style="object-fit: cover; object-position: center top;" width="24" height="24" alt="${escapleText(userName)}">
                         </div>
                     </a>
                 </div>
-                <a class="sc-d98f2c-0 sc-1rx6dmq-2 kghgsn" data-gtm-value="${userId}" href="/users/${userId}">${userName}</a>
+                <a class="sc-d98f2c-0 sc-1rx6dmq-2 kghgsn" data-gtm-value="${userId}" href="/users/${userId}">${escapleText(userName)}</a>
             </div>`;
-            illustTitleElement = `<a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh" href="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(31, 31, 31); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${illustTitle}</a>`
+            illustTitleElement = `<a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh" href="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(31, 31, 31); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapleText(illustTitle)}</a>`
             addBookmarkClass = " addBookmark"
         }
 
