@@ -6,14 +6,14 @@
 // @namespace            https://github.com/chimaha/Pixiv-Infinite-Scroll
 // @match                https://www.pixiv.net/*
 // @grant                none
-// @version              1.4.2
+// @version              1.4.2.1
 // @author               chimaha
 // @description          Add infinite scroll feature to Pixiv.
 // @description:ja       Pixivに無限スクロール機能を追加します。
 // @description:zh-CN    为 Pixiv 添加无限滚动功能。
 // @description:zh-TW    因為Pixiv有無限移動功能。
 // @license              MIT license
-// @icon                 https://www.pixiv.net/favicon.ico
+// @icon                 https://raw.githubusercontent.com/chimaha/Pixiv-Infinite-Scroll/main/icon.png
 // @downloadURL          https://github.com/chimaha/Pixiv-Infinite-Scroll/raw/main/script/pixivinfinitescroll.user.js
 // @updateURL            https://github.com/chimaha/Pixiv-Infinite-Scroll/raw/main/script/pixivinfinitescroll.user.js
 // @supportURL           https://github.com/chimaha/Pixiv-Infinite-Scroll/issues
