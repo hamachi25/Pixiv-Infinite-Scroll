@@ -5,8 +5,6 @@ Pixivに無限スクロール機能を追加します。ページの下までス
 
 今のところ、小説には対応していません。  
 
-動作例  
-
 https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/2b1932be-33f8-4425-a46f-80ff5b866692
 
 ## インストール方法
