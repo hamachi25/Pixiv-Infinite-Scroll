@@ -1,4 +1,4 @@
-[日本語READMEはこちら](https://github.com/chimaha/Pixiv-Infinite-Scroll/blob/main/README.md)  
+[日本語READMEはこちら](https://github.com/chimaha/Pixiv-Infinite-Scroll)  
 
 # Pixiv Infinite Scroll
 
