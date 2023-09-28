@@ -1,3 +1,5 @@
+[English README is here](https://github.com/chimaha/Pixiv-Infinite-Scroll/blob/main/README-en.md)  
+
 # Pixiv Infinite Scroll
 
 Pixivに無限スクロール機能を追加します。ページの下までスクロールした時に自動で次のページを読み込むことで、途切れることなくイラストを閲覧することができます。  
