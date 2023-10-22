@@ -6,7 +6,7 @@
 // @namespace            https://github.com/chimaha/Pixiv-Infinite-Scroll
 // @match                https://www.pixiv.net/*
 // @grant                none
-// @version              1.4.3
+// @version              1.4.3.1
 // @author               chimaha
 // @description          Add infinite scroll feature to Pixiv.
 // @description:ja       Pixivに無限スクロール機能を追加します。
@@ -315,7 +315,7 @@ function following_process() {
         await fetchData();
         bookmarkAddDelete();
         followAndUnfollow(setFollowLanguage);
-        changeURL(matches[2], 23, 30);
+        changeURL(matches[2], false, 23, 30);
     })();
 }
 // -----------------------------------------------------------------------------------------
@@ -587,7 +587,7 @@ function bookmarkAndTag_process(checkType, matches) {
         (async () => {
             await fetchData();
             bookmarkAddDelete();
-            changeURL(matches[3], 47, 50);
+            changeURL(matches[3], false, 47, 50);
         })();
     } else if (checkType == "follow") {
         // フォローユーザーの作品
@@ -644,7 +644,7 @@ function bookmarkAndTag_process(checkType, matches) {
         (async () => {
             await fetchData();
             bookmarkAddDelete();
-            changeURL(matches[2], 59, 70);
+            changeURL(matches[2], false, 59, 70);
         })();
     } else if (checkType == "tag") {
         // タグ検索
@@ -656,14 +656,19 @@ function bookmarkAndTag_process(checkType, matches) {
         // URL作成
         let offset;
         scrollPageCount++;
-        if (matches[7] && isValid) {
-            scrollPageCount == 1 ? saveScrollPageCount = Number(matches[7]) : "";
+        if ((matches[7] || matches[11]) && isValid) {
+            if (matches[7] && scrollPageCount == 1) {
+                saveScrollPageCount = Number(matches[7]);
+            } else if (matches[11] && scrollPageCount == 1) {
+                saveScrollPageCount = Number(matches[11]);
+            }
             offset = saveScrollPageCount + scrollPageCount;
         } else {
             scrollPageCount == 1 ? saveScrollPageCount = 0 : "";
             isValid = false;
             offset = 1 + scrollPageCount;
         }
+
         if (scrollPageCount == 1) {
             revertURL(illustItems, 5, 0);
             loadAnimation("ul.sc-l7cibp-1.krFoBL");
@@ -738,7 +743,7 @@ function bookmarkAndTag_process(checkType, matches) {
         (async () => {
             await fetchData();
             bookmarkAddDelete();
-            changeURL(matches[7], 5, 0);
+            changeURL(matches[7], matches[11], 5, 0);
         })();
     } else if (checkType == "artwork") {
         // ユーザープロフィールのイラスト
@@ -805,7 +810,7 @@ function bookmarkAndTag_process(checkType, matches) {
             (async () => {
                 await fetchData();
                 bookmarkAddDelete();
-                changeURL(matches[4], 47, 50);
+                changeURL(matches[4], false, 47, 50);
             })();
         } else {
             const url = `https://www.pixiv.net/ajax/user/${matches[1]}/profile/all`;
@@ -883,7 +888,7 @@ function bookmarkAndTag_process(checkType, matches) {
             (async () => {
                 await fetchData();
                 bookmarkAddDelete();
-                changeURL(matches[4], 47, 50);
+                changeURL(matches[4], false, 47, 50);
             })();
         }
     }
@@ -910,7 +915,7 @@ function revertURL(illustItems, n, k) {
                     } else {
                         const url = location.href;
                         if (url.includes("?p=") && url.includes("&")) {
-                            newUrl = url.replace(/\p=\d+&/, "");
+                            newUrl = url.replace(/p=\d+&/, "");
                         } else if (url.includes("?p=") && !url.includes("&")) {
                             newUrl = url.replace(/\?p=\d+/, "");
                         } else if (url.includes("&p=")) {
@@ -927,7 +932,7 @@ function revertURL(illustItems, n, k) {
     }
 }
 // 追加したイラスト
-function changeURL(matches, n, k) {
+function changeURL(matches, matches2, n, k) {
     const pageCountElements = document.querySelectorAll(".addElement");
     for (let i = 0; i < pageCountElements.length; i++) {
         pageCountElements[i].classList.remove("addElement");
@@ -940,7 +945,7 @@ function changeURL(matches, n, k) {
                 if (entries[0].isIntersecting) {
                     const pageCountNumber = pageCountElements[i].dataset.page;
                     let newUrl;
-                    if (matches && isValid) {
+                    if ((matches || matches2) && isValid) {
                         const url = Number(saveScrollPageCount) + Number(pageCountNumber) - 1;
                         newUrl = currentUrl.replace(/(p=)[^&]+/, "$1" + url);
                     } else {
@@ -1190,14 +1195,14 @@ let artworkIllustId = "";
 const followingRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/following(?:\?p=(\d+))?/;
 const bookmarkRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/bookmarks\/artworks(?:\/([^?]+))?(?:\?p=(\d+))?/;
 const followUserWorkRegex = /https:\/\/www\.pixiv\.net\/bookmark_new_illust(_r18)?\.php(?:\?p=(\d+))?(?:(?:&|\?)(tag=.*))?/;
-const tagRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/tags\/(.+)\/(artworks|illustrations|manga)(?:\?(order=date))?(?:(?:&|\?)(mode=(?:r18|safe)))?(?:(?:&|\?)(scd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)(ecd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)p=(\d+))?(?:(?:&|\?)(s_mode=(?:s_tag|s_tc)))?(?:(?:&|\?)type=([^&]+))?(?:(?:&|\?)(.+))?/;
+const tagRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/tags\/(.+)\/(artworks|illustrations|manga)(?:\?(order=date))?(?:(?:&|\?)(mode=(?:r18|safe)))?(?:(?:&|\?)(scd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)(ecd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)p=(\d+))?(?:(?:&|\?)(s_mode=(?:s_tag|s_tc)))?(?:(?:&|\?)type=([^&]+))?(?:(?:&|\?)([^p]+))?(?:(?:&|\?)p=(\d+))?/;
 const artworkRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/(illustrations|manga|artworks)(?:\/(.[^?p=]+))?(?:\?p=(\d+))?/;
 
 const observer = new MutationObserver(() => {
     if (currentUrl && saveUrl) {
         function replaceURL(url) {
             if (url.includes("?p=") && url.includes("&")) {
-                return url.replace(/\p=\d+&/, "");
+                return url.replace(/p=\d+&/, "");
             } else if (url.includes("?p=") && !url.includes("&")) {
                 return url.replace(/\?p=\d+/, "");
             } else if (url.includes("&p=")) {
