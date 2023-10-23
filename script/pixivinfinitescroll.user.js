@@ -6,7 +6,7 @@
 // @namespace            https://github.com/chimaha/Pixiv-Infinite-Scroll
 // @match                https://www.pixiv.net/*
 // @grant                none
-// @version              1.4.3.1
+// @version              1.4.3.2
 // @author               chimaha
 // @description          Add infinite scroll feature to Pixiv.
 // @description:ja       Pixivに無限スクロール機能を追加します。
@@ -520,6 +520,27 @@ function bookmarkAndTag_process(checkType, matches) {
         }
     }
 
+    function getIllustData(jsonBody, typeElement, typeClass, target) {
+        for (let i = 0; i < Object.keys(jsonBody).length; i++) {
+            // タグ検索には1つだけ何も入っていないjsonBodyがあるので、そこだけ除外
+            if (!jsonBody[i].id) { continue; }
+            const illust = jsonBody[i];
+            const illustId = illust.id;
+            const illustTitle = illust.title;
+            const illustUrl = illust.url;
+            const userId = illust.userId;
+            const userName = illust.userName;
+            const illustPageCount = illust.pageCount;
+            const illustBookmarkData = illust.bookmarkData;
+            const illustAlt = illust.alt;
+            const userProfileImage = illust.profileImageUrl;
+            const illustR18 = illust.tags[0];
+            const illustMaskReason = illust.maskReason;
+            createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason);
+        }
+        document.querySelector(target).insertAdjacentHTML("beforeend", appendElements);
+    }
+
     function mouseover() {
         for (const element of document.querySelectorAll(`.page${scrollPageCount + 1} a.khjDVZ`)) {
             element.addEventListener("mouseover", () => {
@@ -564,24 +585,10 @@ function bookmarkAndTag_process(checkType, matches) {
             const response = await fetch(url);
             const json = await response.json();
             deleteAnimation(json.body.works, 47);
-            for (let i = 0; i < Object.keys(json.body.works).length; i++) {
-                const illust = json.body.works[i];
-                const illustId = illust.id;
-                const illustTitle = illust.title;
-                const illustUrl = illust.url;
-                const userId = illust.userId;
-                const userName = illust.userName;
-                const illustPageCount = illust.pageCount;
-                const illustBookmarkData = illust.bookmarkData;
-                const illustAlt = illust.alt;
-                const userProfileImage = illust.profileImageUrl;
-                const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq CgxkO addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
-                const typeClass = "";
-                const illustR18 = illust.tags[0];
-                const illustMaskReason = illust.maskReason;
-                createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason);
-            }
-            document.querySelector(".sc-9y4be5-1.jtUPOE").insertAdjacentHTML("beforeend", appendElements);
+
+            const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq CgxkO addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
+            const target = ".sc-9y4be5-1.jtUPOE";
+            getIllustData(json.body.works, typeElement, "", target);
             mouseover();
         };
         (async () => {
@@ -621,24 +628,11 @@ function bookmarkAndTag_process(checkType, matches) {
             const response = await fetch(url);
             const json = await response.json();
             deleteAnimation(json.body.thumbnails.illust, 59);
-            for (let i = 0; i < Object.keys(json.body.thumbnails.illust).length; i++) {
-                const illust = json.body.thumbnails.illust[i];
-                const illustId = illust.id;
-                const illustTitle = illust.title;
-                const illustUrl = illust.url;
-                const userId = illust.userId;
-                const userName = illust.userName;
-                const illustPageCount = illust.pageCount;
-                const illustBookmarkData = illust.bookmarkData;
-                const illustAlt = illust.alt;
-                const userProfileImage = illust.profileImageUrl;
-                const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq wHEbW addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
-                const typeClass = "gtm-followlatestpage-thumbnail-link";
-                const illustR18 = illust.tags[0];
-                const illustMaskReason = illust.maskReason;
-                createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason);
-            }
-            document.querySelector(".sc-9y4be5-1.jtUPOE").insertAdjacentHTML("beforeend", appendElements);
+
+            const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq wHEbW addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
+            const typeClass = "gtm-followlatestpage-thumbnail-link";
+            const target = ".sc-9y4be5-1.jtUPOE";
+            getIllustData(json.body.thumbnails.illust, typeElement, typeClass, target);
             mouseover();
         };
         (async () => {
@@ -718,26 +712,10 @@ function bookmarkAndTag_process(checkType, matches) {
             const response = await fetch(url);
             const json = await response.json();
             deleteAnimation(json.body[insertIllustType].data, 59);
-            for (let i = 0; i < Object.keys(json.body[insertIllustType].data).length; i++) {
-                // jsonファイルに、なぜか必ず1つだけ欠けている部分があるのでスキップする
-                if (!json.body[insertIllustType].data[i].id) { continue; }
-                const illust = json.body[insertIllustType].data[i];
-                const illustId = illust.id;
-                const illustTitle = illust.title;
-                const illustUrl = illust.url;
-                const userId = illust.userId;
-                const userName = illust.userName;
-                const illustPageCount = illust.pageCount;
-                const illustBookmarkData = illust.bookmarkData;
-                const illustAlt = illust.alt;
-                const userProfileImage = illust.profileImageUrl;
-                const typeElement = `<li class="sc-l7cibp-2 gpVAva addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
-                const typeClass = "";
-                const illustR18 = illust.tags[0];
-                const illustMaskReason = illust.maskReason;
-                createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason);
-            }
-            document.querySelector(".sc-l7cibp-1.krFoBL").insertAdjacentHTML("beforeend", appendElements);
+
+            const typeElement = `<li class="sc-l7cibp-2 gpVAva addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
+            const target = ".sc-l7cibp-1.krFoBL";
+            getIllustData(json.body[insertIllustType].data, typeElement, "", target);
             mouseover();
         };
         (async () => {
@@ -754,6 +732,8 @@ function bookmarkAndTag_process(checkType, matches) {
         const illustItems = document.querySelectorAll(".sc-9y4be5-2.kFAPOq");
         if (illustItems.length < 48) { return; }
 
+        // https://www.pixiv.net/users/*/illustrations/風景
+        // 上のURLのようにタグをつけた場合
         if (matches[3]) {
             // URL作成
             let offset;
@@ -787,24 +767,10 @@ function bookmarkAndTag_process(checkType, matches) {
                 const response = await fetch(url);
                 const json = await response.json();
                 deleteAnimation(json.body.works, 47);
-                for (let i = 0; i < Object.keys(json.body.works).length; i++) {
-                    const illust = json.body.works[i];
-                    const illustId = illust.id;
-                    const illustTitle = illust.title;
-                    const illustUrl = illust.url;
-                    const userId = illust.userId;
-                    const userName = "";
-                    const illustPageCount = illust.pageCount;
-                    const illustBookmarkData = illust.bookmarkData;
-                    const illustAlt = illust.alt;
-                    const userProfileImage = "";
-                    const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq CgxkO addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
-                    const typeClass = "";
-                    const illustR18 = illust.tags[0];
-                    const illustMaskReason = "";
-                    createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason);
-                }
-                document.querySelector(".sc-9y4be5-1.jtUPOE").insertAdjacentHTML("beforeend", appendElements);
+
+                const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq CgxkO addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
+                const target = ".sc-9y4be5-1.jtUPOE";
+                getIllustData(json.body.works, typeElement, "", target);
                 mouseover();
             };
             (async () => {
@@ -813,10 +779,11 @@ function bookmarkAndTag_process(checkType, matches) {
                 changeURL(matches[4], false, 47, 50);
             })();
         } else {
+            // タグがない場合
             const url = `https://www.pixiv.net/ajax/user/${matches[1]}/profile/all`;
 
             const fetchData = async () => {
-                // 初回のみillustIDを取得
+                // 初回のみillustIDをすべて取得
                 if (!artworkIllustId) {
                     const response = await fetch(url);
                     const json = await response.json();
@@ -824,6 +791,7 @@ function bookmarkAndTag_process(checkType, matches) {
                     const arrayIllustId = Object.keys(objectIllustId);
                     const objectMangaId = json.body.manga;
                     const arrayMangaId = Object.keys(objectMangaId);
+                    // イラストとマンガの配列を組み合わせ、番号順に並べる
                     const arrayArtworks = arrayIllustId.concat(arrayMangaId);
                     arrayArtworks.sort((a, b) => a - b);
 
@@ -855,6 +823,7 @@ function bookmarkAndTag_process(checkType, matches) {
                     revertURL(illustItems, 47, 50);
                     loadAnimation("ul.sc-9y4be5-1.jtUPOE");
                 }
+                // 配列の後ろから48個取得して削除
                 const sliceIllustId = artworkIllustId.splice(-48);
 
                 const url2 = `https://www.pixiv.net/ajax/user/${matches[1]}/profile/illusts?${sliceIllustId.join("&")}&work_category=illust&is_first_page=0`
@@ -931,7 +900,7 @@ function revertURL(illustItems, n, k) {
         }
     }
 }
-// 追加したイラスト
+// 追加されたイラスト
 function changeURL(matches, matches2, n, k) {
     const pageCountElements = document.querySelectorAll(".addElement");
     for (let i = 0; i < pageCountElements.length; i++) {
@@ -945,6 +914,7 @@ function changeURL(matches, matches2, n, k) {
                 if (entries[0].isIntersecting) {
                     const pageCountNumber = pageCountElements[i].dataset.page;
                     let newUrl;
+                    // 最初の実行がelse(p=がない)の場合は、isValidをfalseにしてelseのみ実行されるように
                     if ((matches || matches2) && isValid) {
                         const url = Number(saveScrollPageCount) + Number(pageCountNumber) - 1;
                         newUrl = currentUrl.replace(/(p=)[^&]+/, "$1" + url);
@@ -1200,6 +1170,8 @@ const artworkRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/(illustr
 
 const observer = new MutationObserver(() => {
     if (currentUrl && saveUrl) {
+        // ページ数が含まれていないURLを作成
+        // そのまま取得すると、?p=2の数字が変わった時に実行されてしまう
         function replaceURL(url) {
             if (url.includes("?p=") && url.includes("&")) {
                 return url.replace(/p=\d+&/, "");
@@ -1211,6 +1183,7 @@ const observer = new MutationObserver(() => {
                 return url
             }
         }
+        // 現在のURLと初めに保存したURLが一致しない場合実行
         if (replaceURL(saveUrl) != replaceURL(location.href)) {
             isProcessed = false;
             scrollPageCount = 0;
@@ -1218,6 +1191,7 @@ const observer = new MutationObserver(() => {
             artworkIllustId = "";
             saveUrl = "";
             isValid = true;
+            document.getElementById("load-animation").remove();
             // タグページ・プロフィールページで条件を変更した際に、追加した要素を削除する
             if (tagRegex.test(location.href) || artworkRegex.test(location.href)) {
                 const removeElements = document.querySelectorAll("[data-page]");
@@ -1231,6 +1205,7 @@ const observer = new MutationObserver(() => {
     if (followingRegex.test(location.href)) {
         // フォロー
         currentUrl = location.href;
+        // 初回のみURLを保存
         observerCount++;
         observerCount == 1 ? saveUrl = location.href : "";
         const intersectionTarget = document.querySelector(".sc-1y4z60g-4.cqwgCG");
@@ -1257,6 +1232,7 @@ const observer = new MutationObserver(() => {
     } else if (bookmarkRegex.test(location.href) || followUserWorkRegex.test(location.href) || tagRegex.test(location.href) || artworkRegex.test(location.href)) {
         // ブックマーク・フォローユーザーの作品・タグ検索・プロフィールページ
         currentUrl = location.href;
+        // 初回のみURLを保存
         observerCount++;
         observerCount == 1 ? saveUrl = location.href : "";
 
@@ -1301,6 +1277,7 @@ const observer = new MutationObserver(() => {
             }, options);
 
             if (bookmarkRegex.test(currentUrl) || followUserWorkRegex.test(currentUrl) || artworkRegex.test(currentUrl)) {
+                // ページ読み込み後すぐスクロールするとページが飛ばされることがあるので、遅延して読み込む
                 if (scrollPageCount == 0 || scrollPageCount == 1) {
                     setTimeout(() => {
                         scrollObserver.observe(document.querySelector(".sc-9y4be5-2.kFAPOq:last-child"));
@@ -1309,7 +1286,7 @@ const observer = new MutationObserver(() => {
                     scrollObserver.observe(document.querySelector(".sc-9y4be5-2.kFAPOq:last-child"));
                 }
             } else {
-                // タグページで条件を切り替えた際に、要素を取得するタイミングを遅らせるためにsetTimeoutを使用
+                // 検索結果で条件を切り替えた際に、要素を取得するタイミングを遅らせるためにsetTimeoutを使用
                 // 2ページ目と3ページ目が同時に読み込まれてしまうので、2ページ目もsetTimeoutを使用
                 if (scrollPageCount == 0 || scrollPageCount == 1) {
                     setTimeout(() => {
