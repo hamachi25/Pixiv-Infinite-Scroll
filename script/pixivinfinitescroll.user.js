@@ -23,8 +23,10 @@
 
 /*! Pixiv Infinite Scroll | MIT license | https://github.com/chimaha/Pixiv-Infinite-Scroll/blob/main/LICENSE */
 
+"use strict";
+
 // エスケープHTML
-function escapleText(str) {
+function escapeText(str) {
     if (typeof str != "string") {
         return str;
     }
@@ -154,7 +156,7 @@ function following_process() {
                             <div width="184" height="184" class="sc-rp5asc-0 fxGVAF addBookmark">
                                 <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY sc-eWnToP khjDVZ" data-gtm-value="${illustId[i]}" data-gtm-user-id="${userId}" href="/artworks/${illustId[i]}">
                                     <div radius="4" class="sc-rp5asc-9 cYUezH" style="position: relative; width: 100%; height: 100%;">
-                                        <img src="${illustUrl[i]}" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${escapleText(illustAlt[i])}" class="sc-rp5asc-10 erYaF">
+                                        <img src="${illustUrl[i]}" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${escapeText(illustAlt[i])}" class="sc-rp5asc-10 erYaF">
                                         ${ugoiraElement[i]}
                                     </div>
                                     <div class="sc-rp5asc-12 Sxcoo">
@@ -175,7 +177,7 @@ function following_process() {
                             </div>
                         </div>
                         <div class="sc-iasfms-0 jtpclu">
-                            <a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh" href="/artworks/${illustId[i]}">${escapleText(illustTitle[i])}</a>
+                            <a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh" href="/artworks/${illustId[i]}">${escapeText(illustTitle[i])}</a>
                         </div>
                     </div>
                 </div>
@@ -227,15 +229,15 @@ function following_process() {
                 <div class="sc-11m5zdr-1 clrYBQ">
                     <div class="sc-19z9m4s-0 fbLOpg">
                         <a class="sc-d98f2c-0" data-gtm-value="${userId}" href="/users/${userId}">
-                            <div size="80" title="${escapleText(userName)}" role="img" class="sc-1asno00-0 deMagM">
-                                <img src="${userProfileImage}" style="object-fit: cover; object-position: center top;" width="80" height="80" alt="${escapleText(userName)}">
+                            <div size="80" title="${escapeText(userName)}" role="img" class="sc-1asno00-0 deMagM">
+                                <img src="${userProfileImage}" style="object-fit: cover; object-position: center top;" width="80" height="80" alt="${escapeText(userName)}">
                             </div>
                         </a>
                         <div class="sc-19z9m4s-4 fYGGbS">
                             <div class="sc-19z9m4s-5 iqZEnZ">
-                                <a class="sc-d98f2c-0 sc-19z9m4s-2 QHGGh" data-gtm-value="${userId}" href="/users/${userId}">${escapleText(userName)}</a>
+                                <a class="sc-d98f2c-0 sc-19z9m4s-2 QHGGh" data-gtm-value="${userId}" href="/users/${userId}">${escapeText(userName)}</a>
                             </div>
-                            <div class="sc-19z9m4s-3 isEYuz">${escapleText(userComment)}</div>
+                            <div class="sc-19z9m4s-3 isEYuz">${escapeText(userComment)}</div>
                             <div class="sc-19z9m4s-1 qjElz">
                                 <button class="sc-bdnxRM jvCTkj sc-dlnjwi ${followClass} sc-1obql3d-0 Rlftz gtm-undefined sc-1obql3d-0 Rlftz gtm-undefined follow" data-gtm-user-id="${userId}" data-click-action="click" data-click-label="follow" height="40" ${followStyle}>${changeFollowLanguage}</button>
                                 <div aria-current="false" class="sc-125tkm8-0 sc-125tkm8-3 ka-dhPl eZXKAK">
@@ -444,7 +446,7 @@ function bookmarkAndTag_process(checkType, matches) {
                         </button>
                     </div>
                 </div>`;
-                illustTitleElement = `<span class="sc-iasfms-7 kocGIc" to="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(30, 30, 30); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapleText(illustTitle)}</a>`
+                illustTitleElement = `<span class="sc-iasfms-7 kocGIc" to="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(30, 30, 30); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapeText(illustTitle)}</a>`
             }
 
         } else {
@@ -452,7 +454,7 @@ function bookmarkAndTag_process(checkType, matches) {
             illustContainer = `
             <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY ${typeClass} sc-eWnToP khjDVZ" data-gtm-value="${illustId}" data-gtm-user-id="${userId}" href="/artworks/${illustId}" style="transition: opacity 0.2s ease 0s;">
                 <div radius="4" class="sc-rp5asc-9 cYUezH" style="position: relative; display: flex; width: 100%; height: 100%;">
-                    <img src="${illustUrl}" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${escapleText(illustAlt)}" class="sc-rp5asc-10 erYaF">
+                    <img src="${illustUrl}" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${escapeText(illustAlt)}" class="sc-rp5asc-10 erYaF">
                     ${ugoiraElement}
                 </div>
                 <div class="sc-rp5asc-12 Sxcoo">
@@ -477,14 +479,14 @@ function bookmarkAndTag_process(checkType, matches) {
             <div aria-haspopup="true" class="sc-1rx6dmq-0 icsUdQ">
                 <div class="sc-1rx6dmq-1 eMfHJB">
                     <a class="sc-d98f2c-0" data-gtm-value="${userId}" href="/users/${userId}">
-                        <div size="24" title="${escapleText(userName)}" role="img" class="sc-1asno00-0 hMqBzA">
-                            <img src="${userProfileImage}" style="object-fit: cover; object-position: center top;" width="24" height="24" alt="${escapleText(userName)}">
+                        <div size="24" title="${escapeText(userName)}" role="img" class="sc-1asno00-0 hMqBzA">
+                            <img src="${userProfileImage}" style="object-fit: cover; object-position: center top;" width="24" height="24" alt="${escapeText(userName)}">
                         </div>
                     </a>
                 </div>
-                <a class="sc-d98f2c-0 sc-1rx6dmq-2 kghgsn" data-gtm-value="${userId}" href="/users/${userId}">${escapleText(userName)}</a>
+                <a class="sc-d98f2c-0 sc-1rx6dmq-2 kghgsn" data-gtm-value="${userId}" href="/users/${userId}">${escapeText(userName)}</a>
             </div>`;
-            illustTitleElement = `<a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh" href="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(31, 31, 31); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapleText(illustTitle)}</a>`
+            illustTitleElement = `<a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh" href="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(31, 31, 31); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapeText(illustTitle)}</a>`
             addBookmarkClass = " addBookmark"
         }
 

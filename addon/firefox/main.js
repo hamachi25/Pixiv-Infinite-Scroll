@@ -1,7 +1,9 @@
 /*! Pixiv Infinite Scroll | MIT license | https://github.com/chimaha/Pixiv-Infinite-Scroll/blob/main/LICENSE */
 
+"use strict";
+
 // エスケープHTML
-function escapleText(str) {
+function escapeText(str) {
     if (typeof str != "string") {
         return str;
     }
@@ -11,6 +13,25 @@ function escapleText(str) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+}
+
+// 読み込み中のアニメーション
+function loadAnimation(target) {
+    const loadDiv = `
+    <div id="load-animation" style="margin-top: 50px;">
+        <div class="sc-nq4el8-0 jowYIb">
+            <div class="_13IZ4oR" style="height: 32px;">
+                <div class="_2t3TQ_F" style="width: 32px; height: 32px; margin-top: -16px; margin-left: -16px;"></div>
+            </div>
+        </div>
+    </div>`;
+    document.querySelector(target).insertAdjacentHTML("afterend", loadDiv);
+}
+function deleteAnimation(jsonBody, n) {
+    const jsonWorksLength = Object.keys(jsonBody).length;
+    if (jsonWorksLength < n) {
+        document.getElementById("load-animation").remove();
+    }
 }
 
 // フォロー中の無限スクロール-----------------------------------------------------------------
@@ -112,7 +133,7 @@ function following_process() {
                             <div width="184" height="184" class="sc-rp5asc-0 fxGVAF addBookmark">
                                 <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY sc-eWnToP khjDVZ" data-gtm-value="${illustId[i]}" data-gtm-user-id="${userId}" href="/artworks/${illustId[i]}">
                                     <div radius="4" class="sc-rp5asc-9 cYUezH" style="position: relative; width: 100%; height: 100%;">
-                                        <img src="${illustUrl[i]}" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${escapleText(illustAlt[i])}" class="sc-rp5asc-10 erYaF">
+                                        <img src="${illustUrl[i]}" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${escapeText(illustAlt[i])}" class="sc-rp5asc-10 erYaF">
                                         ${ugoiraElement[i]}
                                     </div>
                                     <div class="sc-rp5asc-12 Sxcoo">
@@ -133,7 +154,7 @@ function following_process() {
                             </div>
                         </div>
                         <div class="sc-iasfms-0 jtpclu">
-                            <a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh" href="/artworks/${illustId[i]}">${escapleText(illustTitle[i])}</a>
+                            <a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh" href="/artworks/${illustId[i]}">${escapeText(illustTitle[i])}</a>
                         </div>
                     </div>
                 </div>
@@ -180,20 +201,20 @@ function following_process() {
 
         // "appendElements+="で一括追加にすると、なぜかundefinedが追加され続けるので一つずつ追加
         const appendElements = `
-        <div class="sc-1y4z60g-5 iVLXCu addElement page${scrollPageCount + 1}">
+        <div class="sc-1y4z60g-5 iVLXCu addElement addElement" data-page="${scrollPageCount + 1}">
             <div class="sc-11m5zdr-0 bbJBkV">
                 <div class="sc-11m5zdr-1 clrYBQ">
                     <div class="sc-19z9m4s-0 fbLOpg">
                         <a class="sc-d98f2c-0" data-gtm-value="${userId}" href="/users/${userId}">
-                            <div size="80" title="${escapleText(userName)}" role="img" class="sc-1asno00-0 deMagM">
-                                <img src="${userProfileImage}" style="object-fit: cover; object-position: center top;" width="80" height="80" alt="${escapleText(userName)}">
+                            <div size="80" title="${escapeText(userName)}" role="img" class="sc-1asno00-0 deMagM">
+                                <img src="${userProfileImage}" style="object-fit: cover; object-position: center top;" width="80" height="80" alt="${escapeText(userName)}">
                             </div>
                         </a>
                         <div class="sc-19z9m4s-4 fYGGbS">
                             <div class="sc-19z9m4s-5 iqZEnZ">
-                                <a class="sc-d98f2c-0 sc-19z9m4s-2 QHGGh" data-gtm-value="${userId}" href="/users/${userId}">${escapleText(userName)}</a>
+                                <a class="sc-d98f2c-0 sc-19z9m4s-2 QHGGh" data-gtm-value="${userId}" href="/users/${userId}">${escapeText(userName)}</a>
                             </div>
-                            <div class="sc-19z9m4s-3 isEYuz">${escapleText(userComment)}</div>
+                            <div class="sc-19z9m4s-3 isEYuz">${escapeText(userComment)}</div>
                             <div class="sc-19z9m4s-1 qjElz">
                                 <button class="sc-bdnxRM jvCTkj sc-dlnjwi ${followClass} sc-1obql3d-0 Rlftz gtm-undefined sc-1obql3d-0 Rlftz gtm-undefined follow" data-gtm-user-id="${userId}" data-click-action="click" data-click-label="follow" height="40" ${followStyle}>${changeFollowLanguage}</button>
                                 <div aria-current="false" class="sc-125tkm8-0 sc-125tkm8-3 ka-dhPl eZXKAK">
@@ -215,22 +236,33 @@ function following_process() {
     // https://www.pixiv.net/ajax/user/*/following?offset=24&limit=24&rest=show
     // https://www.pixiv.net/users/*/following?p=2
 
-    if (document.querySelectorAll(".sc-1y4z60g-5.iVLXCu").length < 23) { return; }
+    const illustItems = document.querySelectorAll(".sc-1y4z60g-5.iVLXCu");
+    if (illustItems.length < 23) { return; }
 
     // URL作成
-    const matches = window.location.href.match(followingRegex);
+    const matches = location.href.match(followingRegex);
     let offset;
-    if (matches[2]) {
-        offset = (Number(matches[2]) * 24) + (scrollPageCount * 24);
+    if (matches[2] && isValid) {
+        scrollPageCount == 0 ? saveScrollPageCount = Number(matches[2]) : "";
+        offset = (saveScrollPageCount * 24) + (scrollPageCount * 24);
     } else {
+        scrollPageCount == 0 ? saveScrollPageCount = 0 : "";
+        isValid = false;
         offset = 24 + (scrollPageCount * 24);
     }
     scrollPageCount++;
+
+    if (scrollPageCount == 1) {
+        revertURL(illustItems, 23, 30);
+        loadAnimation(".sc-1y4z60g-4.cqwgCG");
+    }
+
     const url = `https://www.pixiv.net/ajax/user/${matches[1]}/following?offset=${offset}&limit=24&rest=show`;
 
     const fetchData = async () => {
         const response = await fetch(url);
         const json = await response.json();
+        deleteAnimation(json.body.users, 23);
         for (let i = 0; i < Object.keys(json.body.users).length; i++) {
             const users = json.body.users[i];
             const userId = users.userId;
@@ -262,6 +294,7 @@ function following_process() {
         await fetchData();
         bookmarkAddDelete();
         followAndUnfollow(setFollowLanguage);
+        changeURL(matches[2], false, 23, 30);
     })();
 }
 // -----------------------------------------------------------------------------------------
@@ -390,7 +423,7 @@ function bookmarkAndTag_process(checkType, matches) {
                         </button>
                     </div>
                 </div>`;
-                illustTitleElement = `<span class="sc-iasfms-7 kocGIc" to="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(30, 30, 30); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapleText(illustTitle)}</a>`
+                illustTitleElement = `<span class="sc-iasfms-7 kocGIc" to="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(30, 30, 30); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapeText(illustTitle)}</a>`
             }
 
         } else {
@@ -398,7 +431,7 @@ function bookmarkAndTag_process(checkType, matches) {
             illustContainer = `
             <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY ${typeClass} sc-eWnToP khjDVZ" data-gtm-value="${illustId}" data-gtm-user-id="${userId}" href="/artworks/${illustId}" style="transition: opacity 0.2s ease 0s;">
                 <div radius="4" class="sc-rp5asc-9 cYUezH" style="position: relative; display: flex; width: 100%; height: 100%;">
-                    <img src="${illustUrl}" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${escapleText(illustAlt)}" class="sc-rp5asc-10 erYaF">
+                    <img src="${illustUrl}" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${escapeText(illustAlt)}" class="sc-rp5asc-10 erYaF">
                     ${ugoiraElement}
                 </div>
                 <div class="sc-rp5asc-12 Sxcoo">
@@ -423,14 +456,14 @@ function bookmarkAndTag_process(checkType, matches) {
             <div aria-haspopup="true" class="sc-1rx6dmq-0 icsUdQ">
                 <div class="sc-1rx6dmq-1 eMfHJB">
                     <a class="sc-d98f2c-0" data-gtm-value="${userId}" href="/users/${userId}">
-                        <div size="24" title="${escapleText(userName)}" role="img" class="sc-1asno00-0 hMqBzA">
-                            <img src="${userProfileImage}" style="object-fit: cover; object-position: center top;" width="24" height="24" alt="${escapleText(userName)}">
+                        <div size="24" title="${escapeText(userName)}" role="img" class="sc-1asno00-0 hMqBzA">
+                            <img src="${userProfileImage}" style="object-fit: cover; object-position: center top;" width="24" height="24" alt="${escapeText(userName)}">
                         </div>
                     </a>
                 </div>
-                <a class="sc-d98f2c-0 sc-1rx6dmq-2 kghgsn" data-gtm-value="${userId}" href="/users/${userId}">${escapleText(userName)}</a>
+                <a class="sc-d98f2c-0 sc-1rx6dmq-2 kghgsn" data-gtm-value="${userId}" href="/users/${userId}">${escapeText(userName)}</a>
             </div>`;
-            illustTitleElement = `<a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh" href="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(31, 31, 31); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapleText(illustTitle)}</a>`
+            illustTitleElement = `<a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh" href="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(31, 31, 31); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapeText(illustTitle)}</a>`
             addBookmarkClass = " addBookmark"
         }
 
@@ -466,6 +499,27 @@ function bookmarkAndTag_process(checkType, matches) {
         }
     }
 
+    function getIllustData(jsonBody, typeElement, typeClass, target) {
+        for (let i = 0; i < Object.keys(jsonBody).length; i++) {
+            // タグ検索には1つだけ何も入っていないjsonBodyがあるので、そこだけ除外
+            if (!jsonBody[i].id) { continue; }
+            const illust = jsonBody[i];
+            const illustId = illust.id;
+            const illustTitle = illust.title;
+            const illustUrl = illust.url;
+            const userId = illust.userId;
+            const userName = illust.userName;
+            const illustPageCount = illust.pageCount;
+            const illustBookmarkData = illust.bookmarkData;
+            const illustAlt = illust.alt;
+            const userProfileImage = illust.profileImageUrl;
+            const illustR18 = illust.tags[0];
+            const illustMaskReason = illust.maskReason;
+            createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason);
+        }
+        document.querySelector(target).insertAdjacentHTML("beforeend", appendElements);
+    }
+
     function mouseover() {
         for (const element of document.querySelectorAll(`.page${scrollPageCount + 1} a.khjDVZ`)) {
             element.addEventListener("mouseover", () => {
@@ -483,113 +537,114 @@ function bookmarkAndTag_process(checkType, matches) {
         // https://www.pixiv.net/ajax/user/*/illusts/bookmarks?tag=&offset=0&limit=48&rest=show
         // https://www.pixiv.net/users/*/bookmarks/artworks?p=2
 
-        if (document.querySelectorAll(".sc-9y4be5-2.kFAPOq").length < 48) { return; }
+        const illustItems = document.querySelectorAll(".sc-9y4be5-2.kFAPOq");
+        if (illustItems.length < 48) { return; }
 
         // URL作成
         let offset;
-        if (matches[3]) {
-            offset = (Number(matches[3]) * 48) + (scrollPageCount * 48);
+        if (matches[3] && isValid) {
+            scrollPageCount == 0 ? saveScrollPageCount = Number(matches[3]) : "";
+            offset = (saveScrollPageCount * 48) + (scrollPageCount * 48);
         } else {
+            scrollPageCount == 0 ? saveScrollPageCount = 0 : "";
+            isValid = false;
             offset = 48 + (scrollPageCount * 48);
         }
-        let tag = "";
-        if (matches[2]) {
-            tag = matches[2]
-        }
+        const tag = matches[2] ? matches[2] : "";
         scrollPageCount++;
+
+        if (scrollPageCount == 1) {
+            revertURL(illustItems, 47, 50);
+            loadAnimation("ul.sc-9y4be5-1.jtUPOE");
+        }
+
         const url = `https://www.pixiv.net/ajax/user/${matches[1]}/illusts/bookmarks?tag=${tag}&offset=${offset}&limit=48&rest=show`;
 
         const fetchData = async () => {
             const response = await fetch(url);
             const json = await response.json();
-            for (let i = 0; i < Object.keys(json.body.works).length; i++) {
-                const illust = json.body.works[i];
-                const illustId = illust.id;
-                const illustTitle = illust.title;
-                const illustUrl = illust.url;
-                const userId = illust.userId;
-                const userName = illust.userName;
-                const illustPageCount = illust.pageCount;
-                const illustBookmarkData = illust.bookmarkData;
-                const illustAlt = illust.alt;
-                const userProfileImage = illust.profileImageUrl;
-                const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq CgxkO addElement page${scrollPageCount + 1}" style="display: block">`;
-                const typeClass = "";
-                const illustR18 = illust.tags[0];
-                const illustMaskReason = illust.maskReason;
-                createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason);
-            }
-            document.querySelector(".sc-9y4be5-1.jtUPOE").insertAdjacentHTML("beforeend", appendElements);
+            deleteAnimation(json.body.works, 47);
+
+            const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq CgxkO addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
+            const target = ".sc-9y4be5-1.jtUPOE";
+            getIllustData(json.body.works, typeElement, "", target);
             mouseover();
         };
         (async () => {
             await fetchData();
             bookmarkAddDelete();
+            changeURL(matches[3], false, 47, 50);
         })();
     } else if (checkType == "follow") {
         // フォローユーザーの作品
         // https://www.pixiv.net/ajax/follow_latest/illust?p=2&mode=all
         // https://www.pixiv.net/bookmark_new_illust.php?p=2
 
-        if (document.querySelectorAll(".sc-9y4be5-2.kFAPOq").length < 60) { return; }
+        const illustItems = document.querySelectorAll(".sc-9y4be5-2.kFAPOq");
+        if (illustItems.length < 60) { return; }
 
         // URL作成
         let offset;
         scrollPageCount++;
-        if (matches[2]) {
-            offset = Number(matches[2]) + scrollPageCount;
+        if (matches[2] && isValid) {
+            scrollPageCount == 1 ? saveScrollPageCount = Number(matches[2]) : "";
+            offset = saveScrollPageCount + scrollPageCount;
         } else {
+            scrollPageCount == 1 ? saveScrollPageCount = 0 : "";
+            isValid = false;
             offset = 1 + scrollPageCount;
         }
-        let setMode = "";
-        if (matches[1]) {
-            setMode = "r18";
-        } else {
-            setMode = "all";
+        const setMode = matches[1] ? "r18" : "all";
+
+        if (scrollPageCount == 1) {
+            revertURL(illustItems, 59, 70);
+            loadAnimation("ul.sc-9y4be5-1.jtUPOE");
         }
+
         const url = `https://www.pixiv.net/ajax/follow_latest/illust?p=${offset}&mode=${setMode}`;
 
         const fetchData = async () => {
             const response = await fetch(url);
             const json = await response.json();
-            for (let i = 0; i < Object.keys(json.body.thumbnails.illust).length; i++) {
-                const illust = json.body.thumbnails.illust[i];
-                const illustId = illust.id;
-                const illustTitle = illust.title;
-                const illustUrl = illust.url;
-                const userId = illust.userId;
-                const userName = illust.userName;
-                const illustPageCount = illust.pageCount;
-                const illustBookmarkData = illust.bookmarkData;
-                const illustAlt = illust.alt;
-                const userProfileImage = illust.profileImageUrl;
-                const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq wHEbW addElement page${scrollPageCount + 1}" style="display: block">`;
-                const typeClass = "gtm-followlatestpage-thumbnail-link";
-                const illustR18 = illust.tags[0];
-                const illustMaskReason = illust.maskReason;
-                createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason);
-            }
-            document.querySelector(".sc-9y4be5-1.jtUPOE").insertAdjacentHTML("beforeend", appendElements);
+            deleteAnimation(json.body.thumbnails.illust, 59);
+
+            const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq wHEbW addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
+            const typeClass = "gtm-followlatestpage-thumbnail-link";
+            const target = ".sc-9y4be5-1.jtUPOE";
+            getIllustData(json.body.thumbnails.illust, typeElement, typeClass, target);
             mouseover();
         };
         (async () => {
             await fetchData();
             bookmarkAddDelete();
+            changeURL(matches[2], false, 59, 70);
         })();
     } else if (checkType == "tag") {
         // タグ検索
         // https://www.pixiv.net/ajax/search/artworks/*?word=*&order=date_d&mode=all&p=1&s_mode=s_tag_full&type=all
         // https://www.pixiv.net/tags/*/artworks?p=2
-
-        if (document.querySelectorAll(".sc-l7cibp-2.gpVAva").length < 60) { return; }
+        const illustItems = document.querySelectorAll(".sc-l7cibp-2.gpVAva");
+        if (illustItems.length < 60) { return; }
 
         // URL作成
         let offset;
         scrollPageCount++;
-        if (matches[7]) {
-            offset = Number(matches[7]) + scrollPageCount;
+        if ((matches[7] || matches[11]) && isValid) {
+            if (matches[7] && scrollPageCount == 1) {
+                saveScrollPageCount = Number(matches[7]);
+            } else if (matches[11] && scrollPageCount == 1) {
+                saveScrollPageCount = Number(matches[11]);
+            }
+            offset = saveScrollPageCount + scrollPageCount;
         } else {
+            scrollPageCount == 1 ? saveScrollPageCount = 0 : "";
+            isValid = false;
             offset = 1 + scrollPageCount;
+        }
+
+        if (scrollPageCount == 1) {
+            revertURL(illustItems, 5, 0);
+            loadAnimation("ul.sc-l7cibp-1.krFoBL");
         }
 
         let setIllustType = "";
@@ -611,17 +666,11 @@ function bookmarkAndTag_process(checkType, matches) {
             insertIllustType = "illust";
         }
 
-        let sinceDate = "";
-        if (matches[5]) {
-            sinceDate = `&${matches[5]}`;
-        }
-        let untilDate = "";
-        if (matches[6]) {
-            untilDate = `&${matches[6]}`;
-        }
-        let otherTag = "";
-        if (matches[10]) {
-            otherTag = `&${matches[10]}`;
+        let tagMatchMode = "";
+        if (matches[8] == "s_mode=s_tag" || matches[8] == "s_mode=s_tc") {
+            tagMatchMode = matches[8];
+        } else {
+            tagMatchMode = "s_mode=s_tag_full";
         }
 
         let setMode = "";
@@ -631,49 +680,27 @@ function bookmarkAndTag_process(checkType, matches) {
             setMode = "mode=all";
         }
 
-        let orderDate = "";
-        if (matches[3] == "order=date") {
-            orderDate = matches[3];
-        } else {
-            orderDate = "order=date_d";
-        }
+        const sinceDate = matches[5] ? `&${matches[5]}` : "";
+        const untilDate = matches[6] ? `&${matches[6]}` : "";
+        const otherTag = matches[10] ? `&${matches[10]}` : "";
+        const orderDate = matches[3] == "order=date" ? matches[3] : "order=date_d";
 
-        let tagMatchMode = "";
-        if (matches[8] == "s_mode=s_tag" || matches[8] == "s_mode=s_tc") {
-            tagMatchMode = matches[8];
-        } else {
-            tagMatchMode = "s_mode=s_tag_full";
-        }
         const url = `https://www.pixiv.net/ajax/search/${matches[2]}/${matches[1]}?word=${matches[1]}&${orderDate}&${setMode}&p=${offset}&${tagMatchMode}&${setIllustType}${sinceDate}${untilDate}${otherTag}`;
 
         const fetchData = async () => {
             const response = await fetch(url);
             const json = await response.json();
-            for (let i = 0; i < Object.keys(json.body[insertIllustType].data).length; i++) {
-                // jsonファイルに、なぜか必ず1つだけ欠けている部分があるのでスキップする
-                if (!json.body[insertIllustType].data[i].id) { continue; }
-                const illust = json.body[insertIllustType].data[i];
-                const illustId = illust.id;
-                const illustTitle = illust.title;
-                const illustUrl = illust.url;
-                const userId = illust.userId;
-                const userName = illust.userName;
-                const illustPageCount = illust.pageCount;
-                const illustBookmarkData = illust.bookmarkData;
-                const illustAlt = illust.alt;
-                const userProfileImage = illust.profileImageUrl;
-                const typeElement = `<li class="sc-l7cibp-2 gpVAva addElement page${scrollPageCount + 1}" style="display: block">`;
-                const typeClass = "";
-                const illustR18 = illust.tags[0];
-                const illustMaskReason = illust.maskReason;
-                createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason);
-            }
-            document.querySelector(".sc-l7cibp-1.krFoBL").insertAdjacentHTML("beforeend", appendElements);
+            deleteAnimation(json.body[insertIllustType].data, 59);
+
+            const typeElement = `<li class="sc-l7cibp-2 gpVAva addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
+            const target = ".sc-l7cibp-1.krFoBL";
+            getIllustData(json.body[insertIllustType].data, typeElement, "", target);
             mouseover();
         };
         (async () => {
             await fetchData();
             bookmarkAddDelete();
+            changeURL(matches[7], matches[11], 5, 0);
         })();
     } else if (checkType == "artwork") {
         // ユーザープロフィールのイラスト
@@ -681,17 +708,28 @@ function bookmarkAndTag_process(checkType, matches) {
         // https://www.pixiv.net/ajax/user/*/profile/all
         // https://www.pixiv.net/ajax/user/*/profile/illusts?ids[]=*&ids[]=*
 
-        if (document.querySelectorAll(".sc-9y4be5-2.kFAPOq").length < 48) { return; }
+        const illustItems = document.querySelectorAll(".sc-9y4be5-2.kFAPOq");
+        if (illustItems.length < 48) { return; }
 
+        // https://www.pixiv.net/users/*/illustrations/風景
+        // 上のURLのようにタグをつけた場合
         if (matches[3]) {
             // URL作成
             let offset;
-            if (matches[4]) {
-                offset = (Number(matches[3]) * 48) + (scrollPageCount * 48);
+            if (matches[4] && isValid) {
+                scrollPageCount == 0 ? saveScrollPageCount = Number(matches[3]) : "";
+                offset = (Number(matches[4]) * 48) + (scrollPageCount * 48);
             } else {
+                scrollPageCount == 0 ? saveScrollPageCount = 0 : "";
+                isValid = false;
                 offset = 48 + (scrollPageCount * 48);
             }
             scrollPageCount++;
+
+            if (scrollPageCount == 1) {
+                revertURL(illustItems, 47, 50);
+                loadAnimation("ul.sc-9y4be5-1.jtUPOE");
+            }
 
             let tag = matches[3];
             let insertIllustType;
@@ -707,36 +745,24 @@ function bookmarkAndTag_process(checkType, matches) {
             const fetchData = async () => {
                 const response = await fetch(url);
                 const json = await response.json();
-                for (let i = 0; i < Object.keys(json.body.works).length; i++) {
-                    const illust = json.body.works[i];
-                    const illustId = illust.id;
-                    const illustTitle = illust.title;
-                    const illustUrl = illust.url;
-                    const userId = illust.userId;
-                    const userName = "";
-                    const illustPageCount = illust.pageCount;
-                    const illustBookmarkData = illust.bookmarkData;
-                    const illustAlt = illust.alt;
-                    const userProfileImage = "";
-                    const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq CgxkO addElement page${scrollPageCount + 1}" style="display: block">`;
-                    const typeClass = "";
-                    const illustR18 = illust.tags[0];
-                    const illustMaskReason = "";
-                    createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason);
-                }
-                document.querySelector(".sc-9y4be5-1.jtUPOE").insertAdjacentHTML("beforeend", appendElements);
+                deleteAnimation(json.body.works, 47);
+
+                const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq CgxkO addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
+                const target = ".sc-9y4be5-1.jtUPOE";
+                getIllustData(json.body.works, typeElement, "", target);
                 mouseover();
             };
             (async () => {
                 await fetchData();
                 bookmarkAddDelete();
+                changeURL(matches[4], false, 47, 50);
             })();
         } else {
-
+            // タグがない場合
             const url = `https://www.pixiv.net/ajax/user/${matches[1]}/profile/all`;
 
             const fetchData = async () => {
-                // 初回のみillustIDを取得
+                // 初回のみillustIDをすべて取得
                 if (!artworkIllustId) {
                     const response = await fetch(url);
                     const json = await response.json();
@@ -744,18 +770,14 @@ function bookmarkAndTag_process(checkType, matches) {
                     const arrayIllustId = Object.keys(objectIllustId);
                     const objectMangaId = json.body.manga;
                     const arrayMangaId = Object.keys(objectMangaId);
+                    // イラストとマンガの配列を組み合わせ、番号順に並べる
                     const arrayArtworks = arrayIllustId.concat(arrayMangaId);
                     arrayArtworks.sort((a, b) => a - b);
 
                     // 開いているページまでのillustIDを削除
                     function deleteIllustId(artworkIllustId) {
-                        if (matches[3]) {
-                            artworkIllustId.splice(-48 * matches[3]);
-                        } else {
-                            artworkIllustId.splice(-48);
-                        }
+                        matches[4] ? artworkIllustId.splice(-96) : artworkIllustId.splice(-48);
                     }
-
                     if (matches[2] == "illustrations") {
                         artworkIllustId = arrayIllustId.map(item => "ids[]=" + item);
                         deleteIllustId(artworkIllustId);
@@ -769,12 +791,25 @@ function bookmarkAndTag_process(checkType, matches) {
                 }
 
                 scrollPageCount++;
+                if (matches[4] && isValid && scrollPageCount == 1) {
+                    saveScrollPageCount = Number(matches[4]);
+                } else if (scrollPageCount == 1) {
+                    saveScrollPageCount = 0;
+                    isValid = false;
+                }
+
+                if (scrollPageCount == 1) {
+                    revertURL(illustItems, 47, 50);
+                    loadAnimation("ul.sc-9y4be5-1.jtUPOE");
+                }
+                // 配列の後ろから48個取得して削除
                 const sliceIllustId = artworkIllustId.splice(-48);
 
                 const url2 = `https://www.pixiv.net/ajax/user/${matches[1]}/profile/illusts?${sliceIllustId.join("&")}&work_category=illust&is_first_page=0`
 
                 const response2 = await fetch(url2);
                 const json2 = await response2.json();
+                deleteAnimation(json2.body.works, 47);
                 // jsonファイルは先頭が古いイラストで、後ろが新しいイラスト
                 // 後ろの新しいイラストからfor文を回して要素を追加していく必要があるので、reverseメソッドを使用
                 const keys = Object.keys(json2.body.works).reverse();
@@ -789,7 +824,7 @@ function bookmarkAndTag_process(checkType, matches) {
                     const illustBookmarkData = illust.bookmarkData;
                     const illustAlt = illust.alt;
                     const userProfileImage = "";
-                    const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq CgxkO addElement page${scrollPageCount + 1}" style="display: block">`;
+                    const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq CgxkO addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
                     const typeClass = "";
                     const illustR18 = illust.tags[0];
                     const illustMaskReason = "";
@@ -801,11 +836,85 @@ function bookmarkAndTag_process(checkType, matches) {
             (async () => {
                 await fetchData();
                 bookmarkAddDelete();
+                changeURL(matches[4], false, 47, 50);
             })();
         }
     }
 }
 // -----------------------------------------------------------------------------------------
+
+
+// ページ数をURLに表示する--------------------------------------------------------------------
+// 元からあるイラスト
+function revertURL(illustItems, n, k) {
+    // p=がついている場合はそのまま出力
+    const pageAdded = location.href.includes("p=") ? location.href : false;
+    for (let i = 0; i < illustItems.length; i++) {
+        // n個ごとにIntersectionObserverを設置
+        if ((i % n) == 0 && i != k) {
+            illustItems[i].classList.add("pageCount");
+
+            const options = { rootMargin: "-45% 0%" };
+            const pageCountObserver = new IntersectionObserver(entries => {
+                if (entries[0].isIntersecting) {
+                    let newUrl;
+                    if (pageAdded) {
+                        newUrl = pageAdded;
+                    } else {
+                        const url = location.href;
+                        if (url.includes("?p=") && url.includes("&")) {
+                            newUrl = url.replace(/p=\d+&/, "");
+                        } else if (url.includes("?p=") && !url.includes("&")) {
+                            newUrl = url.replace(/\?p=\d+/, "");
+                        } else if (url.includes("&p=")) {
+                            newUrl = url.replace(/&p=\d+/, "");
+                        } else {
+                            return url;
+                        }
+                    }
+                    history.replaceState(null, null, newUrl);
+                }
+            }, options);
+            pageCountObserver.observe(illustItems[i]);
+        }
+    }
+}
+// 追加されたイラスト
+function changeURL(matches, matches2, n, k) {
+    const pageCountElements = document.querySelectorAll(".addElement");
+    for (let i = 0; i < pageCountElements.length; i++) {
+        pageCountElements[i].classList.remove("addElement");
+        // n個ごとにIntersectionObserverを設置
+        if ((i % n) == 0 && i != k) {
+            pageCountElements[i].classList.add("pageCount");
+
+            const options = { rootMargin: "-45% 0%" };
+            const pageCountObserver = new IntersectionObserver(entries => {
+                if (entries[0].isIntersecting) {
+                    const pageCountNumber = pageCountElements[i].dataset.page;
+                    let newUrl;
+                    // 最初の実行がelse(p=がない)の場合は、isValidをfalseにしてelseのみ実行されるように
+                    if ((matches || matches2) && isValid) {
+                        const url = Number(saveScrollPageCount) + Number(pageCountNumber) - 1;
+                        newUrl = currentUrl.replace(/(p=)[^&]+/, "$1" + url);
+                    } else {
+                        if (currentUrl.includes("p=")) {
+                            const url = Number(saveScrollPageCount) + Number(pageCountNumber);
+                            newUrl = currentUrl.replace(/(p=)[^&]+/, "$1" + url);
+                        } else {
+                            const separate = currentUrl.includes("?") ? "&" : "?";
+                            newUrl = currentUrl + separate + "p=" + Number(pageCountNumber);
+                        }
+                    }
+                    history.replaceState(null, null, newUrl);
+                }
+            }, options);
+            pageCountObserver.observe(pageCountElements[i]);
+        }
+    }
+}
+// -----------------------------------------------------------------------------------------
+
 
 
 // 新たに追加した要素でのブックマーク・フォロー機能---------------------------------------------
@@ -856,7 +965,7 @@ function bookmarkAddDelete() {
                         });
                         const json = await response.json();
                         // ストレージにBookmarkIDを保存
-                        sessionStorage.setItem(illustId, json.body.last_bookmark_id);
+                        sessionStorage.illustId = json.body.last_bookmark_id;
 
                         if (!response.ok) { throw new Error(); }
 
@@ -1025,33 +1134,59 @@ function followAndUnfollow(setFollowLanguage) {
 
 
 let isProcessed = false;
+let saveScrollPageCount;
+let isValid = true;
 let currentUrl;
+let saveUrl;
 let scrollPageCount = 0;
+let observerCount = 0;
 let artworkIllustId = "";
 const followingRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/following(?:\?p=(\d+))?/;
 const bookmarkRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/bookmarks\/artworks(?:\/([^?]+))?(?:\?p=(\d+))?/;
 const followUserWorkRegex = /https:\/\/www\.pixiv\.net\/bookmark_new_illust(_r18)?\.php(?:\?p=(\d+))?(?:(?:&|\?)(tag=.*))?/;
-const tagRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/tags\/(.+)\/(artworks|illustrations|manga)(?:\?(order=date))?(?:(?:&|\?)(mode=(?:r18|safe)))?(?:(?:&|\?)(scd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)(ecd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)p=(\d+))?(?:(?:&|\?)(s_mode=(?:s_tag|s_tc)))?(?:(?:&|\?)type=([^&]+))?(?:(?:&|\?)(.+))?/;
+const tagRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/tags\/(.+)\/(artworks|illustrations|manga)(?:\?(order=date))?(?:(?:&|\?)(mode=(?:r18|safe)))?(?:(?:&|\?)(scd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)(ecd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)p=(\d+))?(?:(?:&|\?)(s_mode=(?:s_tag|s_tc)))?(?:(?:&|\?)type=([^&]+))?(?:(?:&|\?)([^p]+))?(?:(?:&|\?)p=(\d+))?/;
 const artworkRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/(illustrations|manga|artworks)(?:\/(.[^?p=]+))?(?:\?p=(\d+))?/;
 
 const observer = new MutationObserver(() => {
-    // URLが変更された際の処理
-    if (window.location.href != currentUrl) {
-        isProcessed = false;
-        scrollPageCount = 0;
-        artworkIllustId = "";
-        // タグページ・プロフィールページで条件を変更した際に、追加した要素を削除する
-        if (tagRegex.test(window.location.href) || artworkRegex.test(window.location.href)) {
-            const removeElements = document.querySelectorAll(".addElement");
-            for (const removeElement of removeElements) {
-                removeElement.remove();
+    if (currentUrl && saveUrl) {
+        // ページ数が含まれていないURLを作成
+        // そのまま取得すると、?p=2の数字が変わった時に実行されてしまう
+        function replaceURL(url) {
+            if (url.includes("?p=") && url.includes("&")) {
+                return url.replace(/p=\d+&/, "");
+            } else if (url.includes("?p=") && !url.includes("&")) {
+                return url.replace(/\?p=\d+/, "");
+            } else if (url.includes("&p=")) {
+                return url.replace(/&p=\d+/, "");
+            } else {
+                return url
+            }
+        }
+        // 現在のURLと初めに保存したURLが一致しない場合実行
+        if (replaceURL(saveUrl) != replaceURL(location.href)) {
+            isProcessed = false;
+            scrollPageCount = 0;
+            observerCount = 0;
+            artworkIllustId = "";
+            saveUrl = "";
+            isValid = true;
+            document.getElementById("load-animation").remove();
+            // タグページ・プロフィールページで条件を変更した際に、追加した要素を削除する
+            if (tagRegex.test(location.href) || artworkRegex.test(location.href)) {
+                const removeElements = document.querySelectorAll("[data-page]");
+                for (const removeElement of removeElements) {
+                    removeElement.remove();
+                }
             }
         }
     }
 
-    if (followingRegex.test(window.location.href)) {
+    if (followingRegex.test(location.href)) {
         // フォロー
-        currentUrl = window.location.href;
+        currentUrl = location.href;
+        // 初回のみURLを保存
+        observerCount++;
+        observerCount == 1 ? saveUrl = location.href : "";
         const intersectionTarget = document.querySelector(".sc-1y4z60g-4.cqwgCG");
 
         if (intersectionTarget && !isProcessed) {
@@ -1065,11 +1200,20 @@ const observer = new MutationObserver(() => {
                     }
                 })
             });
-            scrollObserver.observe(document.querySelector(".sc-1y4z60g-5.iVLXCu:last-child").previousElementSibling);
+            if (scrollPageCount == 0 || scrollPageCount == 1) {
+                setTimeout(() => {
+                    scrollObserver.observe(document.querySelector(".sc-1y4z60g-5.iVLXCu:last-child").previousElementSibling);
+                }, 400);
+            } else {
+                scrollObserver.observe(document.querySelector(".sc-1y4z60g-5.iVLXCu:last-child").previousElementSibling);
+            }
         }
-    } else if (bookmarkRegex.test(window.location.href) || followUserWorkRegex.test(window.location.href) || tagRegex.test(window.location.href) || artworkRegex.test(window.location.href)) {
+    } else if (bookmarkRegex.test(location.href) || followUserWorkRegex.test(location.href) || tagRegex.test(location.href) || artworkRegex.test(location.href)) {
         // ブックマーク・フォローユーザーの作品・タグ検索・プロフィールページ
-        currentUrl = window.location.href;
+        currentUrl = location.href;
+        // 初回のみURLを保存
+        observerCount++;
+        observerCount == 1 ? saveUrl = location.href : "";
 
         let checkType;
         let matches;
@@ -1111,9 +1255,8 @@ const observer = new MutationObserver(() => {
                 })
             }, options);
 
-            if (bookmarkRegex.test(currentUrl) || followUserWorkRegex.test(currentUrl)) {
-                scrollObserver.observe(document.querySelector(".sc-9y4be5-2.kFAPOq:last-child"));
-            } else if (artworkRegex.test(currentUrl)) {
+            if (bookmarkRegex.test(currentUrl) || followUserWorkRegex.test(currentUrl) || artworkRegex.test(currentUrl)) {
+                // ページ読み込み後すぐスクロールするとページが飛ばされることがあるので、遅延して読み込む
                 if (scrollPageCount == 0 || scrollPageCount == 1) {
                     setTimeout(() => {
                         scrollObserver.observe(document.querySelector(".sc-9y4be5-2.kFAPOq:last-child"));
@@ -1122,7 +1265,7 @@ const observer = new MutationObserver(() => {
                     scrollObserver.observe(document.querySelector(".sc-9y4be5-2.kFAPOq:last-child"));
                 }
             } else {
-                // タグページで条件を切り替えた際に、要素を取得するタイミングを遅らせるためにsetTimeoutを使用
+                // 検索結果で条件を切り替えた際に、要素を取得するタイミングを遅らせるためにsetTimeoutを使用
                 // 2ページ目と3ページ目が同時に読み込まれてしまうので、2ページ目もsetTimeoutを使用
                 if (scrollPageCount == 0 || scrollPageCount == 1) {
                     setTimeout(() => {
