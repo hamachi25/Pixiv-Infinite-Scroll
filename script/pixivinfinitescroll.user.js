@@ -6,7 +6,7 @@
 // @namespace            https://github.com/chimaha/Pixiv-Infinite-Scroll
 // @match                https://www.pixiv.net/*
 // @grant                none
-// @version              1.4.3.2
+// @version              1.4.3.3
 // @author               chimaha
 // @description          Add infinite scroll feature to Pixiv.
 // @description:ja       Pixivに無限スクロール機能を追加します。
@@ -631,7 +631,7 @@ function bookmarkAndTag_process(checkType, matches) {
             const json = await response.json();
             deleteAnimation(json.body.thumbnails.illust, 59);
 
-            const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq wHEbW addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
+            const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq kkQsWp addElement" data-page="${scrollPageCount + 1}" style="display: block;">`;
             const typeClass = "gtm-followlatestpage-thumbnail-link";
             const target = ".sc-9y4be5-1.jtUPOE";
             getIllustData(json.body.thumbnails.illust, typeElement, typeClass, target);
