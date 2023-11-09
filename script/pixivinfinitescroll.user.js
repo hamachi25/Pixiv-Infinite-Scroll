@@ -6,7 +6,7 @@
 // @namespace            https://github.com/chimaha/Pixiv-Infinite-Scroll
 // @match                https://www.pixiv.net/*
 // @grant                none
-// @version              1.4.3.4
+// @version              1.4.3.5
 // @author               chimaha
 // @description          Add infinite scroll feature to Pixiv.
 // @description:ja       Pixivに無限スクロール機能を追加します。
@@ -38,6 +38,20 @@ function escapeText(str) {
         .replace(/'/g, "&#039;");
 }
 
+
+const fetchResponse = async (url) => {
+    let response;
+    let json;
+    try {
+        response = await fetch(url);
+        if (!response.ok) { throw new Error(`Response Error：${response.status}`); }
+        json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 // 読み込み中のアニメーション
 function loadAnimation(target) {
     const loadDiv = `
@@ -52,7 +66,8 @@ function loadAnimation(target) {
 }
 function deleteAnimation(jsonBody, n) {
     const jsonWorksLength = Object.keys(jsonBody).length;
-    if (jsonWorksLength < n) {
+    const loadAnimation = document.getElementById("load-animation");
+    if (jsonWorksLength < n && loadAnimation) {
         document.getElementById("load-animation").remove();
     }
 }
@@ -224,7 +239,7 @@ function following_process() {
 
         // "appendElements+="で一括追加にすると、なぜかundefinedが追加され続けるので一つずつ追加
         const appendElements = `
-        <div class="sc-1y4z60g-5 iVLXCu addElement addElement" data-page="${scrollPageCount + 1}">
+        <div class="sc-1y4z60g-5 iVLXCu addElement" data-page="${scrollPageCount + 1}">
             <div class="sc-11m5zdr-0 bbJBkV">
                 <div class="sc-11m5zdr-1 clrYBQ">
                     <div class="sc-19z9m4s-0 fbLOpg">
@@ -260,7 +275,7 @@ function following_process() {
     // https://www.pixiv.net/users/*/following?p=2
 
     const illustItems = document.querySelectorAll(".sc-1y4z60g-5.iVLXCu");
-    if (illustItems.length < 23) { return; }
+    if (illustItems.length < 24 && scrollPageCount == 1) { return; }
 
     // URL作成
     const matches = location.href.match(followingRegex);
@@ -283,9 +298,9 @@ function following_process() {
     const url = `https://www.pixiv.net/ajax/user/${matches[1]}/following?offset=${offset}&limit=24&rest=show`;
 
     const fetchData = async () => {
-        const response = await fetch(url);
-        const json = await response.json();
+        const json = await fetchResponse(url);
         deleteAnimation(json.body.users, 23);
+
         for (let i = 0; i < Object.keys(json.body.users).length; i++) {
             const users = json.body.users[i];
             const userId = users.userId;
@@ -561,7 +576,7 @@ function bookmarkAndTag_process(checkType, matches) {
         // https://www.pixiv.net/users/*/bookmarks/artworks?p=2
 
         const illustItems = document.querySelectorAll(".sc-9y4be5-2.kFAPOq");
-        if (illustItems.length < 48) { return; }
+        if (illustItems.length < 48 && scrollPageCount == 1) { return; }
 
         // URL作成
         let offset;
@@ -584,9 +599,9 @@ function bookmarkAndTag_process(checkType, matches) {
         const url = `https://www.pixiv.net/ajax/user/${matches[1]}/illusts/bookmarks?tag=${tag}&offset=${offset}&limit=48&rest=show`;
 
         const fetchData = async () => {
-            const response = await fetch(url);
-            const json = await response.json();
+            const json = await fetchResponse(url);
             deleteAnimation(json.body.works, 47);
+            
 
             const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq CgxkO addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
             const target = ".sc-9y4be5-1.jtUPOE";
@@ -604,7 +619,7 @@ function bookmarkAndTag_process(checkType, matches) {
         // https://www.pixiv.net/bookmark_new_illust.php?p=2
 
         const illustItems = document.querySelectorAll(".sc-9y4be5-2.kFAPOq");
-        if (illustItems.length < 60) { return; }
+        if (illustItems.length < 60 && scrollPageCount == 1) { return; }
 
         // URL作成
         let offset;
@@ -627,8 +642,7 @@ function bookmarkAndTag_process(checkType, matches) {
         const url = `https://www.pixiv.net/ajax/follow_latest/illust?p=${offset}&mode=${setMode}`;
 
         const fetchData = async () => {
-            const response = await fetch(url);
-            const json = await response.json();
+            const json = await fetchResponse(url);
             deleteAnimation(json.body.thumbnails.illust, 59);
 
             const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq kkQsWp wHEbW addElement" data-page="${scrollPageCount + 1}" style="display: block; order: 3;">`;
@@ -647,7 +661,7 @@ function bookmarkAndTag_process(checkType, matches) {
         // https://www.pixiv.net/ajax/search/artworks/*?word=*&order=date_d&mode=all&p=1&s_mode=s_tag_full&type=all
         // https://www.pixiv.net/tags/*/artworks?p=2
         const illustItems = document.querySelectorAll(".sc-l7cibp-2.gpVAva");
-        if (illustItems.length < 60) { return; }
+        if (illustItems.length < 60 && scrollPageCount == 1) { return; }
 
         // URL作成
         let offset;
@@ -711,8 +725,7 @@ function bookmarkAndTag_process(checkType, matches) {
         const url = `https://www.pixiv.net/ajax/search/${matches[2]}/${matches[1]}?word=${matches[1]}&${orderDate}&${setMode}&p=${offset}&${tagMatchMode}&${setIllustType}${sinceDate}${untilDate}${otherTag}`;
 
         const fetchData = async () => {
-            const response = await fetch(url);
-            const json = await response.json();
+            const json = await fetchResponse(url);
             deleteAnimation(json.body[insertIllustType].data, 59);
 
             const typeElement = `<li class="sc-l7cibp-2 gpVAva addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
@@ -732,7 +745,7 @@ function bookmarkAndTag_process(checkType, matches) {
         // https://www.pixiv.net/ajax/user/*/profile/illusts?ids[]=*&ids[]=*
 
         const illustItems = document.querySelectorAll(".sc-9y4be5-2.kFAPOq");
-        if (illustItems.length < 48) { return; }
+        if (illustItems.length < 48 && scrollPageCount == 1) { return; }
 
         // https://www.pixiv.net/users/*/illustrations/風景
         // 上のURLのようにタグをつけた場合
@@ -766,8 +779,7 @@ function bookmarkAndTag_process(checkType, matches) {
             const url = `https://www.pixiv.net/ajax/user/${matches[1]}/${insertIllustType}/tag?tag=${tag}&offset=${offset}&limit=48`;
 
             const fetchData = async () => {
-                const response = await fetch(url);
-                const json = await response.json();
+                const json = await fetchResponse(url);
                 deleteAnimation(json.body.works, 47);
 
                 const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq CgxkO addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
@@ -787,8 +799,7 @@ function bookmarkAndTag_process(checkType, matches) {
             const fetchData = async () => {
                 // 初回のみillustIDをすべて取得
                 if (!artworkIllustId) {
-                    const response = await fetch(url);
-                    const json = await response.json();
+                    const json = await fetchResponse(url);
                     const objectIllustId = json.body.illusts;
                     const arrayIllustId = Object.keys(objectIllustId);
                     const objectMangaId = json.body.manga;
@@ -830,8 +841,7 @@ function bookmarkAndTag_process(checkType, matches) {
 
                 const url2 = `https://www.pixiv.net/ajax/user/${matches[1]}/profile/illusts?${sliceIllustId.join("&")}&work_category=illust&is_first_page=0`
 
-                const response2 = await fetch(url2);
-                const json2 = await response2.json();
+                const json2 = await fetchResponse(url2);
                 deleteAnimation(json2.body.works, 47);
                 // jsonファイルは先頭が古いイラストで、後ろが新しいイラスト
                 // 後ろの新しいイラストからfor文を回して要素を追加していく必要があるので、reverseメソッドを使用
@@ -1302,4 +1312,4 @@ const observer = new MutationObserver(() => {
     }
 });
 const config = { childList: true, subtree: true };
-observer.observe(document.querySelector("#root"), config);
+observer.observe(document.querySelector("body"), config);
