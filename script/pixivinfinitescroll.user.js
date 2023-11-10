@@ -166,7 +166,7 @@ function following_process() {
             illustGroup += `
             <div class="sc-w2rqc8-2 bgeGyS">
                 <div class="sc-fgp4rp-1 cQUnPX">
-                    <div class="sc-iasfms-5 liyNwX">
+                    <div class="sc-iasfms-5 cWMKYW">
                         <div type="illust" size="184" class="sc-iasfms-3 iIcDMF">
                             <div width="184" height="184" class="sc-rp5asc-0 fxGVAF addBookmark">
                                 <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY sc-eWnToP khjDVZ" data-gtm-value="${illustId[i]}" data-gtm-user-id="${userId}" href="/artworks/${illustId[i]}">
@@ -192,7 +192,7 @@ function following_process() {
                             </div>
                         </div>
                         <div class="sc-iasfms-0 jtpclu">
-                            <a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh" href="/artworks/${illustId[i]}">${escapeText(illustTitle[i])}</a>
+                            <a class="sc-d98f2c-0 sc-iasfms-6 eUXPuC" href="/artworks/${illustId[i]}">${escapeText(illustTitle[i])}</a>
                         </div>
                     </div>
                 </div>
