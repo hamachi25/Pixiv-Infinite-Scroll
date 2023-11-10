@@ -72,6 +72,18 @@ function deleteAnimation(jsonBody, n) {
     }
 }
 
+// イラストをマウスオーバーでopacity変更
+function mouseover() {
+    for (const element of document.querySelectorAll(`[data-page="${scrollPageCount + 1}"] a.khjDVZ`)) {
+        element.addEventListener("mouseover", () => {
+            element.style.opacity = "0.8";
+        });
+        element.addEventListener("mouseleave", () => {
+            element.style.opacity = "1";
+        });
+    }
+}
+
 // フォロー中の無限スクロール-----------------------------------------------------------------
 function following_process() {
 
@@ -169,7 +181,7 @@ function following_process() {
                     <div class="sc-iasfms-5 cWMKYW">
                         <div type="illust" size="184" class="sc-iasfms-3 iIcDMF">
                             <div width="184" height="184" class="sc-rp5asc-0 fxGVAF addBookmark">
-                                <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY sc-eWnToP khjDVZ" data-gtm-value="${illustId[i]}" data-gtm-user-id="${userId}" href="/artworks/${illustId[i]}">
+                                <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY sc-eWnToP khjDVZ" data-gtm-value="${illustId[i]}" data-gtm-user-id="${userId}" href="/artworks/${illustId[i]}" style="transition: opacity 0.2s ease 0s;">
                                     <div radius="4" class="sc-rp5asc-9 cYUezH" style="position: relative; width: 100%; height: 100%;">
                                         <img src="${illustUrl[i]}" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${escapeText(illustAlt[i])}" class="sc-rp5asc-10 erYaF">
                                         ${ugoiraElement[i]}
@@ -327,6 +339,7 @@ function following_process() {
             }
             createElement(userId, userName, userProfileImage, userComment, userFollowing, illustId, illustTitle, illustUrl, illustBookmarkData, illustAlt, illustR18, illustPageCount);
         }
+        mouseover();
     };
     (async () => {
         await fetchData();
@@ -556,17 +569,6 @@ function bookmarkAndTag_process(checkType, matches) {
             createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason);
         }
         document.querySelector(target).insertAdjacentHTML("beforeend", appendElements);
-    }
-
-    function mouseover() {
-        for (const element of document.querySelectorAll(`.page${scrollPageCount + 1} a.khjDVZ`)) {
-            element.addEventListener("mouseover", () => {
-                element.style.opacity = "0.8";
-            });
-            element.addEventListener("mouseleave", () => {
-                element.style.opacity = "1";
-            });
-        }
     }
 
     let appendElements = "";
