@@ -5,8 +5,10 @@
 // @name:zh-TW           Pixiv Infinite Scroll
 // @namespace            https://github.com/chimaha/Pixiv-Infinite-Scroll
 // @match                https://www.pixiv.net/*
-// @grant                none
-// @version              1.4.3.5
+// @grant                GM_getValue
+// @grant                GM_setValue
+// @grant                GM_registerMenuCommand
+// @version              1.4.3.6
 // @author               chimaha
 // @description          Add infinite scroll feature to Pixiv.
 // @description:ja       Pixivに無限スクロール機能を追加します。
@@ -24,6 +26,8 @@
 /*! Pixiv Infinite Scroll | MIT license | https://github.com/chimaha/Pixiv-Infinite-Scroll/blob/main/LICENSE */
 
 "use strict";
+
+let menubool = GM_getValue("menu", true);
 
 // エスケープHTML
 function escapeText(str) {
@@ -68,7 +72,7 @@ function deleteAnimation(jsonBody, n) {
     const jsonWorksLength = Object.keys(jsonBody).length;
     const loadAnimation = document.getElementById("load-animation");
     if (jsonWorksLength < n && loadAnimation) {
-        document.getElementById("load-animation").remove();
+        loadAnimation.remove();
     }
 }
 
@@ -107,7 +111,16 @@ function following_process() {
             setFollowLanguage.push("Following", "Follow");
     }
 
+    let borderCount = 0;
+
     function createElement(userId, userName, userProfileImage, userComment, userFollowing, illustId, illustTitle, illustUrl, illustBookmarkData, illustAlt, illustR18, illustPageCount) {
+
+        // ページ区切り線
+        borderCount++;
+        if (borderCount == 1 && menubool) {
+            const borderElement = `<div style="border-top: 1px solid; text-align: center; font-size: 20px; color: gray; user-select: none;">${borderOffset}</div>`;
+            document.querySelector(".sc-1y4z60g-4.cqwgCG").insertAdjacentHTML("beforeend", borderElement);
+        }
 
         // フォロー中・フォローするを切り替え
         let changeFollowLanguage;
@@ -292,13 +305,16 @@ function following_process() {
     // URL作成
     const matches = location.href.match(followingRegex);
     let offset;
+    let borderOffset;
     if (matches[2] && isValid) {
         scrollPageCount == 0 ? saveScrollPageCount = Number(matches[2]) : "";
         offset = (saveScrollPageCount * 24) + (scrollPageCount * 24);
+        borderOffset = scrollPageCount + saveScrollPageCount + 1;
     } else {
         scrollPageCount == 0 ? saveScrollPageCount = 0 : "";
         isValid = false;
         offset = 24 + (scrollPageCount * 24);
+        borderOffset = scrollPageCount + 2;
     }
     scrollPageCount++;
 
@@ -550,7 +566,7 @@ function bookmarkAndTag_process(checkType, matches) {
         }
     }
 
-    function getIllustData(jsonBody, typeElement, typeClass, target) {
+    function getIllustData(jsonBody, typeElement, typeClass, target, borderOffset) {
         for (let i = 0; i < Object.keys(jsonBody).length; i++) {
             // タグ検索には1つだけ何も入っていないjsonBodyがあるので、そこだけ除外
             if (!jsonBody[i].id) { continue; }
@@ -568,7 +584,18 @@ function bookmarkAndTag_process(checkType, matches) {
             const illustMaskReason = illust.maskReason;
             createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason);
         }
-        document.querySelector(target).insertAdjacentHTML("beforeend", appendElements);
+        if (appendElements) {
+            if (menubool) {
+                appendElements = `
+                <div class="addElement-parents" style="border-top: 1px solid; text-align: center; font-size: 20px; color: gray; margin: 30px 0 20px 0; user-select: none;">
+                    ${borderOffset}
+                </div>
+                <ul class="sc-9y4be5-1 sc-l7cibp-1 jtUPOE krFoBL addElement-parents">${appendElements}</ul>`
+            } else {
+                appendElements = `<ul class="sc-9y4be5-1 sc-l7cibp-1 jtUPOE krFoBL addElement-parents" style="margin-top: 12px">${appendElements}</ul>`
+            }
+            document.querySelector(target).insertAdjacentHTML("beforeend", appendElements);
+        }
     }
 
     let appendElements = "";
@@ -582,20 +609,23 @@ function bookmarkAndTag_process(checkType, matches) {
 
         // URL作成
         let offset;
+        let borderOffset;
         if (matches[3] && isValid) {
             scrollPageCount == 0 ? saveScrollPageCount = Number(matches[3]) : "";
             offset = (saveScrollPageCount * 48) + (scrollPageCount * 48);
+            borderOffset = scrollPageCount + saveScrollPageCount + 1;
         } else {
             scrollPageCount == 0 ? saveScrollPageCount = 0 : "";
             isValid = false;
             offset = 48 + (scrollPageCount * 48);
+            borderOffset = scrollPageCount + 2;
         }
         const tag = matches[2] ? matches[2] : "";
         scrollPageCount++;
 
         if (scrollPageCount == 1) {
             revertURL(illustItems, 47, 50);
-            loadAnimation("ul.sc-9y4be5-1.jtUPOE");
+            loadAnimation("section.sc-jgyytr-0.buukZm > div:nth-child(3)");
         }
 
         const url = `https://www.pixiv.net/ajax/user/${matches[1]}/illusts/bookmarks?tag=${tag}&offset=${offset}&limit=48&rest=show`;
@@ -603,11 +633,11 @@ function bookmarkAndTag_process(checkType, matches) {
         const fetchData = async () => {
             const json = await fetchResponse(url);
             deleteAnimation(json.body.works, 47);
-            
+
 
             const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq CgxkO addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
-            const target = ".sc-9y4be5-1.jtUPOE";
-            getIllustData(json.body.works, typeElement, "", target);
+            const target = ".sc-9y4be5-0.gTaKEp";
+            getIllustData(json.body.works, typeElement, "", target, borderOffset);
             mouseover();
         };
         (async () => {
@@ -625,20 +655,23 @@ function bookmarkAndTag_process(checkType, matches) {
 
         // URL作成
         let offset;
+        let borderOffset;
         scrollPageCount++;
         if (matches[2] && isValid) {
             scrollPageCount == 1 ? saveScrollPageCount = Number(matches[2]) : "";
             offset = saveScrollPageCount + scrollPageCount;
+            borderOffset = scrollPageCount + saveScrollPageCount;
         } else {
             scrollPageCount == 1 ? saveScrollPageCount = 0 : "";
             isValid = false;
             offset = 1 + scrollPageCount;
+            borderOffset = scrollPageCount + 1;
         }
         const setMode = matches[1] ? "r18" : "all";
 
         if (scrollPageCount == 1) {
             revertURL(illustItems, 59, 70);
-            loadAnimation("ul.sc-9y4be5-1.jtUPOE");
+            loadAnimation(".sc-9y4be5-0.cFnmRM");
         }
 
         const url = `https://www.pixiv.net/ajax/follow_latest/illust?p=${offset}&mode=${setMode}`;
@@ -649,8 +682,8 @@ function bookmarkAndTag_process(checkType, matches) {
 
             const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq kkQsWp wHEbW addElement" data-page="${scrollPageCount + 1}" style="display: block; order: 3;">`;
             const typeClass = "gtm-followlatestpage-thumbnail-link";
-            const target = ".sc-9y4be5-1.jtUPOE";
-            getIllustData(json.body.thumbnails.illust, typeElement, typeClass, target);
+            const target = ".sc-9y4be5-0.cFnmRM";
+            getIllustData(json.body.thumbnails.illust, typeElement, typeClass, target, borderOffset);
             mouseover();
         };
         (async () => {
@@ -668,6 +701,7 @@ function bookmarkAndTag_process(checkType, matches) {
         // URL作成
         let offset;
         scrollPageCount++;
+        let borderOffset;
         if ((matches[7] || matches[11]) && isValid) {
             if (matches[7] && scrollPageCount == 1) {
                 saveScrollPageCount = Number(matches[7]);
@@ -675,15 +709,17 @@ function bookmarkAndTag_process(checkType, matches) {
                 saveScrollPageCount = Number(matches[11]);
             }
             offset = saveScrollPageCount + scrollPageCount;
+            borderOffset = scrollPageCount + saveScrollPageCount;
         } else {
             scrollPageCount == 1 ? saveScrollPageCount = 0 : "";
             isValid = false;
             offset = 1 + scrollPageCount;
+            borderOffset = scrollPageCount + 1;
         }
 
         if (scrollPageCount == 1) {
             revertURL(illustItems, 5, 0);
-            loadAnimation("ul.sc-l7cibp-1.krFoBL");
+            loadAnimation(".sc-l7cibp-0.juyBTC > .sc-1nr368f-4.iClkCH:first-child");
         }
 
         let setIllustType = "";
@@ -731,8 +767,8 @@ function bookmarkAndTag_process(checkType, matches) {
             deleteAnimation(json.body[insertIllustType].data, 59);
 
             const typeElement = `<li class="sc-l7cibp-2 gpVAva addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
-            const target = ".sc-l7cibp-1.krFoBL";
-            getIllustData(json.body[insertIllustType].data, typeElement, "", target);
+            const target = ".sc-l7cibp-0.juyBTC > .sc-1nr368f-4.iClkCH";
+            getIllustData(json.body[insertIllustType].data, typeElement, "", target, borderOffset);
             mouseover();
         };
         (async () => {
@@ -754,19 +790,22 @@ function bookmarkAndTag_process(checkType, matches) {
         if (matches[3]) {
             // URL作成
             let offset;
+            let borderOffset;
             if (matches[4] && isValid) {
-                scrollPageCount == 0 ? saveScrollPageCount = Number(matches[3]) : "";
+                scrollPageCount == 0 ? saveScrollPageCount = Number(matches[4]) : "";
                 offset = (Number(matches[4]) * 48) + (scrollPageCount * 48);
+                borderOffset = scrollPageCount + saveScrollPageCount + 1;
             } else {
                 scrollPageCount == 0 ? saveScrollPageCount = 0 : "";
                 isValid = false;
                 offset = 48 + (scrollPageCount * 48);
+                borderOffset = scrollPageCount + 2;
             }
             scrollPageCount++;
 
             if (scrollPageCount == 1) {
                 revertURL(illustItems, 47, 50);
-                loadAnimation("ul.sc-9y4be5-1.jtUPOE");
+                loadAnimation("section.sc-jgyytr-0.buukZm");
             }
 
             let tag = matches[3];
@@ -785,8 +824,8 @@ function bookmarkAndTag_process(checkType, matches) {
                 deleteAnimation(json.body.works, 47);
 
                 const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq CgxkO addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
-                const target = ".sc-9y4be5-1.jtUPOE";
-                getIllustData(json.body.works, typeElement, "", target);
+                const target = ".sc-9y4be5-0.gTaKEp";
+                getIllustData(json.body.works, typeElement, "", target, borderOffset);
                 mouseover();
             };
             (async () => {
@@ -827,16 +866,21 @@ function bookmarkAndTag_process(checkType, matches) {
                 }
 
                 scrollPageCount++;
-                if (matches[4] && isValid && scrollPageCount == 1) {
-                    saveScrollPageCount = Number(matches[4]);
-                } else if (scrollPageCount == 1) {
-                    saveScrollPageCount = 0;
-                    isValid = false;
+                let borderOffset;
+                if (matches[4] && isValid) {
+                    scrollPageCount == 1 ? saveScrollPageCount = Number(matches[4]) : "";
+                    borderOffset = scrollPageCount + saveScrollPageCount;
+                } else {
+                    borderOffset = scrollPageCount + 1;
+                    if (scrollPageCount == 1) {
+                        saveScrollPageCount = 0;
+                        isValid = false;
+                    }
                 }
 
                 if (scrollPageCount == 1) {
                     revertURL(illustItems, 47, 50);
-                    loadAnimation("ul.sc-9y4be5-1.jtUPOE");
+                    loadAnimation("section.sc-jgyytr-0.buukZm");
                 }
                 // 配列の後ろから48個取得して削除
                 const sliceIllustId = artworkIllustId.splice(-48);
@@ -865,7 +909,18 @@ function bookmarkAndTag_process(checkType, matches) {
                     const illustMaskReason = "";
                     createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason);
                 }
-                document.querySelector(".sc-9y4be5-1.jtUPOE").insertAdjacentHTML("beforeend", appendElements);
+                if (appendElements) {
+                    if (menubool) {
+                        appendElements = `
+                        <div class="addElement-parents" style="border-top: 1px solid; text-align: center; font-size: 20px; color: gray; margin: 30px 0 20px 0; user-select: none;">
+                            ${borderOffset}
+                        </div>
+                        <ul class="sc-9y4be5-1 sc-l7cibp-1 jtUPOE krFoBL addElement-parents">${appendElements}</ul>`
+                    } else {
+                        appendElements = `<ul class="sc-9y4be5-1 sc-l7cibp-1 jtUPOE krFoBL addElement-parents" style="margin-top: 12px">${appendElements}</ul>`
+                    }
+                    document.querySelector(".sc-9y4be5-0.gTaKEp").insertAdjacentHTML("beforeend", appendElements);
+                }
                 mouseover();
             };
             (async () => {
@@ -1208,7 +1263,7 @@ const observer = new MutationObserver(() => {
             document.getElementById("load-animation").remove();
             // タグページ・プロフィールページで条件を変更した際に、追加した要素を削除する
             if (tagRegex.test(location.href) || artworkRegex.test(location.href)) {
-                const removeElements = document.querySelectorAll("[data-page]");
+                const removeElements = document.querySelectorAll(".addElement-parents");
                 for (const removeElement of removeElements) {
                     removeElement.remove();
                 }
@@ -1294,20 +1349,28 @@ const observer = new MutationObserver(() => {
                 // ページ読み込み後すぐスクロールするとページが飛ばされることがあるので、遅延して読み込む
                 if (scrollPageCount == 0 || scrollPageCount == 1) {
                     setTimeout(() => {
-                        scrollObserver.observe(document.querySelector(".sc-9y4be5-2.kFAPOq:last-child"));
-                    }, 400);
+                        if (document.querySelector(".sc-9y4be5-1.jtUPOE:last-child")) {
+                            scrollObserver.observe(document.querySelector(".sc-9y4be5-1.jtUPOE:last-child > .sc-9y4be5-2.kFAPOq:last-child"));
+                        } else {
+                            scrollObserver.observe(document.querySelector(".sc-9y4be5-2.kFAPOq:last-child"));
+                        }
+                    }, 500);
                 } else {
-                    scrollObserver.observe(document.querySelector(".sc-9y4be5-2.kFAPOq:last-child"));
+                    scrollObserver.observe(document.querySelector(".sc-9y4be5-1.jtUPOE:last-child > .sc-9y4be5-2.kFAPOq:last-child"));
                 }
             } else {
                 // 検索結果で条件を切り替えた際に、要素を取得するタイミングを遅らせるためにsetTimeoutを使用
                 // 2ページ目と3ページ目が同時に読み込まれてしまうので、2ページ目もsetTimeoutを使用
                 if (scrollPageCount == 0 || scrollPageCount == 1) {
                     setTimeout(() => {
-                        scrollObserver.observe(document.querySelector(".sc-l7cibp-2.gpVAva:last-child"));
-                    }, 400);
+                        if (document.querySelector(".sc-9y4be5-1.jtUPOE:last-child")) {
+                            scrollObserver.observe(document.querySelector(".sc-l7cibp-1.krFoBL:last-child > .sc-l7cibp-2.gpVAva:last-child"));
+                        } else {
+                            scrollObserver.observe(document.querySelector(".sc-l7cibp-2.gpVAva:last-child"));
+                        }
+                    }, 500);
                 } else {
-                    scrollObserver.observe(document.querySelector(".sc-l7cibp-2.gpVAva:last-child"));
+                    scrollObserver.observe(document.querySelector(".sc-l7cibp-1.krFoBL:last-child > .sc-l7cibp-2.gpVAva:last-child"));
                 }
             }
         }
@@ -1315,3 +1378,25 @@ const observer = new MutationObserver(() => {
 });
 const config = { childList: true, subtree: true };
 observer.observe(document.querySelector("body"), config);
+
+// 区切り線の表示設定
+const browserLang = navigator.language;
+let menuLang;
+switch (browserLang) {
+    case "ja":
+        menuLang = "区切り線を表示：";
+        break;
+    default:
+        menuLang = "Show dividing lines: ";
+}
+
+let menuText = menubool ? `${menuLang}ON✔️` : `${menuLang}OFF❌`;
+GM_registerMenuCommand(menuText, () => {
+    if (menubool) {
+        const showBorder = false;
+        GM_setValue("menu", showBorder);
+    } else {
+        const showBorder = true;
+        GM_setValue("menu", showBorder);
+    }
+});
