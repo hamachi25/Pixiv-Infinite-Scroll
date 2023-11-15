@@ -2,5 +2,9 @@
     "extensionDescription": {
         "message": "Add an infinite scroll feature to Pixiv.",
         "description": "Description of the extension"
+    },
+    "dividingLine": {
+        "message": "Show dividing lines",
+        "description": "Setting title of whether to show dividing lines"
     }
 }
