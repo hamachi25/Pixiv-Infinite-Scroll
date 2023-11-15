@@ -8,7 +8,7 @@
 // @grant                GM_getValue
 // @grant                GM_setValue
 // @grant                GM_registerMenuCommand
-// @version              1.4.3.6
+// @version              1.4.4
 // @author               chimaha
 // @description          Add infinite scroll feature to Pixiv.
 // @description:ja       Pixivに無限スクロール機能を追加します。
@@ -27,7 +27,7 @@
 
 "use strict";
 
-let menubool = GM_getValue("menu", true);
+let showDividingLine = GM_getValue("dividingLine", true);
 
 // エスケープHTML
 function escapeText(str) {
@@ -114,10 +114,10 @@ function following_process() {
     let borderCount = 0;
 
     function createElement(userId, userName, userProfileImage, userComment, userFollowing, illustId, illustTitle, illustUrl, illustBookmarkData, illustAlt, illustR18, illustPageCount) {
-
+        
         // ページ区切り線
         borderCount++;
-        if (borderCount == 1 && menubool) {
+        if (borderCount == 1 && showDividingLine) {
             const borderElement = `<div style="border-top: 1px solid; text-align: center; font-size: 20px; color: gray; user-select: none;">${borderOffset}</div>`;
             document.querySelector(".sc-1y4z60g-4.cqwgCG").insertAdjacentHTML("beforeend", borderElement);
         }
@@ -585,7 +585,7 @@ function bookmarkAndTag_process(checkType, matches) {
             createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason);
         }
         if (appendElements) {
-            if (menubool) {
+            if (showDividingLine) {
                 appendElements = `
                 <div class="addElement-parents" style="border-top: 1px solid; text-align: center; font-size: 20px; color: gray; margin: 30px 0 20px 0; user-select: none;">
                     ${borderOffset}
@@ -910,7 +910,7 @@ function bookmarkAndTag_process(checkType, matches) {
                     createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason);
                 }
                 if (appendElements) {
-                    if (menubool) {
+                    if (showDividingLine) {
                         appendElements = `
                         <div class="addElement-parents" style="border-top: 1px solid; text-align: center; font-size: 20px; color: gray; margin: 30px 0 20px 0; user-select: none;">
                             ${borderOffset}
@@ -1237,147 +1237,143 @@ const followUserWorkRegex = /https:\/\/www\.pixiv\.net\/bookmark_new_illust(_r18
 const tagRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/tags\/(.+)\/(artworks|illustrations|manga)(?:\?(order=date))?(?:(?:&|\?)(mode=(?:r18|safe)))?(?:(?:&|\?)(scd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)(ecd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)p=(\d+))?(?:(?:&|\?)(s_mode=(?:s_tag|s_tc)))?(?:(?:&|\?)type=([^&]+))?(?:(?:&|\?)([^p]+))?(?:(?:&|\?)p=(\d+))?/;
 const artworkRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/(illustrations|manga|artworks)(?:\/(.[^?p=]+))?(?:\?p=(\d+))?/;
 
-const observer = new MutationObserver(() => {
-    if (currentUrl && saveUrl) {
-        // ページ数が含まれていないURLを作成
-        // そのまま取得すると、?p=2の数字が変わった時に実行されてしまう
-        function replaceURL(url) {
-            if (url.includes("?p=") && url.includes("&")) {
-                return url.replace(/p=\d+&/, "");
-            } else if (url.includes("?p=") && !url.includes("&")) {
-                return url.replace(/\?p=\d+/, "");
-            } else if (url.includes("&p=")) {
-                return url.replace(/&p=\d+/, "");
-            } else {
-                return url
+const observer = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+        if (currentUrl && saveUrl) {
+
+            // ページ数が含まれていないURLを作成
+            // そのまま取得すると、?p=2の数字が変わった時に実行されてしまう
+            function replaceURL(url) {
+                if (url.includes("?p=") && url.includes("&")) {
+                    return url.replace(/p=\d+&/, "");
+                } else if (url.includes("?p=") && !url.includes("&")) {
+                    return url.replace(/\?p=\d+/, "");
+                } else if (url.includes("&p=")) {
+                    return url.replace(/&p=\d+/, "");
+                } else {
+                    return url
+                }
             }
-        }
-        // 現在のURLと初めに保存したURLが一致しない場合実行
-        if (replaceURL(saveUrl) != replaceURL(location.href)) {
-            isProcessed = false;
-            scrollPageCount = 0;
-            observerCount = 0;
-            artworkIllustId = "";
-            saveUrl = "";
-            isValid = true;
-            document.getElementById("load-animation").remove();
-            // タグページ・プロフィールページで条件を変更した際に、追加した要素を削除する
-            if (tagRegex.test(location.href) || artworkRegex.test(location.href)) {
-                const removeElements = document.querySelectorAll(".addElement-parents");
-                for (const removeElement of removeElements) {
-                    removeElement.remove();
+
+            // 現在のURLと初めに保存したURLが一致しない場合実行
+            if (replaceURL(saveUrl) != replaceURL(location.href)) {
+                isProcessed = false;
+                scrollPageCount = 0;
+                observerCount = 0;
+                artworkIllustId = "";
+                saveUrl = "";
+                isValid = true;
+                document.getElementById("load-animation").remove();
+                // タグページ・プロフィールページで条件を変更した際に、追加した要素を削除する
+                if (tagRegex.test(location.href) || artworkRegex.test(location.href)) {
+                    const removeElements = document.querySelectorAll(".addElement-parents");
+                    for (const removeElement of removeElements) {
+                        removeElement.remove();
+                    }
                 }
             }
         }
-    }
 
-    if (followingRegex.test(location.href)) {
-        // フォロー
-        currentUrl = location.href;
-        // 初回のみURLを保存
-        observerCount++;
-        observerCount == 1 ? saveUrl = location.href : "";
-        const intersectionTarget = document.querySelector(".sc-1y4z60g-4.cqwgCG");
+        if (followingRegex.test(location.href)) {
+            // フォロー
+            currentUrl = location.href;
+            // 初回のみURLを保存
+            observerCount++;
+            observerCount == 1 ? saveUrl = location.href : "";
+            const intersectionTarget = document.querySelector(".sc-1y4z60g-4.cqwgCG");
 
-        if (intersectionTarget && !isProcessed) {
-            isProcessed = true;
-            const scrollObserver = new IntersectionObserver(entries => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        following_process();
-                        isProcessed = false;
-                        scrollObserver.unobserve(entry.target);
-                    }
-                })
-            });
-            if (scrollPageCount == 0 || scrollPageCount == 1) {
-                setTimeout(() => {
+            if (intersectionTarget && !isProcessed) {
+                isProcessed = true;
+                const scrollObserver = new IntersectionObserver(entries => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            following_process();
+                            isProcessed = false;
+                            scrollObserver.unobserve(entry.target);
+                        }
+                    })
+                });
+                if (scrollPageCount == 0 || scrollPageCount == 1) {
+                    setTimeout(() => {
+                        scrollObserver.observe(document.querySelector(".sc-1y4z60g-5.iVLXCu:last-child").previousElementSibling);
+                    }, 400);
+                } else {
                     scrollObserver.observe(document.querySelector(".sc-1y4z60g-5.iVLXCu:last-child").previousElementSibling);
-                }, 400);
-            } else {
-                scrollObserver.observe(document.querySelector(".sc-1y4z60g-5.iVLXCu:last-child").previousElementSibling);
+                }
             }
-        }
-    } else if (bookmarkRegex.test(location.href) || followUserWorkRegex.test(location.href) || tagRegex.test(location.href) || artworkRegex.test(location.href)) {
-        // ブックマーク・フォローユーザーの作品・タグ検索・プロフィールページ
-        currentUrl = location.href;
-        // 初回のみURLを保存
-        observerCount++;
-        observerCount == 1 ? saveUrl = location.href : "";
+        } else if (bookmarkRegex.test(location.href) || followUserWorkRegex.test(location.href) || tagRegex.test(location.href) || artworkRegex.test(location.href)) {
+            // ブックマーク・フォローユーザーの作品・タグ検索・プロフィールページ
+            currentUrl = location.href;
+            // 初回のみURLを保存
+            observerCount++;
+            observerCount == 1 ? saveUrl = location.href : "";
 
-        let checkType;
-        let matches;
-        if (bookmarkRegex.test(currentUrl)) {
-            checkType = "bookmark";
-            matches = currentUrl.match(bookmarkRegex);
-        } else if (followUserWorkRegex.test(currentUrl)) {
-            checkType = "follow";
-            matches = currentUrl.match(followUserWorkRegex);
-            if (matches[3]) {
-                observer.disconnect();
-                return;
+            let checkType;
+            let matches;
+            if (bookmarkRegex.test(currentUrl)) {
+                checkType = "bookmark";
+                matches = currentUrl.match(bookmarkRegex);
+            } else if (followUserWorkRegex.test(currentUrl)) {
+                checkType = "follow";
+                matches = currentUrl.match(followUserWorkRegex);
+                if (matches[3]) {
+                    observer.disconnect();
+                    return;
+                }
+            } else if (tagRegex.test(currentUrl)) {
+                checkType = "tag";
+                matches = currentUrl.match(tagRegex);
+            } else if (artworkRegex.test(currentUrl)) {
+                checkType = "artwork";
+                matches = currentUrl.match(artworkRegex);
             }
-        } else if (tagRegex.test(currentUrl)) {
-            checkType = "tag";
-            matches = currentUrl.match(tagRegex);
-        } else if (artworkRegex.test(currentUrl)) {
-            checkType = "artwork";
-            matches = currentUrl.match(artworkRegex);
-        }
 
-        let intersectionTarget;
-        if (bookmarkRegex.test(currentUrl) || followUserWorkRegex.test(currentUrl) || artworkRegex.test(currentUrl)) {
-            intersectionTarget = document.querySelector(".sc-9y4be5-1.jtUPOE");
-        } else {
-            intersectionTarget = document.querySelector(".sc-l7cibp-1.krFoBL img");
-        }
-
-        if (intersectionTarget && !isProcessed) {
-            isProcessed = true;
-            const options = { rootMargin: "0px 0px 300px 0px" };
-            const scrollObserver = new IntersectionObserver(entries => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        bookmarkAndTag_process(checkType, matches);
-                        isProcessed = false;
-                        scrollObserver.unobserve(entry.target);
-                    }
-                })
-            }, options);
-
+            let intersectionTarget;
             if (bookmarkRegex.test(currentUrl) || followUserWorkRegex.test(currentUrl) || artworkRegex.test(currentUrl)) {
-                // ページ読み込み後すぐスクロールするとページが飛ばされることがあるので、遅延して読み込む
-                if (scrollPageCount == 0 || scrollPageCount == 1) {
-                    setTimeout(() => {
-                        if (document.querySelector(".sc-9y4be5-1.jtUPOE:last-child")) {
-                            scrollObserver.observe(document.querySelector(".sc-9y4be5-1.jtUPOE:last-child > .sc-9y4be5-2.kFAPOq:last-child"));
-                        } else {
-                            scrollObserver.observe(document.querySelector(".sc-9y4be5-2.kFAPOq:last-child"));
-                        }
-                    }, 500);
-                } else {
-                    scrollObserver.observe(document.querySelector(".sc-9y4be5-1.jtUPOE:last-child > .sc-9y4be5-2.kFAPOq:last-child"));
-                }
+                intersectionTarget = document.querySelector(".sc-9y4be5-1.jtUPOE");
             } else {
-                // 検索結果で条件を切り替えた際に、要素を取得するタイミングを遅らせるためにsetTimeoutを使用
-                // 2ページ目と3ページ目が同時に読み込まれてしまうので、2ページ目もsetTimeoutを使用
-                if (scrollPageCount == 0 || scrollPageCount == 1) {
-                    setTimeout(() => {
-                        if (document.querySelector(".sc-9y4be5-1.jtUPOE:last-child")) {
-                            scrollObserver.observe(document.querySelector(".sc-l7cibp-1.krFoBL:last-child > .sc-l7cibp-2.gpVAva:last-child"));
-                        } else {
-                            scrollObserver.observe(document.querySelector(".sc-l7cibp-2.gpVAva:last-child"));
+                intersectionTarget = document.querySelector(".sc-l7cibp-1.krFoBL img");
+            }
+
+            if (intersectionTarget && !isProcessed) {
+                isProcessed = true;
+                const options = { rootMargin: "0px 0px 300px 0px" };
+                const scrollObserver = new IntersectionObserver(entries => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            bookmarkAndTag_process(checkType, matches);
+                            isProcessed = false;
+                            scrollObserver.unobserve(entry.target);
                         }
-                    }, 500);
+                    })
+                }, options);
+
+                if (bookmarkRegex.test(currentUrl) || followUserWorkRegex.test(currentUrl) || artworkRegex.test(currentUrl)) {
+                    // ページ読み込み後すぐスクロールするとページが飛ばされることがあるので、遅延して読み込む
+                    if (scrollPageCount == 0 || scrollPageCount == 1) {
+                        setTimeout(() => {
+                            scrollObserver.observe(document.querySelector(".sc-9y4be5-1.jtUPOE:last-child > .sc-9y4be5-2.kFAPOq:last-child"));
+                        }, 400);
+                    } else {
+                        scrollObserver.observe(document.querySelector(".sc-9y4be5-1.jtUPOE:last-child > .sc-9y4be5-2.kFAPOq:last-child"));
+                    }
                 } else {
-                    scrollObserver.observe(document.querySelector(".sc-l7cibp-1.krFoBL:last-child > .sc-l7cibp-2.gpVAva:last-child"));
+                    // 2ページ目と3ページ目が同時に読み込まれてしまうので、2ページ目もsetTimeoutを使用
+                    if (scrollPageCount == 0 || scrollPageCount == 1) {
+                        setTimeout(() => {
+                            scrollObserver.observe(document.querySelector(".sc-l7cibp-1.krFoBL:last-child > .sc-l7cibp-2.gpVAva:last-child"));
+                        }, 400);
+                    } else {
+                        scrollObserver.observe(document.querySelector(".sc-l7cibp-1.krFoBL:last-child > .sc-l7cibp-2.gpVAva:last-child"));
+                    }
                 }
             }
         }
-    }
+    })
 });
 const config = { childList: true, subtree: true };
 observer.observe(document.querySelector("body"), config);
+
 
 // 区切り線の表示設定
 const browserLang = navigator.language;
@@ -1390,13 +1386,11 @@ switch (browserLang) {
         menuLang = "Show dividing lines: ";
 }
 
-let menuText = menubool ? `${menuLang}ON✔️` : `${menuLang}OFF❌`;
+let menuText = showDividingLine ? `${menuLang}ON✔️` : `${menuLang}OFF❌`;
 GM_registerMenuCommand(menuText, () => {
-    if (menubool) {
-        const showBorder = false;
-        GM_setValue("menu", showBorder);
+    if (showDividingLine) {
+        GM_setValue("dividingLine", false);
     } else {
-        const showBorder = true;
-        GM_setValue("menu", showBorder);
+        GM_setValue("dividingLine", true);
     }
 });
