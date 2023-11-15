@@ -8,7 +8,7 @@
 // @grant                GM_getValue
 // @grant                GM_setValue
 // @grant                GM_registerMenuCommand
-// @version              1.4.4
+// @version              1.4.3.5
 // @author               chimaha
 // @description          Add infinite scroll feature to Pixiv.
 // @description:ja       Pixivに無限スクロール機能を追加します。
@@ -566,7 +566,7 @@ function bookmarkAndTag_process(checkType, matches) {
         }
     }
 
-    function getIllustData(jsonBody, typeElement, typeClass, target, borderOffset) {
+    function getIllustData(jsonBody, typeElement, typeClass, target, borderOffset, tag) {
         for (let i = 0; i < Object.keys(jsonBody).length; i++) {
             // タグ検索には1つだけ何も入っていないjsonBodyがあるので、そこだけ除外
             if (!jsonBody[i].id) { continue; }
@@ -591,10 +591,14 @@ function bookmarkAndTag_process(checkType, matches) {
                     ${borderOffset}
                 </div>
                 <ul class="sc-9y4be5-1 sc-l7cibp-1 jtUPOE krFoBL addElement-parents">${appendElements}</ul>`
+                document.querySelector(target).insertAdjacentHTML("beforeend", appendElements);
+            } else if (tag) {
+                // タグ検索の場合詰めて表示する
+                document.querySelector(".sc-l7cibp-1.krFoBL").insertAdjacentHTML("beforeend", appendElements);
             } else {
                 appendElements = `<ul class="sc-9y4be5-1 sc-l7cibp-1 jtUPOE krFoBL addElement-parents" style="margin-top: 12px">${appendElements}</ul>`
+                document.querySelector(target).insertAdjacentHTML("beforeend", appendElements);
             }
-            document.querySelector(target).insertAdjacentHTML("beforeend", appendElements);
         }
     }
 
@@ -637,7 +641,7 @@ function bookmarkAndTag_process(checkType, matches) {
 
             const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq CgxkO addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
             const target = ".sc-9y4be5-0.gTaKEp";
-            getIllustData(json.body.works, typeElement, "", target, borderOffset);
+            getIllustData(json.body.works, typeElement, "", target, borderOffset, false);
             mouseover();
         };
         (async () => {
@@ -683,7 +687,7 @@ function bookmarkAndTag_process(checkType, matches) {
             const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq kkQsWp wHEbW addElement" data-page="${scrollPageCount + 1}" style="display: block; order: 3;">`;
             const typeClass = "gtm-followlatestpage-thumbnail-link";
             const target = ".sc-9y4be5-0.cFnmRM";
-            getIllustData(json.body.thumbnails.illust, typeElement, typeClass, target, borderOffset);
+            getIllustData(json.body.thumbnails.illust, typeElement, typeClass, target, borderOffset, false);
             mouseover();
         };
         (async () => {
@@ -768,7 +772,7 @@ function bookmarkAndTag_process(checkType, matches) {
 
             const typeElement = `<li class="sc-l7cibp-2 gpVAva addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
             const target = ".sc-l7cibp-0.juyBTC > .sc-1nr368f-4.iClkCH";
-            getIllustData(json.body[insertIllustType].data, typeElement, "", target, borderOffset);
+            getIllustData(json.body[insertIllustType].data, typeElement, "", target, borderOffset, true);
             mouseover();
         };
         (async () => {
@@ -825,7 +829,7 @@ function bookmarkAndTag_process(checkType, matches) {
 
                 const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq CgxkO addElement" data-page="${scrollPageCount + 1}" style="display: block">`;
                 const target = ".sc-9y4be5-0.gTaKEp";
-                getIllustData(json.body.works, typeElement, "", target, borderOffset);
+                getIllustData(json.body.works, typeElement, "", target, borderOffset, false);
                 mouseover();
             };
             (async () => {
@@ -1263,7 +1267,8 @@ const observer = new MutationObserver(mutations => {
                 artworkIllustId = "";
                 saveUrl = "";
                 isValid = true;
-                document.getElementById("load-animation").remove();
+                const loadAnimation = document.getElementById("load-animation");
+                loadAnimation ? loadAnimation.remove() : "";
                 // タグページ・プロフィールページで条件を変更した際に、追加した要素を削除する
                 if (tagRegex.test(location.href) || artworkRegex.test(location.href)) {
                     const removeElements = document.querySelectorAll(".addElement-parents");
