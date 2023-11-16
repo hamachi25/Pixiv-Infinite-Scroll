@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     chrome.storage.local.get("dividingLine").then((result) => {
         if (result.dividingLine != undefined) {
-            console.log(result.dividingLine)
             dividingLine.checked = result.dividingLine;
         }
     })
