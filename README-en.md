@@ -14,8 +14,7 @@ You can set whether to display a dividing line for each page.
 
 ![X4lW1KTofO](https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/fef7ec7f-fdcd-4184-a576-53331f382e51)![d4EI34y5SW](https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/cefb6473-e3b4-4013-8ad0-c7467001d469)
 
-
-
+&nbsp;  
 
 ## How to Install
 ### Firefox
@@ -31,8 +30,7 @@ You can set whether to display a dividing line for each page.
 1. Download script manager extensions such as Violetmonkey and Tampermonkey
 2. Download [UserScript](https://github.com/chimaha/Pixiv-Infinite-Scroll/raw/main/script/pixivinfinitescroll.user.js)
 
-
-
+&nbsp;  
 
 ## Update  
 ### v1.4.4  
@@ -40,5 +38,5 @@ New
 - [Added the ability to display page separators](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/a78c50d8dc7a5b66fd7c5663406f6ca723a9022f)
 
 Fixes
-- [Fixed a bug where hovering over an illustration did not change its transparency](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/046a1b5b395918380aef0649f1d706ad22402df5)https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/046a1b5b395918380aef0649f1d706ad22402df5
-- [Fixed proper element size on "follow" page](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/6e849a861db31db2bc97e5176aca364b569cbc42)https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/6e849a861db31db2bc97e5176aca364b569cbc42
+- [Fixed a bug where hovering over an illustration did not change its transparency](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/046a1b5b395918380aef0649f1d706ad22402df5)
+- [Fixed proper element size on "follow" page](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/6e849a861db31db2bc97e5176aca364b569cbc42)

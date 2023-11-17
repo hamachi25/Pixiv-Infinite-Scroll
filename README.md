@@ -15,7 +15,7 @@ https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/a12dc5ff-510f-
 
 ![Iu4PVRP7o7](https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/a5e28f2b-e340-40b8-9a63-90f85c1e1040)![nSjrBJNOUx](https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/63d0cc27-c39f-47d1-b220-5e8f9b795521)  
 
-
+&nbsp;  
 
 ## インストール方法
 ### Firefox
@@ -31,8 +31,7 @@ https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/a12dc5ff-510f-
 1. VioletmonkeyやTampermonkeyなどのスクリプトマネージャー拡張機能をダウンロード
 2. [UserScript](https://github.com/chimaha/Pixiv-Infinite-Scroll/raw/main/script/pixivinfinitescroll.user.js)をダウンロード    
 
-
-
+&nbsp;  
 
 ## Update  
 ### v1.4.4  
@@ -40,5 +39,5 @@ New
 - [ページ区切り線を表示する機能を追加](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/a78c50d8dc7a5b66fd7c5663406f6ca723a9022f)
 
 Fixes
-- [イラストをホバーしても透明度が変更されないバグを修正](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/046a1b5b395918380aef0649f1d706ad22402df5)https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/046a1b5b395918380aef0649f1d706ad22402df5
-- [「フォロー」のページで要素サイズが適切になるように修正](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/6e849a861db31db2bc97e5176aca364b569cbc42)https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/6e849a861db31db2bc97e5176aca364b569cbc42
+- [イラストをホバーしても透明度が変更されないバグを修正](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/046a1b5b395918380aef0649f1d706ad22402df5)046a1b5b395918380aef0649f1d706ad22402df5
+- [「フォロー」のページで要素サイズが適切になるように修正](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/6e849a861db31db2bc97e5176aca364b569cbc42)
