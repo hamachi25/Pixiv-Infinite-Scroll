@@ -7,7 +7,15 @@ It can be used in "Search Results", "User Profile", "Following", "Works by users
 
 Currently, the novel is not supported.  
 
-https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/a12dc5ff-510f-47c7-b0d4-9a484c87028d
+https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/a12dc5ff-510f-47c7-b0d4-9a484c87028d  
+
+
+You can set whether to display a dividing line for each page.  
+
+![X4lW1KTofO](https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/fef7ec7f-fdcd-4184-a576-53331f382e51)![d4EI34y5SW](https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/cefb6473-e3b4-4013-8ad0-c7467001d469)
+
+
+
 
 ## How to Install
 ### Firefox
