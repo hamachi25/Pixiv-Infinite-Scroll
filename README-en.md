@@ -30,3 +30,15 @@ You can set whether to display a dividing line for each page.
 ### UserScript (Firefox/Chrome)
 1. Download script manager extensions such as Violetmonkey and Tampermonkey
 2. Download [UserScript](https://github.com/chimaha/Pixiv-Infinite-Scroll/raw/main/script/pixivinfinitescroll.user.js)
+
+
+
+
+## Update  
+### v1.4.4  
+New  
+- [Added the ability to display page separators](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/a78c50d8dc7a5b66fd7c5663406f6ca723a9022f)
+
+Fixes
+- [Fixed a bug where hovering over an illustration did not change its transparency](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/046a1b5b395918380aef0649f1d706ad22402df5)https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/046a1b5b395918380aef0649f1d706ad22402df5
+- [Fixed proper element size on "follow" page](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/6e849a861db31db2bc97e5176aca364b569cbc42)https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/6e849a861db31db2bc97e5176aca364b569cbc42
