@@ -5,9 +5,9 @@
     "description": "__MSG_extensionDescription__",
     "default_locale": "en",
     "icons": {
+        "32": "icons/pis32.png",
         "48": "icons/pis48.png",
-        "96": "icons/pis96.png",
-        "128": "icons/pis128.png"
+        "96": "icons/pis96.png"
     },
     "content_scripts": [
         {
@@ -15,8 +15,19 @@
                 "https://www.pixiv.net/*"
             ],
             "js": [
-                "main.js"
+                "script/main.js"
             ]
         }
+    ],
+    "action": {
+        "default_icon": {
+            "32": "icons/pis32.png",
+            "48": "icons/pis48.png",
+            "96": "icons/pis96.png"
+        },
+        "default_popup": "script/popup.html"
+    },
+    "permissions": [
+        "storage"
     ]
 }
