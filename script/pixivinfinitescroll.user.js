@@ -673,9 +673,16 @@ function bookmarkAndTag_process(checkType, matches) {
         }
         const setMode = matches[1] ? "r18" : "all";
 
+        // クラス名が異なることがある
+        let targetClass;
+        if (document.querySelector(".sc-9y4be5-0.cFnmRM")) {
+            targetClass = ".sc-9y4be5-0.cFnmRM";
+        } else {
+            targetClass = ".sc-9y4be5-0.lkFSNl";
+        }
         if (scrollPageCount == 1) {
             revertURL(illustItems, 59, 70);
-            loadAnimation(".sc-9y4be5-0.cFnmRM");
+            loadAnimation(targetClass);
         }
 
         const url = `https://www.pixiv.net/ajax/follow_latest/illust?p=${offset}&mode=${setMode}`;
@@ -686,8 +693,7 @@ function bookmarkAndTag_process(checkType, matches) {
 
             const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq kkQsWp wHEbW addElement" data-page="${scrollPageCount + 1}" style="display: block; order: 3;">`;
             const typeClass = "gtm-followlatestpage-thumbnail-link";
-            const target = ".sc-9y4be5-0.cFnmRM";
-            getIllustData(json.body.thumbnails.illust, typeElement, typeClass, target, borderOffset, false);
+            getIllustData(json.body.thumbnails.illust, typeElement, typeClass, targetClass, borderOffset, false);
             mouseover();
         };
         (async () => {
