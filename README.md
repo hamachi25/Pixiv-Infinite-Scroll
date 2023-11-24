@@ -34,6 +34,11 @@ https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/a12dc5ff-510f-
 &nbsp;  
 
 ## アップデート  
+### v1.4.4.1  
+修正
+- [「フォローユーザーの作品」で次ページが読み込まれないバグを修正 ](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/002d18f5741bce7a8dfd3b363fde9936e804daf6)  
+
+&nbsp;
 ### v1.4.4  
 新機能  
 - [ページ区切り線を表示する機能を追加](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/a78c50d8dc7a5b66fd7c5663406f6ca723a9022f)
