@@ -33,11 +33,11 @@ https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/a12dc5ff-510f-
 
 &nbsp;  
 
-## Update  
+## アップデート  
 ### v1.4.4  
-New  
+新機能  
 - [ページ区切り線を表示する機能を追加](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/a78c50d8dc7a5b66fd7c5663406f6ca723a9022f)
 
-Fixes
+修正
 - [イラストをホバーしても透明度が変更されないバグを修正](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/046a1b5b395918380aef0649f1d706ad22402df5)
 - [「フォロー」のページで要素サイズが適切になるように修正](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/6e849a861db31db2bc97e5176aca364b569cbc42)
