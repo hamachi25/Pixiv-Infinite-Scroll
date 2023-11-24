@@ -8,7 +8,7 @@
 // @grant                GM_getValue
 // @grant                GM_setValue
 // @grant                GM_registerMenuCommand
-// @version              1.4.4
+// @version              1.4.4.1
 // @author               chimaha
 // @description          Add infinite scroll feature to Pixiv.
 // @description:ja       Pixivに無限スクロール機能を追加します。
