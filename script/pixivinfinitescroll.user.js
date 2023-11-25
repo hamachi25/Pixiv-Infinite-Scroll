@@ -530,7 +530,7 @@ function bookmarkAndTag_process(checkType, matches) {
                 </div>
                 <a class="sc-d98f2c-0 sc-1rx6dmq-2 kghgsn" data-gtm-value="${userId}" href="/users/${userId}">${escapeText(userName)}</a>
             </div>`;
-            illustTitleElement = `<a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh" href="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(31, 31, 31); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapeText(illustTitle)}</a>`
+            illustTitleElement = `<a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh eUXPuC" href="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapeText(illustTitle)}</a>`
             addBookmarkClass = " addBookmark"
         }
 
