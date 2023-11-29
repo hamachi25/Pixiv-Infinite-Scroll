@@ -33,10 +33,16 @@ https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/a12dc5ff-510f-
 
 &nbsp;  
 
-## アップデート  
+## アップデート 
+### v1.4.4.2   
+修正
+- [仕様変更に対応](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/3cd58461c9490da64f8784ebced6465152fdf87f) 
+- [ロードアニメーションを削除](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/3cd58461c9490da64f8784ebced6465152fdf87f) 
+
+&nbsp;
 ### v1.4.4.1  
 修正
-- [「フォローユーザーの作品」で次ページが読み込まれないバグを修正 ](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/002d18f5741bce7a8dfd3b363fde9936e804daf6)  
+- [「フォローユーザーの作品」で次ページが読み込まれないバグを修正](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/002d18f5741bce7a8dfd3b363fde9936e804daf6)  
 
 &nbsp;
 ### v1.4.4  

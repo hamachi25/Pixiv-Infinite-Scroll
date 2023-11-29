@@ -35,7 +35,13 @@ You can set whether to display a dividing line for each page.
 ## Update  
 ### v1.4.4.1  
 Fixes
-- [Fixed a bug that prevented the next page from loading in "Works by users you are following" ](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/002d18f5741bce7a8dfd3b363fde9936e804daf6)  
+- [Responding to specification changes](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/3cd58461c9490da64f8784ebced6465152fdf87f)  
+- [Remove loading animation](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/3cd58461c9490da64f8784ebced6465152fdf87f)  
+
+&nbsp;
+### v1.4.4.1  
+Fixes
+- [Fixed a bug that prevented the next page from loading in "Works by users you are following"](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/002d18f5741bce7a8dfd3b363fde9936e804daf6)  
 
 &nbsp;
 ### v1.4.4  
