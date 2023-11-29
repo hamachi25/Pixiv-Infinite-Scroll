@@ -95,7 +95,7 @@ function following_process() {
     let borderCount = 0;
 
     function createElement(userId, userName, userProfileImage, userComment, userFollowing, illustId, illustTitle, illustUrl, illustBookmarkData, illustAlt, illustR18, illustPageCount) {
-        
+
         // ページ区切り線
         borderCount++;
         if (borderCount == 1 && showDividingLine) {
@@ -286,8 +286,12 @@ function following_process() {
     const matches = location.href.match(followingRegex);
     let offset;
     let borderOffset;
-    if (matches[2] && isValid) {
-        scrollPageCount == 0 ? saveScrollPageCount = Number(matches[2]) : "";
+    if ((matches[2] || matches[4]) && isValid) {
+        if (matches[2] && scrollPageCount == 0) {
+            saveScrollPageCount = Number(matches[2]);
+        } else if (scrollPageCount == 0) {
+            saveScrollPageCount = Number(matches[4]);
+        }
         offset = (saveScrollPageCount * 24) + (scrollPageCount * 24);
         borderOffset = scrollPageCount + saveScrollPageCount + 1;
     } else {
@@ -298,11 +302,12 @@ function following_process() {
     }
     scrollPageCount++;
 
+    const showHide = matches[3] ? "hide" : "show";
     if (scrollPageCount == 1) {
         revertURL(illustItems, 23, 30);
     }
 
-    const url = `https://www.pixiv.net/ajax/user/${matches[1]}/following?offset=${offset}&limit=24&rest=show`;
+    const url = `https://www.pixiv.net/ajax/user/${matches[1]}/following?offset=${offset}&limit=24&rest=${showHide}`;
 
     const fetchData = async () => {
         const json = await fetchResponse(url);
@@ -1203,7 +1208,7 @@ let saveUrl;
 let scrollPageCount = 0;
 let observerCount = 0;
 let artworkIllustId = "";
-const followingRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/following(?:\?p=(\d+))?/;
+const followingRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/following(?:\?p=(\d+))?(?:(?:&|\?)(rest=hide))?(?:\&p=(\d+))?/;
 const bookmarkRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/bookmarks\/artworks(?:\/([^?]+))?(?:\?p=(\d+))?/;
 const followUserWorkRegex = /https:\/\/www\.pixiv\.net\/bookmark_new_illust(_r18)?\.php(?:\?p=(\d+))?(?:(?:&|\?)(tag=.*))?/;
 const tagRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/tags\/(.+)\/(artworks|illustrations|manga)(?:\?(order=date))?(?:(?:&|\?)(mode=(?:r18|safe)))?(?:(?:&|\?)(scd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)(ecd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)p=(\d+))?(?:(?:&|\?)(s_mode=(?:s_tag|s_tc)))?(?:(?:&|\?)type=([^&]+))?(?:(?:&|\?)([^p]+))?(?:(?:&|\?)p=(\d+))?/;
@@ -1251,7 +1256,7 @@ const observer = new MutationObserver(mutations => {
             // 初回のみURLを保存
             observerCount++;
             observerCount == 1 ? saveUrl = location.href : "";
-            const intersectionTarget = document.querySelector(".sc-1y4z60g-4.cqwgCG");
+            const intersectionTarget = document.querySelector(".sc-1y4z60g-4");
 
             if (intersectionTarget && !isProcessed) {
                 isProcessed = true;
@@ -1264,12 +1269,15 @@ const observer = new MutationObserver(mutations => {
                         }
                     })
                 });
-                if (scrollPageCount == 0 || scrollPageCount == 1) {
-                    setTimeout(() => {
-                        scrollObserver.observe(document.querySelector(".sc-1y4z60g-5.iVLXCu:last-child").previousElementSibling);
-                    }, 400);
-                } else {
-                    scrollObserver.observe(document.querySelector(".sc-1y4z60g-5.iVLXCu:last-child").previousElementSibling);
+                const observerElement = document.querySelector(".sc-1y4z60g-5:last-child").previousElementSibling;
+                if (observerElement) {
+                    if (scrollPageCount == 0 || scrollPageCount == 1) {
+                        setTimeout(() => {
+                            scrollObserver.observe(observerElement);
+                        }, 400);
+                    } else {
+                        scrollObserver.observe(observerElement);
+                    }
                 }
             }
         } else if (bookmarkRegex.test(location.href) || followUserWorkRegex.test(location.href) || tagRegex.test(location.href) || artworkRegex.test(location.href)) {
