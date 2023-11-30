@@ -33,14 +33,19 @@ You can set whether to display a dividing line for each page.
 &nbsp;  
 
 ## Update  
-### v1.4.4.1  
-Fixes
+### v1.4.4.3  
+Fixes  
+- [Support for private following pages](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/3cd58461c9490da64f8784ebced6465152fdf87f)  
+
+&nbsp;
+### v1.4.4.2  
+Fixes  
 - [Responding to specification changes](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/3cd58461c9490da64f8784ebced6465152fdf87f)  
 - [Remove loading animation](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/3cd58461c9490da64f8784ebced6465152fdf87f)  
 
 &nbsp;
 ### v1.4.4.1  
-Fixes
+Fixes  
 - [Fixed a bug that prevented the next page from loading in "Works by users you are following"](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/002d18f5741bce7a8dfd3b363fde9936e804daf6)  
 
 &nbsp;
@@ -48,6 +53,6 @@ Fixes
 New  
 - [Added the ability to display page separators](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/a78c50d8dc7a5b66fd7c5663406f6ca723a9022f)
 
-Fixes
+Fixes  
 - [Fixed a bug where hovering over an illustration did not change its transparency](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/046a1b5b395918380aef0649f1d706ad22402df5)
 - [Fixed proper element size on "follow" page](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/6e849a861db31db2bc97e5176aca364b569cbc42)

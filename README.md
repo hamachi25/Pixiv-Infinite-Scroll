@@ -33,7 +33,12 @@ https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/a12dc5ff-510f-
 
 &nbsp;  
 
-## アップデート 
+## アップデート
+### v1.4.4.3    
+修正  
+- [非公開フォローページに対応](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/872a7b206d2fcdcbb175cc47b0d14b8123e46ad6) 
+
+&nbsp;
 ### v1.4.4.2   
 修正
 - [仕様変更に対応](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/3cd58461c9490da64f8784ebced6465152fdf87f) 
