@@ -58,6 +58,18 @@ function addStyle() {
 	document.head.lastElementChild.textContent = `
         .gqlfsh:visited {
             color: rgb(173, 173, 173);
+        }
+        .jtUPOE {
+            display: flex;
+            padding: 0px;
+            flex-wrap: wrap;
+            margin: -12px;
+            list-style: none;
+        }
+        .hdRpMN {
+            display: grid;
+            grid-template-columns: repeat(6, 184px);
+            gap: 24px;
         }`;
 }
 
@@ -543,7 +555,7 @@ function bookmarkAndTag_process(checkType, matches) {
         }
     }
 
-    function getIllustData(jsonBody, typeElement, typeClass, target, borderOffset, tag) {
+    function getIllustData(type, jsonBody, typeElement, typeClass, target, borderOffset, tag) {
         for (let i = 0; i < Object.keys(jsonBody).length; i++) {
             // タグ検索には1つだけ何も入っていないjsonBodyがあるので、そこだけ除外
             if (!jsonBody[i].id) { continue; }
@@ -562,18 +574,27 @@ function bookmarkAndTag_process(checkType, matches) {
             createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason);
         }
         if (appendElements) {
+            let ulClass;
+            switch (type) {
+                case "tag":
+                    ulClass = "sc-l7cibp-1 hdRpMN";
+                    break;
+                default:
+                    ulClass = "sc-9y4be5-1 jtUPOE";
+            }
+
             if (showDividingLine) {
                 appendElements = `
                 <div class="addElement-parents" style="border-top: 1px solid; text-align: center; font-size: 20px; color: gray; margin: 30px 0 20px 0; user-select: none;">
                     ${borderOffset}
                 </div>
-                <ul class="sc-9y4be5-1 sc-l7cibp-1 jtUPOE hdRpMN addElement-parents" style="display: grid; grid-template-columns: repeat(6, 184px); gap: 24px; list-style: none; padding: 0px;">${appendElements}</ul>`
+                <ul class="${ulClass} addElement-parents">${appendElements}</ul>`
                 document.querySelector(target).insertAdjacentHTML("beforeend", appendElements);
             } else if (tag) {
                 // タグ検索の場合詰めて表示する
                 document.querySelector(".sc-l7cibp-1").insertAdjacentHTML("beforeend", appendElements);
             } else {
-                appendElements = `<ul class="sc-9y4be5-1 sc-l7cibp-1 jtUPOE hdRpMN addElement-parents" style="margin-top: 12px; display: grid; grid-template-columns: repeat(6, 184px); gap: 24px; list-style: none; padding: 0px;">${appendElements}</ul>`
+                appendElements = `<ul class="${ulClass} addElement-parents">${appendElements}</ul>`
                 document.querySelector(target).insertAdjacentHTML("beforeend", appendElements);
             }
         }
@@ -613,9 +634,9 @@ function bookmarkAndTag_process(checkType, matches) {
         const fetchData = async () => {
             const json = await fetchResponse(url);
 
-            const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq eLrjNK addElement" data-page="${scrollPageCount + 1}" style="display: block; margin: 12px; width: 187px order: 1;">`;
+            const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq eLrjNK addElement" data-page="${scrollPageCount + 1}" style="display: block; margin: 12px; width: 184px order: 1;">`;
             const target = ".sc-9y4be5-0";
-            getIllustData(json.body.works, typeElement, "", target, borderOffset, false);
+            getIllustData("bookmark", json.body.works, typeElement, "", target, borderOffset, false);
             mouseover();
         };
         (async () => {
@@ -662,10 +683,10 @@ function bookmarkAndTag_process(checkType, matches) {
         const fetchData = async () => {
             const json = await fetchResponse(url);
 
-            const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq kkQsWp wHEbW addElement" data-page="${scrollPageCount + 1}" style="display: block; order: 3; margin: 12px; width: 187px ">`;
+            const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq JaPty addElement" data-page="${scrollPageCount + 1}" style="display: block; order: 3; margin: 12px; width: 184px">`;
             const typeClass = "gtm-followlatestpage-thumbnail-link";
             const target = ".sc-9y4be5-0";
-            getIllustData(json.body.thumbnails.illust, typeElement, typeClass, target, borderOffset, false);
+            getIllustData("follow", json.body.thumbnails.illust, typeElement, typeClass, target, borderOffset, false);
             mouseover();
         };
         (async () => {
@@ -746,9 +767,9 @@ function bookmarkAndTag_process(checkType, matches) {
         const fetchData = async () => {
             const json = await fetchResponse(url);
 
-            const typeElement = `<li class="sc-l7cibp-2 dhTDfw addElement" data-page="${scrollPageCount + 1}" style="display: block; margin: 0px; width: 187px; order: 1;">`;
+            const typeElement = `<li class="sc-l7cibp-2 dhTDfw addElement" data-page="${scrollPageCount + 1}" style="display: block; margin: 0px; order: 1;">`;
             const target = ".sc-l7cibp-0 > .sc-1nr368f-4:first-child";
-            getIllustData(json.body[insertIllustType].data, typeElement, "", target, borderOffset, true);
+            getIllustData("tag", json.body[insertIllustType].data, typeElement, "", target, borderOffset, true);
             mouseover();
         };
         (async () => {
@@ -801,9 +822,9 @@ function bookmarkAndTag_process(checkType, matches) {
             const fetchData = async () => {
                 const json = await fetchResponse(url);
 
-                const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq eLrjNK addElement" data-page="${scrollPageCount + 1}" style="display: block; margin: 12px; width: 187px order: 1;">`;
+                const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq lSsnI addElement" data-page="${scrollPageCount + 1}" style="display: block; margin: 12px; width: 184px order: 1;">`;
                 const target = ".sc-9y4be5-0";
-                getIllustData(json.body.works, typeElement, "", target, borderOffset, false);
+                getIllustData("artwork", json.body.works, typeElement, "", target, borderOffset, false);
                 mouseover();
             };
             (async () => {
@@ -891,9 +912,9 @@ function bookmarkAndTag_process(checkType, matches) {
                         <div class="addElement-parents" style="border-top: 1px solid; text-align: center; font-size: 20px; color: gray; margin: 30px 0 20px 0; user-select: none;">
                             ${borderOffset}
                         </div>
-                        <ul class="sc-9y4be5-1 jtUPOE addElement-parents" style="display: grid; grid-template-columns: repeat(6, 184px); gap: 24px; list-style: none; padding: 0px;">${appendElements}</ul>`
+                        <ul class="sc-9y4be5-1 jtUPOE addElement-parents">${appendElements}</ul>`
                     } else {
-                        appendElements = `<ul class="sc-9y4be5-1 jtUPOE addElement-parents" style="margin-top: 12px; display: grid; grid-template-columns: repeat(6, 184px); gap: 24px; list-style: none; padding: 0px;">${appendElements}</ul>`
+                        appendElements = `<ul class="sc-9y4be5-1 jtUPOE addElement-parents">${appendElements}</ul>`
                     }
                     document.querySelector(".sc-9y4be5-0").insertAdjacentHTML("beforeend", appendElements);
                 }
