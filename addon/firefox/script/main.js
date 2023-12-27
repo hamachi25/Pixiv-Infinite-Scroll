@@ -82,7 +82,7 @@ function following_process() {
         borderCount++;
         if (borderCount == 1 && showDividingLine) {
             const borderElement = `<div style="border-top: 1px solid; text-align: center; font-size: 20px; color: gray; user-select: none;">${borderOffset}</div>`;
-            document.querySelector(".sc-1y4z60g-4.cqwgCG").insertAdjacentHTML("beforeend", borderElement);
+            document.querySelector(".sc-1y4z60g-4").insertAdjacentHTML("beforeend", borderElement);
         }
 
         // フォロー中・フォローするを切り替え
@@ -980,9 +980,9 @@ function bookmarkAddDelete() {
     const buttonGrandElements = document.querySelectorAll(".addBookmark");
     for (let i = 0; i < buttonGrandElements.length; i++) {
 
-        const buttonElement = buttonGrandElements[i].querySelector(".sc-kgq5hw-0.fgVkZi");
+        const buttonElement = buttonGrandElements[i].querySelector("button.sc-kgq5hw-0");
         const svgElement = buttonGrandElements[i].querySelector("svg.sc-j89e3c-1");
-        const getIdElement = buttonGrandElements[i].querySelector("a.sc-d98f2c-0.khjDVZ");
+        const getIdElement = buttonGrandElements[i].querySelector("a.sc-d98f2c-0[data-gtm-user-id]");
         const userId = getIdElement.getAttribute("data-gtm-user-id");
         const illustId = getIdElement.getAttribute("data-gtm-value");
         buttonGrandElements[i].classList.remove("addBookmark");
