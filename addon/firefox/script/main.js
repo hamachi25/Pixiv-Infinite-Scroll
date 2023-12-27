@@ -51,6 +51,17 @@ function mouseover() {
     }
 }
 
+
+function addStyle() {
+	if (document.getElementById("pis-style")) { return }
+	document.head.insertAdjacentHTML('beforeend', '<style id="pis-style"></style>');
+	document.head.lastElementChild.textContent = `
+        .gqlfsh:visited {
+            color: rgb(173, 173, 173);
+        }`;
+}
+
+
 // フォロー中の無限スクロール-----------------------------------------------------------------
 function following_process() {
 
@@ -154,8 +165,8 @@ function following_process() {
             illustGroup += `
             <div class="sc-w2rqc8-2 bgeGyS">
                 <div class="sc-fgp4rp-1 cQUnPX">
-                    <div class="sc-iasfms-5 cWMKYW">
-                        <div type="illust" size="184" class="sc-iasfms-3 iIcDMF">
+                    <div class="sc-iasfms-5 liyNwX" style="width: 184px;">
+                        <div type="illust" size="184" class="sc-iasfms-3 frFjhu">
                             <div width="184" height="184" class="sc-rp5asc-0 fxGVAF addBookmark">
                                 <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY sc-eWnToP khjDVZ" data-gtm-value="${illustId[i]}" data-gtm-user-id="${userId}" href="/artworks/${illustId[i]}" style="transition: opacity 0.2s ease 0s;">
                                     <div radius="4" class="sc-rp5asc-9 cYUezH" style="position: relative; width: 100%; height: 100%;">
@@ -179,8 +190,8 @@ function following_process() {
                                 </div>
                             </div>
                         </div>
-                        <div class="sc-iasfms-0 jtpclu">
-                            <a class="sc-d98f2c-0 sc-iasfms-6 eUXPuC" href="/artworks/${illustId[i]}">${escapeText(illustTitle[i])}</a>
+                        <div class="sc-iasfms-1 jthKhf">
+                            <a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh" href="/artworks/${illustId[i]}" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapeText(illustTitle[i])}</a>
                         </div>
                     </div>
                 </div>
@@ -509,7 +520,7 @@ function bookmarkAndTag_process(checkType, matches) {
                                 ${illustContainer}
                             </div>
                         </div>
-                        <div class="sc-iasfms-0 jtpclu">
+                        <div class="sc-iasfms-0 jtpclu" style="display: flex; margin-top: 4px;">
                             ${illustTitleElement}
                         </div>
                     </div>
@@ -523,10 +534,10 @@ function bookmarkAndTag_process(checkType, matches) {
                                 ${illustContainer}
                             </div>
                         </div>
-                        <div class="sc-iasfms-0 jtpclu">
+                        <div class="sc-iasfms-0 jtpclu" style="display: flex; margin-top: 4px;">
                             ${illustTitleElement}
                         </div>
-                        <div class="sc-iasfms-0 jtpclu">${userNameContainer}</div>
+                        <div class="sc-iasfms-0 jtpclu" style="display: flex; margin-top: 4px;">${userNameContainer}</div>
                     </div>
                 </li>`;
         }
@@ -1205,7 +1216,6 @@ const artworkRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/(illustr
 const observer = new MutationObserver(mutations => {
     mutations.forEach(mutation => {
         if (currentUrl && saveUrl) {
-
             // ページ数が含まれていないURLを作成
             // そのまま取得すると、?p=2の数字が変わった時に実行されてしまう
             function replaceURL(url) {
@@ -1239,6 +1249,7 @@ const observer = new MutationObserver(mutations => {
         }
 
         if (followingRegex.test(location.href)) {
+            addStyle();
             // フォロー
             currentUrl = location.href;
             // 初回のみURLを保存
@@ -1269,6 +1280,7 @@ const observer = new MutationObserver(mutations => {
                 }
             }
         } else if (bookmarkRegex.test(location.href) || followUserWorkRegex.test(location.href) || tagRegex.test(location.href) || artworkRegex.test(location.href)) {
+            addStyle();
             // ブックマーク・フォローユーザーの作品・タグ検索・プロフィールページ
             currentUrl = location.href;
             // 初回のみURLを保存
