@@ -268,11 +268,11 @@ function following_process() {
     const matches = location.href.match(followingRegex);
     let offset;
     let borderOffset;
-    if ((matches[2] || matches[4]) && isValid) {
-        if (matches[2] && scrollPageCount == 0) {
-            saveScrollPageCount = Number(matches[2]);
+    if ((matches[3] || matches[5]) && isValid) {
+        if (matches[3] && scrollPageCount == 0) {
+            saveScrollPageCount = Number(matches[3]);
         } else if (scrollPageCount == 0) {
-            saveScrollPageCount = Number(matches[4]);
+            saveScrollPageCount = Number(matches[5]);
         }
         offset = (saveScrollPageCount * 24) + (scrollPageCount * 24);
         borderOffset = scrollPageCount + saveScrollPageCount + 1;
@@ -284,12 +284,13 @@ function following_process() {
     }
     scrollPageCount++;
 
-    const showHide = matches[3] ? "hide" : "show";
+    const folderTag = matches[2] ? `&tag=${matches[2]}` : "";
+    const showHide = matches[4] ? "hide" : "show";
     if (scrollPageCount == 1) {
         revertURL(illustItems, 23, 30);
     }
 
-    const url = `https://www.pixiv.net/ajax/user/${matches[1]}/following?offset=${offset}&limit=24&rest=${showHide}`;
+    const url = `https://www.pixiv.net/ajax/user/${matches[1]}/following?offset=${offset}&limit=24&rest=${showHide}${folderTag}`;
 
     const fetchData = async () => {
         const json = await fetchResponse(url);
@@ -326,7 +327,7 @@ function following_process() {
         await fetchData();
         bookmarkAddDelete();
         followAndUnfollow(setFollowLanguage);
-        changeURL(matches[2], false, 23, 30);
+        changeURL(matches[3], matches[5], 23, 30);
     })();
 }
 // -----------------------------------------------------------------------------------------
@@ -601,7 +602,6 @@ function bookmarkAndTag_process(checkType, matches) {
         const fetchData = async () => {
             const json = await fetchResponse(url);
 
-
             const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq eLrjNK addElement" data-page="${scrollPageCount + 1}" style="display: block; margin: 12px; width: 187px order: 1;">`;
             const target = ".sc-9y4be5-0";
             getIllustData(json.body.works, typeElement, "", target, borderOffset, false);
@@ -624,8 +624,12 @@ function bookmarkAndTag_process(checkType, matches) {
         let offset;
         let borderOffset;
         scrollPageCount++;
-        if (matches[2] && isValid) {
-            scrollPageCount == 1 ? saveScrollPageCount = Number(matches[2]) : "";
+        if ((matches[2] || matches[4]) && isValid) {
+            if (matches[2] && scrollPageCount == 1) {
+                saveScrollPageCount = Number(matches[2]);
+            } else if (scrollPageCount == 1) {
+                saveScrollPageCount = Number(matches[4]);
+            }
             offset = saveScrollPageCount + scrollPageCount;
             borderOffset = scrollPageCount + saveScrollPageCount;
         } else {
@@ -640,7 +644,9 @@ function bookmarkAndTag_process(checkType, matches) {
             revertURL(illustItems, 59, 70);
         }
 
-        const url = `https://www.pixiv.net/ajax/follow_latest/illust?p=${offset}&mode=${setMode}`;
+        const folderTag = matches[3] ? `&${matches[3]}` : "";
+
+        const url = `https://www.pixiv.net/ajax/follow_latest/illust?p=${offset}&mode=${setMode}${folderTag}`;
 
         const fetchData = async () => {
             const json = await fetchResponse(url);
@@ -654,7 +660,7 @@ function bookmarkAndTag_process(checkType, matches) {
         (async () => {
             await fetchData();
             bookmarkAddDelete();
-            changeURL(matches[2], false, 59, 70);
+            changeURL(matches[2], matches[4], 59, 70);
         })();
     } else if (checkType == "tag") {
         // タグ検索
@@ -722,7 +728,7 @@ function bookmarkAndTag_process(checkType, matches) {
         const sinceDate = matches[5] ? `&${matches[5]}` : "";
         const untilDate = matches[6] ? `&${matches[6]}` : "";
         const otherTag = matches[10] ? `&${matches[10]}` : "";
-        const orderDate = matches[3] == "order=date" ? matches[3] : "order=date_d";
+        const orderDate = matches[3] ? `order=${matches[3]}` : "order=date_d";
 
         const url = `https://www.pixiv.net/ajax/search/${matches[2]}/${matches[1]}?word=${matches[1]}&${orderDate}&${setMode}&p=${offset}&${tagMatchMode}&${setIllustType}${sinceDate}${untilDate}${otherTag}`;
 
@@ -1190,10 +1196,10 @@ let saveUrl;
 let scrollPageCount = 0;
 let observerCount = 0;
 let artworkIllustId = "";
-const followingRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/following(?:\?p=(\d+))?(?:(?:&|\?)(rest=hide))?(?:\&p=(\d+))?/;
+const followingRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/following(?:\/([^?]+))?(?:\?p=(\d+))?(?:(?:&|\?)(rest=hide))?(?:\&p=(\d+))?/;
 const bookmarkRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/bookmarks\/artworks(?:\/([^?]+))?(?:\?p=(\d+))?/;
-const followUserWorkRegex = /https:\/\/www\.pixiv\.net\/bookmark_new_illust(_r18)?\.php(?:\?p=(\d+))?(?:(?:&|\?)(tag=.*))?/;
-const tagRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/tags\/(.+)\/(artworks|illustrations|manga)(?:\?(order=date))?(?:(?:&|\?)(mode=(?:r18|safe)))?(?:(?:&|\?)(scd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)(ecd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)p=(\d+))?(?:(?:&|\?)(s_mode=(?:s_tag|s_tc)))?(?:(?:&|\?)type=([^&]+))?(?:(?:&|\?)([^p]+))?(?:(?:&|\?)p=(\d+))?/;
+const followUserWorkRegex = /https:\/\/www\.pixiv\.net\/bookmark_new_illust(_r18)?\.php(?:\?p=(\d+))?(?:(?:&|\?)(tag=[^&]*))?(?:\&p=(\d+))?/;
+const tagRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/tags\/(.+)\/(artworks|illustrations|manga)(?:\?order=([^&]+))?(?:(?:&|\?)(mode=(?:r18|safe)))?(?:(?:&|\?)(scd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)(ecd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)p=(\d+))?(?:(?:&|\?)(s_mode=(?:s_tag|s_tc)))?(?:(?:&|\?)type=([^&]+))?(?:(?:&|\?)([^p]+))?(?:(?:&|\?)p=(\d+))?/;
 const artworkRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/(illustrations|manga|artworks)(?:\/(.[^?p=]+))?(?:\?p=(\d+))?/;
 
 const observer = new MutationObserver(mutations => {
@@ -1223,7 +1229,7 @@ const observer = new MutationObserver(mutations => {
                 saveUrl = "";
                 isValid = true;
                 // タグページ・プロフィールページで条件を変更した際に、追加した要素を削除する
-                if (tagRegex.test(location.href) || artworkRegex.test(location.href)) {
+                if (tagRegex.test(location.href) || artworkRegex.test(location.href) || followUserWorkRegex.test(location.href)) {
                     const removeElements = document.querySelectorAll(".addElement-parents");
                     for (const removeElement of removeElements) {
                         removeElement.remove();
@@ -1277,10 +1283,6 @@ const observer = new MutationObserver(mutations => {
             } else if (followUserWorkRegex.test(currentUrl)) {
                 checkType = "follow";
                 matches = currentUrl.match(followUserWorkRegex);
-                if (matches[3]) {
-                    observer.disconnect();
-                    return;
-                }
             } else if (tagRegex.test(currentUrl)) {
                 checkType = "tag";
                 matches = currentUrl.match(tagRegex);
