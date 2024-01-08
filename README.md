@@ -19,35 +19,8 @@ https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/a12dc5ff-510f-
 
 ## インストール方法
 ### Firefox
-<a href="https://addons.mozilla.org/ja/firefox/addon/pixiv-infinite-scroll/" rel="nofollow"><img src="https://camo.githubusercontent.com/93008761190f691a7bea18556da6cad05b8ac6ef6a1e9e4121718bec79a45768/68747470733a2f2f626c6f672e6d6f7a696c6c612e6f72672f6164646f6e732f66696c65732f323031352f31312f6765742d7468652d6164646f6e2e706e67" alt="Get it on the Firefox Webstore" data-canonical-src="https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png" style="max-width: 100%;"></a>
+<a href="https://addons.mozilla.org/ja/firefox/addon/pixiv-infinite-scroll/" rel="nofollow"><img src="https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/9e3e2878-bdad-4963-80db-91d0fd5cd191" alt="Get it on the Firefox Webstore" data-canonical-src="https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png" style="max-width: 100%;"></a>
 
 ### UserScript (Firefox/Chrome)
 1. VioletmonkeyやTampermonkeyなどのスクリプトマネージャー拡張機能をダウンロード
 2. [UserScript](https://github.com/chimaha/Pixiv-Infinite-Scroll/raw/main/script/pixivinfinitescroll.user.js)をダウンロード    
-
-&nbsp;  
-
-## アップデート
-### v1.4.4.3    
-修正  
-- [非公開フォローページに対応](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/872a7b206d2fcdcbb175cc47b0d14b8123e46ad6) 
-
-&nbsp;
-### v1.4.4.2   
-修正
-- [仕様変更に対応](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/3cd58461c9490da64f8784ebced6465152fdf87f) 
-- [ロードアニメーションを削除](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/3cd58461c9490da64f8784ebced6465152fdf87f) 
-
-&nbsp;
-### v1.4.4.1  
-修正
-- [「フォローユーザーの作品」で次ページが読み込まれないバグを修正](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/002d18f5741bce7a8dfd3b363fde9936e804daf6)  
-
-&nbsp;
-### v1.4.4  
-新機能  
-- [ページ区切り線を表示する機能を追加](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/a78c50d8dc7a5b66fd7c5663406f6ca723a9022f)
-
-修正
-- [イラストをホバーしても透明度が変更されないバグを修正](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/046a1b5b395918380aef0649f1d706ad22402df5)
-- [「フォロー」のページで要素サイズが適切になるように修正](https://github.com/chimaha/Pixiv-Infinite-Scroll/commit/6e849a861db31db2bc97e5176aca364b569cbc42)
