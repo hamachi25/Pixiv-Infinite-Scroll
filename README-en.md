@@ -7,8 +7,10 @@ It can be used in "Search Results", "User Profile", "Following", "Works by users
 
 Currently, the novel is not supported.  
 
-https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/a12dc5ff-510f-47c7-b0d4-9a484c87028d  
 
+https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/afbed6de-e889-4e6f-8179-57a46973b1f5
+
+&nbsp;  
 
 You can set whether to display a dividing line for each page.  
 
