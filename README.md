@@ -8,8 +8,10 @@ Pixivに無限スクロール機能を追加します。ページの下までス
 今のところ、小説には対応していません。  
 
 
-https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/a12dc5ff-510f-47c7-b0d4-9a484c87028d
 
+https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/afbed6de-e889-4e6f-8179-57a46973b1f5
+
+&nbsp;  
 
 ページごとの区切り線を表示するか設定することができます。 
 
