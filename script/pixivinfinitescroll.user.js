@@ -8,7 +8,7 @@
 // @grant                GM_getValue
 // @grant                GM_setValue
 // @grant                GM_registerMenuCommand
-// @version              1.5
+// @version              1.6
 // @author               chimaha
 // @description          Add infinite scroll feature to Pixiv.
 // @description:ja       Pixivに無限スクロール機能を追加します。
@@ -43,6 +43,28 @@ function escapeText(str) {
 }
 
 
+// 読み込み中のアニメーション
+function loadAnimation(target) {
+    const loadDiv = `
+    <div id="load-animation" style="margin-top: 50px;">
+        <div class="sc-1d7d5ry-2 eRpWzd">
+            <div class="eJWYE_ff2i8Ib65r">
+                <div class="g2opRplSrlwUvRxg"></div>
+            </div>
+        </div>
+    </div>`;
+    document.querySelector(target).insertAdjacentHTML("afterend", loadDiv);
+}
+
+function deleteAnimation(jsonBody, n) {
+    const jsonWorksLength = Object.keys(jsonBody).length;
+    const loadAnimation = document.getElementById("load-animation");
+    if (jsonWorksLength < n && loadAnimation) {
+        loadAnimation.remove();
+    }
+}
+
+
 const fetchResponse = async (url) => {
     let response;
     let json;
@@ -53,8 +75,9 @@ const fetchResponse = async (url) => {
         return json;
     } catch (error) {
         console.error(error);
+        return 0;
     }
-}
+};
 
 
 // イラストをマウスオーバーでopacity変更
@@ -71,9 +94,9 @@ function mouseover() {
 
 
 function addStyle() {
-	if (document.getElementById("pis-style")) { return }
-	document.head.insertAdjacentHTML('beforeend', '<style id="pis-style"></style>');
-	document.head.lastElementChild.textContent = `
+    if (document.getElementById("pis-style")) { return }
+    document.head.insertAdjacentHTML("beforeend", '<style id="pis-style"></style>');
+    document.head.lastElementChild.textContent = `
         .gqlfsh:visited {
             color: rgb(173, 173, 173);
         }
@@ -88,6 +111,43 @@ function addStyle() {
             display: grid;
             grid-template-columns: repeat(6, 184px);
             gap: 24px;
+        }
+
+        /* ロードアニメーション */
+        .eRpWzd {
+            padding-top: 104px;
+            padding-bottom: 104px;
+            margin: 0 !important;
+        }
+        .eJWYE_ff2i8Ib65r {
+            align-self: center;
+            position: relative;
+            vertical-align: middle;
+            text-align: center;
+            width: 100%;
+            height: 32px;
+            font-size: 20px;
+            color: #36c9ed;
+        }
+        .eJWYE_ff2i8Ib65r::before {
+            content: "";
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+            margin-right: -.25em;
+        }
+        .eJWYE_ff2i8Ib65r > .g2opRplSrlwUvRxg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 32px;
+            height: 32px;
+            margin-top: -16px;
+            margin-left: -16px;
+            background-color: #555;
+            border-radius: 100%;
+            -webkit-animation: qu_tf7_bDQZgiylG 1s ease-in-out infinite;
+            animation: qu_tf7_bDQZgiylG 1s ease-in-out infinite;
         }`;
 }
 
@@ -327,14 +387,22 @@ function following_process() {
 
     const folderTag = matches[2] ? `&tag=${matches[2]}` : "";
     const showHide = matches[4] ? "hide" : "show";
+
     if (scrollPageCount == 1) {
         revertURL(illustItems, 23, 30);
+        loadAnimation(".sc-1y4z60g-4");
     }
 
     const url = `https://www.pixiv.net/ajax/user/${matches[1]}/following?offset=${offset}&limit=24&rest=${showHide}${folderTag}`;
 
     const fetchData = async () => {
         const json = await fetchResponse(url);
+        if (json == 0) {
+            deleteAnimation(0, 23);
+            return;
+        } else {
+            deleteAnimation(json.body.users, 23);
+        }
 
         for (let i = 0; i < Object.keys(json.body.users).length; i++) {
             const users = json.body.users[i];
@@ -471,7 +539,7 @@ function bookmarkAndTag_process(checkType, matches) {
                         </button>
                     </div>
                 </div>`;
-                illustTitleElement = `<span class="sc-iasfms-6 hvLYiR" to="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(133, 133, 133); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${setDeletedLanguage[2]}</a>`
+                illustTitleElement = `<span class="sc-iasfms-6 hvLYiR" to="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(133, 133, 133); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${setDeletedLanguage[2]}</a>`;
             } else {
                 // 削除・非公開
                 illustContainer = `
@@ -537,8 +605,8 @@ function bookmarkAndTag_process(checkType, matches) {
                 </div>
                 <a class="sc-d98f2c-0 sc-1rx6dmq-2 kghgsn" data-gtm-value="${userId}" href="/users/${userId}">${escapeText(userName)}</a>
             </div>`;
-            illustTitleElement = `<a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh eUXPuC" href="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapeText(illustTitle)}</a>`
-            addBookmarkClass = " addBookmark"
+            illustTitleElement = `<a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh eUXPuC" href="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapeText(illustTitle)}</a>`;
+            addBookmarkClass = " addBookmark";
         }
 
         if (checkType == "artwork") {
@@ -645,12 +713,19 @@ function bookmarkAndTag_process(checkType, matches) {
 
         if (scrollPageCount == 1) {
             revertURL(illustItems, 47, 50);
+            loadAnimation("section.sc-jgyytr-0 > div:nth-child(3)");
         }
 
         const url = `https://www.pixiv.net/ajax/user/${matches[1]}/illusts/bookmarks?tag=${tag}&offset=${offset}&limit=48&rest=show`;
 
         const fetchData = async () => {
             const json = await fetchResponse(url);
+            if (json == 0) {
+                deleteAnimation(0, 47);
+                return;
+            } else {
+                deleteAnimation(json.body.works, 47);
+            }
 
             const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq eLrjNK addElement" data-page="${scrollPageCount + 1}" style="display: block; margin: 12px; width: 184px order: 1;">`;
             const target = ".sc-9y4be5-0";
@@ -690,8 +765,10 @@ function bookmarkAndTag_process(checkType, matches) {
         }
         const setMode = matches[1] ? "r18" : "all";
 
+        const target = ".sc-9y4be5-0";
         if (scrollPageCount == 1) {
             revertURL(illustItems, 59, 70);
+            loadAnimation(target);
         }
 
         const folderTag = matches[3] ? `&${matches[3]}` : "";
@@ -700,10 +777,15 @@ function bookmarkAndTag_process(checkType, matches) {
 
         const fetchData = async () => {
             const json = await fetchResponse(url);
+            if (json == 0) {
+                deleteAnimation(0, 59);
+                return;
+            } else {
+                deleteAnimation(json.body.thumbnails.illust, 59);
+            }
 
             const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq JaPty addElement" data-page="${scrollPageCount + 1}" style="display: block; order: 3; margin: 12px; width: 184px">`;
             const typeClass = "gtm-followlatestpage-thumbnail-link";
-            const target = ".sc-9y4be5-0";
             getIllustData("follow", json.body.thumbnails.illust, typeElement, typeClass, target, borderOffset, false);
             mouseover();
         };
@@ -740,6 +822,7 @@ function bookmarkAndTag_process(checkType, matches) {
 
         if (scrollPageCount == 1) {
             revertURL(illustItems, 5, 0);
+            loadAnimation(".sc-l7cibp-0 > .sc-1nr368f-4:first-child");
         }
 
         let setIllustType = "";
@@ -784,6 +867,12 @@ function bookmarkAndTag_process(checkType, matches) {
 
         const fetchData = async () => {
             const json = await fetchResponse(url);
+            if (json == 0) {
+                deleteAnimation(0, 59);
+                return;
+            } else {
+                deleteAnimation(json.body[insertIllustType].data, 59);
+            }
 
             const typeElement = `<li class="sc-l7cibp-2 dhTDfw addElement" data-page="${scrollPageCount + 1}" style="display: block; margin: 0px; order: 1;">`;
             const target = ".sc-l7cibp-0 > .sc-1nr368f-4:first-child";
@@ -824,6 +913,7 @@ function bookmarkAndTag_process(checkType, matches) {
 
             if (scrollPageCount == 1) {
                 revertURL(illustItems, 47, 50);
+                loadAnimation("section.sc-jgyytr-0");
             }
 
             let tag = matches[3];
@@ -839,6 +929,12 @@ function bookmarkAndTag_process(checkType, matches) {
 
             const fetchData = async () => {
                 const json = await fetchResponse(url);
+                if (json == 0) {
+                    deleteAnimation(0, 47);
+                    return;
+                } else {
+                    deleteAnimation(json.body.works, 47);
+                }
 
                 const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq lSsnI addElement" data-page="${scrollPageCount + 1}" style="display: block; margin: 12px; width: 184px order: 1;">`;
                 const target = ".sc-9y4be5-0";
@@ -897,6 +993,7 @@ function bookmarkAndTag_process(checkType, matches) {
 
                 if (scrollPageCount == 1) {
                     revertURL(illustItems, 47, 50);
+                    loadAnimation("section.sc-jgyytr-0");
                 }
                 // 配列の後ろから48個取得して削除
                 const sliceIllustId = artworkIllustId.splice(-48);
@@ -904,6 +1001,12 @@ function bookmarkAndTag_process(checkType, matches) {
                 const url2 = `https://www.pixiv.net/ajax/user/${matches[1]}/profile/illusts?${sliceIllustId.join("&")}&work_category=illust&is_first_page=0`
 
                 const json2 = await fetchResponse(url2);
+                if (json2 == 0) {
+                    deleteAnimation(0, 47);
+                    return;
+                } else {
+                    deleteAnimation(json2.body.works, 47);
+                }
                 // jsonファイルは先頭が古いイラストで、後ろが新しいイラスト
                 // 後ろの新しいイラストからfor文を回して要素を追加していく必要があるので、reverseメソッドを使用
                 const keys = Object.keys(json2.body.works).reverse();
@@ -1053,7 +1156,7 @@ function bookmarkAddDelete() {
                             illust_id: illustId,
                             restrict: 0,
                             comment: "",
-                            tags: []
+                            tags: [],
                         };
                         const url = "https://www.pixiv.net/ajax/illusts/bookmarks/add";
 
@@ -1106,9 +1209,9 @@ function bookmarkAddDelete() {
                         }
 
                         const deleteBookmarkBody = new URLSearchParams({
-                            bookmark_id: bookmarkId
+                            bookmark_id: bookmarkId,
                         });
-                        const url = "https://www.pixiv.net/ajax/illusts/bookmarks/delete"
+                        const url = "https://www.pixiv.net/ajax/illusts/bookmarks/delete";
 
                         const setCsrfToken = await getCsrfToken();
                         const response = await fetch(url, {
@@ -1134,7 +1237,7 @@ function bookmarkAddDelete() {
                     }
                 })();
             }
-        })
+        });
     }
 }
 
@@ -1160,7 +1263,7 @@ function followAndUnfollow(setFollowLanguage) {
                             user_id: userId,
                             tag: "",
                             restrict: 0,
-                            format: "json"
+                            format: "json",
                         });
                         const url = "https://www.pixiv.net/bookmark_add.php";
 
@@ -1172,7 +1275,7 @@ function followAndUnfollow(setFollowLanguage) {
                                 "x-csrf-token": setCsrfToken,
                             },
                             body: followBody,
-                            credentials: "same-origin"
+                            credentials: "same-origin",
                         });
 
                         if (!response.ok) { throw new Error(); }
@@ -1202,9 +1305,9 @@ function followAndUnfollow(setFollowLanguage) {
                         const unfollowBody = new URLSearchParams({
                             mode: "del",
                             type: "bookuser",
-                            id: userId
+                            id: userId,
                         });
-                        const url = "https://www.pixiv.net/rpc_group_setting.php"
+                        const url = "https://www.pixiv.net/rpc_group_setting.php";
 
                         const setCsrfToken = await getCsrfToken();
                         const response = await fetch(url, {
@@ -1214,7 +1317,7 @@ function followAndUnfollow(setFollowLanguage) {
                                 "x-csrf-token": setCsrfToken,
                             },
                             body: unfollowBody,
-                            credentials: "same-origin"
+                            credentials: "same-origin",
                         });
 
                         if (!response.ok) { throw new Error(); }
@@ -1231,7 +1334,7 @@ function followAndUnfollow(setFollowLanguage) {
                     }
                 })();
             }
-        })
+        });
     }
 }
 // -----------------------------------------------------------------------------------------
@@ -1265,7 +1368,7 @@ const observer = new MutationObserver(mutations => {
                 } else if (url.includes("&p=")) {
                     return url.replace(/&p=\d+/, "");
                 } else {
-                    return url
+                    return url;
                 }
             }
 
@@ -1277,6 +1380,8 @@ const observer = new MutationObserver(mutations => {
                 artworkIllustId = "";
                 saveUrl = "";
                 isValid = true;
+                const loadAnimation = document.getElementById("load-animation");
+                loadAnimation ? loadAnimation.remove() : "";
                 // タグページ・プロフィールページで条件を変更した際に、追加した要素を削除する
                 if (tagRegex.test(location.href) || artworkRegex.test(location.href) || followUserWorkRegex.test(location.href)) {
                     const removeElements = document.querySelectorAll(".addElement-parents");
@@ -1305,7 +1410,7 @@ const observer = new MutationObserver(mutations => {
                             isProcessed = false;
                             scrollObserver.unobserve(entry.target);
                         }
-                    })
+                    });
                 });
                 const observerElement = document.querySelector(".sc-1y4z60g-5:last-child").previousElementSibling;
                 if (observerElement) {
@@ -1359,7 +1464,7 @@ const observer = new MutationObserver(mutations => {
                             isProcessed = false;
                             scrollObserver.unobserve(entry.target);
                         }
-                    })
+                    });
                 }, options);
 
                 if (bookmarkRegex.test(currentUrl) || followUserWorkRegex.test(currentUrl) || artworkRegex.test(currentUrl)) {
@@ -1385,7 +1490,7 @@ const observer = new MutationObserver(mutations => {
                 }
             }
         }
-    })
+    });
 });
 const config = { childList: true, subtree: true };
 observer.observe(document.querySelector("body"), config);
