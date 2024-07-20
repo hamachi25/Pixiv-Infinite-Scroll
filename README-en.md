@@ -19,9 +19,10 @@ You can set whether to display a dividing line for each page.
 &nbsp;  
 
 ## How to Install
-### Firefox
-<a href="https://addons.mozilla.org/en-US/firefox/addon/pixiv-infinite-scroll/" rel="nofollow"><img src="https://github.com/chimaha/Pixiv-Infinite-Scroll/assets/107383950/a1386f99-3579-49fa-9c0f-29099bbb25b4" alt="Get it on the Firefox Webstore" data-canonical-src="https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png" style="max-width: 100%;"></a>
+### Extension
+<a href="https://chromewebstore.google.com/detail/pixiv-infinite-scroll/ihbbldgmjgjfpglmceokpdjenkjedcnb"><img alt="Chrome WebStore" width="191.8" height="58" src="https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/HRs9MPufa1J1h5glNhut.png"></a>
+<a href="https://addons.mozilla.org/en-US/firefox/addon/pixiv-infinite-scroll/"><img alt="Firefox Browser ADD-ONS" width="172" height="60" src="https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png"></a>
 
-### UserScript (Firefox/Chrome)
+### UserScript
 1. Download script manager extensions such as Violetmonkey and Tampermonkey
 2. Download [UserScript](https://github.com/chimaha/Pixiv-Infinite-Scroll/raw/main/script/pixivinfinitescroll.user.js)
