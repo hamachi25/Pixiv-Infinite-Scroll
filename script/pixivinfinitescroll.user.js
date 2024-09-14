@@ -42,7 +42,6 @@ function escapeText(str) {
         .replace(/'/g, "&#039;");
 }
 
-
 // 読み込み中のアニメーション
 function loadAnimation(target) {
     const loadDiv = `
@@ -64,13 +63,14 @@ function deleteAnimation(jsonBody, n) {
     }
 }
 
-
 const fetchResponse = async (url) => {
     let response;
     let json;
     try {
         response = await fetch(url);
-        if (!response.ok) { throw new Error(`Response Error：${response.status}`); }
+        if (!response.ok) {
+            throw new Error(`Response Error：${response.status}`);
+        }
         json = await response.json();
         return json;
     } catch (error) {
@@ -79,10 +79,11 @@ const fetchResponse = async (url) => {
     }
 };
 
-
 // イラストをマウスオーバーでopacity変更
 function mouseover() {
-    for (const element of document.querySelectorAll(`[data-page="${scrollPageCount + 1}"] a.khjDVZ`)) {
+    for (const element of document.querySelectorAll(
+        `[data-page="${scrollPageCount + 1}"] a.khjDVZ`
+    )) {
         element.addEventListener("mouseover", () => {
             element.style.opacity = "0.8";
         });
@@ -92,11 +93,31 @@ function mouseover() {
     }
 }
 
+function addPageURLToDividingLine(borderOffset) {
+    if (currentUrl.includes("p=")) {
+        return currentUrl.replace(/(p=)[^&]+/, "$1" + Number(borderOffset));
+    } else {
+        const separate = currentUrl.includes("?") ? "&" : "?";
+        return currentUrl + separate + "p=" + Number(borderOffset);
+    }
+}
 
 function addStyle() {
-    if (document.getElementById("pis-style")) { return }
+    if (document.getElementById("pis-style")) {
+        return;
+    }
     document.head.insertAdjacentHTML("beforeend", '<style id="pis-style"></style>');
     document.head.lastElementChild.textContent = `
+        /* 区切り線の数字リンク */
+        .pis-pageurl{
+            display: block;
+            width: 100%;
+        }
+        .pis-pageurl:hover {
+            text-decoration: underline;
+            color: black;
+        }
+
         .gqlfsh:visited {
             color: rgb(173, 173, 173);
         }
@@ -151,10 +172,8 @@ function addStyle() {
         }`;
 }
 
-
 // フォロー中の無限スクロール-----------------------------------------------------------------
 function following_process() {
-
     // langの値によって言語を変更する
     const setFollowLanguage = [];
     const currentLanguage = document.querySelector("html").getAttribute("lang");
@@ -177,12 +196,30 @@ function following_process() {
 
     let borderCount = 0;
 
-    function createElement(userId, userName, userProfileImage, userComment, userFollowing, illustId, illustTitle, illustUrl, illustBookmarkData, illustAlt, illustR18, illustPageCount) {
-
+    function createElement(
+        userId,
+        userName,
+        userProfileImage,
+        userComment,
+        userFollowing,
+        illustId,
+        illustTitle,
+        illustUrl,
+        illustBookmarkData,
+        illustAlt,
+        illustR18,
+        illustPageCount
+    ) {
         // ページ区切り線
         borderCount++;
         if (borderCount == 1 && showDividingLine) {
-            const borderElement = `<div style="border-top: 1px solid; text-align: center; font-size: 20px; color: gray; user-select: none;">${borderOffset}</div>`;
+            const borderElement = `
+                <div style="border-top: 1px solid; text-align: center; font-size: 20px; color: gray; user-select: none;">
+                    <a class="pis-pageurl" href="${addPageURLToDividingLine(
+                        borderOffset
+                    )}" target="_blank" rel="noopener noreferrer">${borderOffset}</a>
+                </div>
+            `;
             document.querySelector(".sc-1y4z60g-4").insertAdjacentHTML("beforeend", borderElement);
         }
 
@@ -193,7 +230,8 @@ function following_process() {
         if (userFollowing) {
             changeFollowLanguage = setFollowLanguage[0];
             followClass = "cnpwVx";
-            followStyle = 'style="background-color: var(--charcoal-surface3); color: var(--charcoal-text2); font-weight: bold; padding-right: 24px; padding-left: 24px; border-radius: 999999px; height: 40px;"';
+            followStyle =
+                'style="background-color: var(--charcoal-surface3); color: var(--charcoal-text2); font-weight: bold; padding-right: 24px; padding-left: 24px; border-radius: 999999px; height: 40px;"';
         } else {
             changeFollowLanguage = setFollowLanguage[1];
             followClass = "fOWAlD";
@@ -214,7 +252,9 @@ function following_process() {
         let r18Element = [];
         for (const checkR18 of illustR18) {
             if (checkR18 == "R-18") {
-                r18Element.push('<div class="sc-rp5asc-15 cIllir"><div class="sc-1ovn4zb-0 bfWaOT">R-18</div></div>');
+                r18Element.push(
+                    '<div class="sc-rp5asc-15 cIllir"><div class="sc-1ovn4zb-0 bfWaOT">R-18</div></div>'
+                );
             } else {
                 r18Element.push("");
             }
@@ -225,7 +265,9 @@ function following_process() {
         let pageCountElement = [];
         illustPageCount.forEach((pageCount, i) => {
             if (illustAlt[i].slice(-4) == "うごイラ") {
-                ugoiraElement.push('<svg viewBox="0 0 24 24" class="sc-192k5ld-0 etaMpt sc-rp5asc-8 kSDUsv" style="width: 48px; height: 48px; position: absolute";><circle cx="12" cy="12" r="10" class="sc-192k5ld-1 lajlxF" style="fill: rgba(0, 0, 0, 0.32);"></circle><path d="M9,8.74841664 L9,15.2515834 C9,15.8038681 9.44771525,16.2515834 10,16.2515834 C10.1782928,16.2515834 10.3533435,16.2039156 10.5070201,16.1135176 L16.0347118,12.8619342 C16.510745,12.5819147 16.6696454,11.969013 16.3896259,11.4929799 C16.3034179,11.3464262 16.1812655,11.2242738 16.0347118,11.1380658 L10.5070201,7.88648243 C10.030987,7.60646294 9.41808527,7.76536339 9.13806578,8.24139652 C9.04766776,8.39507316 9,8.57012386 9,8.74841664 Z" class="sc-192k5ld-2 jwyUTl" style="fill: rgb(255, 255, 255);"></path></svg>');
+                ugoiraElement.push(
+                    '<svg viewBox="0 0 24 24" class="sc-192k5ld-0 etaMpt sc-rp5asc-8 kSDUsv" style="width: 48px; height: 48px; position: absolute";><circle cx="12" cy="12" r="10" class="sc-192k5ld-1 lajlxF" style="fill: rgba(0, 0, 0, 0.32);"></circle><path d="M9,8.74841664 L9,15.2515834 C9,15.8038681 9.44771525,16.2515834 10,16.2515834 C10.1782928,16.2515834 10.3533435,16.2039156 10.5070201,16.1135176 L16.0347118,12.8619342 C16.510745,12.5819147 16.6696454,11.969013 16.3896259,11.4929799 C16.3034179,11.3464262 16.1812655,11.2242738 16.0347118,11.1380658 L10.5070201,7.88648243 C10.030987,7.60646294 9.41808527,7.76536339 9.13806578,8.24139652 C9.04766776,8.39507316 9,8.57012386 9,8.74841664 Z" class="sc-192k5ld-2 jwyUTl" style="fill: rgb(255, 255, 255);"></path></svg>'
+                );
                 pageCountElement.push("");
             } else {
                 ugoiraElement.push("");
@@ -258,9 +300,17 @@ function following_process() {
                     <div class="sc-iasfms-5 liyNwX" style="width: 184px;">
                         <div type="illust" size="184" class="sc-iasfms-3 frFjhu">
                             <div width="184" height="184" class="sc-rp5asc-0 fxGVAF addBookmark">
-                                <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY sc-eWnToP khjDVZ" data-gtm-value="${illustId[i]}" data-gtm-user-id="${userId}" href="/artworks/${illustId[i]}" style="transition: opacity 0.2s ease 0s;">
+                                <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY sc-eWnToP khjDVZ" data-gtm-value="${
+                                    illustId[i]
+                                }" data-gtm-user-id="${userId}" href="/artworks/${
+                illustId[i]
+            }" style="transition: opacity 0.2s ease 0s;">
                                     <div radius="4" class="sc-rp5asc-9 cYUezH" style="position: relative; width: 100%; height: 100%;">
-                                        <img src="${illustUrl[i]}" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${escapeText(illustAlt[i])}" class="sc-rp5asc-10 erYaF">
+                                        <img src="${
+                                            illustUrl[i]
+                                        }" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${escapeText(
+                illustAlt[i]
+            )}" class="sc-rp5asc-10 erYaF">
                                         ${ugoiraElement[i]}
                                     </div>
                                     <div class="sc-rp5asc-12 Sxcoo">
@@ -271,7 +321,9 @@ function following_process() {
                                 <div class="sc-iasfms-4 iHfghO" style="position: absolute; bottom: 0px; right: 0px;">
                                     <div class="">
                                         <button type="button" class="sc-kgq5hw-0 fgVkZi">
-                                            <svg viewBox="0 0 32 32" width="32" height="32" class="sc-j89e3c-1 ${bookmarkClass[i]}" ${bookmarkStyle[i]}>
+                                            <svg viewBox="0 0 32 32" width="32" height="32" class="sc-j89e3c-1 ${
+                                                bookmarkClass[i]
+                                            }" ${bookmarkStyle[i]}>
                                                 <path d="M21,5.5 C24.8659932,5.5 28,8.63400675 28,12.5 C28,18.2694439 24.2975093,23.1517313 17.2206059,27.1100183 C16.4622493,27.5342993 15.5379984,27.5343235 14.779626,27.110148 C7.70250208,23.1517462 4,18.2694529 4,12.5 C4,8.63400691 7.13400681,5.5 11,5.5 C12.829814,5.5 14.6210123,6.4144028 16,7.8282366 C17.3789877,6.4144028 19.170186,5.5 21,5.5 Z"></path>
                                                 <path d="M16,11.3317089 C15.0857201,9.28334665 13.0491506,7.5 11,7.5 C8.23857625,7.5 6,9.73857647 6,12.5 C6,17.4386065 9.2519779,21.7268174 15.7559337,25.3646328 C15.9076021,25.4494645 16.092439,25.4494644 16.2441073,25.3646326 C22.7480325,21.7268037 26,17.4385986 26,12.5 C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11.3317089 Z" class="sc-j89e3c-0 dUurgf"></path>
                                             </svg>
@@ -281,7 +333,11 @@ function following_process() {
                             </div>
                         </div>
                         <div class="sc-iasfms-1 jthKhf">
-                            <a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh" href="/artworks/${illustId[i]}" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapeText(illustTitle[i])}</a>
+                            <a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh" href="/artworks/${
+                                illustId[i]
+                            }" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapeText(
+                illustTitle[i]
+            )}</a>
                         </div>
                     </div>
                 </div>
@@ -328,18 +384,26 @@ function following_process() {
 
         // "appendElements+="で一括追加にすると、なぜかundefinedが追加され続けるので一つずつ追加
         const appendElements = `
-        <div class="sc-1y4z60g-5 iVLXCu addElement" data-page="${scrollPageCount + 1}" style="padding-top: 24px; padding-bottom: 24px; border-bottom: solid 1px var(--charcoal-border-default);">
+        <div class="sc-1y4z60g-5 iVLXCu addElement" data-page="${
+            scrollPageCount + 1
+        }" style="padding-top: 24px; padding-bottom: 24px; border-bottom: solid 1px var(--charcoal-border-default);">
             <div class="sc-11m5zdr-0 bbJBkV">
                 <div class="sc-11m5zdr-1 clrYBQ">
                     <div class="sc-19z9m4s-0 fbLOpg">
                         <a class="sc-d98f2c-0" data-gtm-value="${userId}" href="/users/${userId}">
-                            <div size="80" title="${escapeText(userName)}" role="img" class="sc-1asno00-0 deMagM">
-                                <img src="${userProfileImage}" style="object-fit: cover; object-position: center top;" width="80" height="80" alt="${escapeText(userName)}">
+                            <div size="80" title="${escapeText(
+                                userName
+                            )}" role="img" class="sc-1asno00-0 deMagM">
+                                <img src="${userProfileImage}" style="object-fit: cover; object-position: center top;" width="80" height="80" alt="${escapeText(
+            userName
+        )}">
                             </div>
                         </a>
                         <div class="sc-19z9m4s-4 fYGGbS">
                             <div class="sc-19z9m4s-5 iqZEnZ">
-                                <a class="sc-d98f2c-0 sc-19z9m4s-2 QHGGh" data-gtm-value="${userId}" href="/users/${userId}">${escapeText(userName)}</a>
+                                <a class="sc-d98f2c-0 sc-19z9m4s-2 QHGGh" data-gtm-value="${userId}" href="/users/${userId}">${escapeText(
+            userName
+        )}</a>
                             </div>
                             <div class="sc-19z9m4s-3 isEYuz">${escapeText(userComment)}</div>
                             <div class="sc-19z9m4s-1 qjElz">
@@ -364,7 +428,9 @@ function following_process() {
     // https://www.pixiv.net/users/*/following?p=2
 
     const illustItems = document.querySelectorAll(".sc-1y4z60g-5");
-    if (illustItems.length < 24 && scrollPageCount == 1) { return; }
+    if (illustItems.length < 24 && scrollPageCount == 1) {
+        return;
+    }
     // URL作成
     const matches = location.href.match(followingRegex);
     let offset;
@@ -375,12 +441,12 @@ function following_process() {
         } else if (scrollPageCount == 0) {
             saveScrollPageCount = Number(matches[5]);
         }
-        offset = (saveScrollPageCount * 24) + (scrollPageCount * 24);
+        offset = saveScrollPageCount * 24 + scrollPageCount * 24;
         borderOffset = scrollPageCount + saveScrollPageCount + 1;
     } else {
-        scrollPageCount == 0 ? saveScrollPageCount = 0 : "";
+        scrollPageCount == 0 ? (saveScrollPageCount = 0) : "";
         isValid = false;
-        offset = 24 + (scrollPageCount * 24);
+        offset = 24 + scrollPageCount * 24;
         borderOffset = scrollPageCount + 2;
     }
     scrollPageCount++;
@@ -428,7 +494,20 @@ function following_process() {
                 illustR18.push(illusts.tags[0]);
                 illustPageCount.push(illusts.pageCount);
             }
-            createElement(userId, userName, userProfileImage, userComment, userFollowing, illustId, illustTitle, illustUrl, illustBookmarkData, illustAlt, illustR18, illustPageCount);
+            createElement(
+                userId,
+                userName,
+                userProfileImage,
+                userComment,
+                userFollowing,
+                illustId,
+                illustTitle,
+                illustUrl,
+                illustBookmarkData,
+                illustAlt,
+                illustR18,
+                illustPageCount
+            );
         }
         mouseover();
     };
@@ -441,30 +520,71 @@ function following_process() {
 }
 // -----------------------------------------------------------------------------------------
 
-
-
 // ブックマーク・フォローユーザーの作品・タグ検索・プロフィールページの無限スクロール--------------
 function bookmarkAndTag_process(checkType, matches) {
-    function createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason) {
-
+    function createElement(
+        illustId,
+        illustTitle,
+        illustUrl,
+        userId,
+        userName,
+        illustPageCount,
+        illustBookmarkData,
+        illustAlt,
+        userProfileImage,
+        typeElement,
+        typeClass,
+        illustR18,
+        illustMaskReason
+    ) {
         // langの値によって言語を変更する
         const setDeletedLanguage = [];
         const currentLanguage = document.querySelector("html").getAttribute("lang");
         switch (currentLanguage) {
             case "ja":
-                setDeletedLanguage.push("R18 / R18G", "作品", "閲覧制限中", "削除済み", "もしくは非公開");
+                setDeletedLanguage.push(
+                    "R18 / R18G",
+                    "作品",
+                    "閲覧制限中",
+                    "削除済み",
+                    "もしくは非公開"
+                );
                 break;
             case "ko":
-                setDeletedLanguage.push("R-18 / R-18G", "작품", "열람 제한 중", "삭제됨", "혹은 비공개");
+                setDeletedLanguage.push(
+                    "R-18 / R-18G",
+                    "작품",
+                    "열람 제한 중",
+                    "삭제됨",
+                    "혹은 비공개"
+                );
                 break;
             case "zh-CN":
-                setDeletedLanguage.push("R-18 / R-18G", "作品", "浏览受限（含成人内容）", "已删除", "或不公开");
+                setDeletedLanguage.push(
+                    "R-18 / R-18G",
+                    "作品",
+                    "浏览受限（含成人内容）",
+                    "已删除",
+                    "或不公开"
+                );
                 break;
             case "zh-TW":
-                setDeletedLanguage.push("R-18 / R-18G", "作品", "瀏覽受限（含成人內容）", "已刪除", "或非公開");
+                setDeletedLanguage.push(
+                    "R-18 / R-18G",
+                    "作品",
+                    "瀏覽受限（含成人內容）",
+                    "已刪除",
+                    "或非公開"
+                );
                 break;
             default:
-                setDeletedLanguage.push("R-18/R-18G", "works", "Restricted (Adult Content)", "Deleted", "or private");
+                setDeletedLanguage.push(
+                    "R-18/R-18G",
+                    "works",
+                    "Restricted (Adult Content)",
+                    "Deleted",
+                    "or private"
+                );
         }
 
         // ブックマークを切り替え
@@ -490,7 +610,8 @@ function bookmarkAndTag_process(checkType, matches) {
         let ugoiraElement = "";
         let pageCountElement = "";
         if (illustAlt.slice(-4) == "うごイラ") {
-            ugoiraElement = '<svg viewBox="0 0 24 24" class="sc-192k5ld-0 etaMpt sc-rp5asc-8 kSDUsv"  style="width: 48px; height: 48px; position: absolute";><circle cx="12" cy="12" r="10" class="sc-192k5ld-1 lajlxF" style="fill: rgba(0, 0, 0, 0.32);"></circle><path d="M9,8.74841664 L9,15.2515834 C9,15.8038681 9.44771525,16.2515834 10,16.2515834 C10.1782928,16.2515834 10.3533435,16.2039156 10.5070201,16.1135176 L16.0347118,12.8619342 C16.510745,12.5819147 16.6696454,11.969013 16.3896259,11.4929799 C16.3034179,11.3464262 16.1812655,11.2242738 16.0347118,11.1380658 L10.5070201,7.88648243 C10.030987,7.60646294 9.41808527,7.76536339 9.13806578,8.24139652 C9.04766776,8.39507316 9,8.57012386 9,8.74841664 Z" class="sc-192k5ld-2 jwyUTl" style="fill: rgb(255, 255, 255);></path></svg>';
+            ugoiraElement =
+                '<svg viewBox="0 0 24 24" class="sc-192k5ld-0 etaMpt sc-rp5asc-8 kSDUsv"  style="width: 48px; height: 48px; position: absolute";><circle cx="12" cy="12" r="10" class="sc-192k5ld-1 lajlxF" style="fill: rgba(0, 0, 0, 0.32);"></circle><path d="M9,8.74841664 L9,15.2515834 C9,15.8038681 9.44771525,16.2515834 10,16.2515834 C10.1782928,16.2515834 10.3533435,16.2039156 10.5070201,16.1135176 L16.0347118,12.8619342 C16.510745,12.5819147 16.6696454,11.969013 16.3896259,11.4929799 C16.3034179,11.3464262 16.1812655,11.2242738 16.0347118,11.1380658 L10.5070201,7.88648243 C10.030987,7.60646294 9.41808527,7.76536339 9.13806578,8.24139652 C9.04766776,8.39507316 9,8.57012386 9,8.74841664 Z" class="sc-192k5ld-2 jwyUTl" style="fill: rgb(255, 255, 255);></path></svg>';
         } else {
             if (illustPageCount > 2) {
                 pageCountElement = `
@@ -508,7 +629,6 @@ function bookmarkAndTag_process(checkType, matches) {
                 </div>`;
             }
         }
-
 
         let illustContainer = "";
         let userNameContainer = "";
@@ -565,15 +685,18 @@ function bookmarkAndTag_process(checkType, matches) {
                         </button>
                     </div>
                 </div>`;
-                illustTitleElement = `<span class="sc-iasfms-7 kocGIc" to="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(30, 30, 30); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapeText(illustTitle)}</a>`
+                illustTitleElement = `<span class="sc-iasfms-7 kocGIc" to="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; color: rgb(30, 30, 30); white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapeText(
+                    illustTitle
+                )}</a>`;
             }
-
         } else {
             // ノーマル
             illustContainer = `
             <a class="sc-d98f2c-0 sc-rp5asc-16 iUsZyY ${typeClass} sc-eWnToP khjDVZ" data-gtm-value="${illustId}" data-gtm-user-id="${userId}" href="/artworks/${illustId}" style="transition: opacity 0.2s ease 0s;">
                 <div radius="4" class="sc-rp5asc-9 cYUezH" style="position: relative; display: flex; width: 100%; height: 100%;">
-                    <img src="${illustUrl}" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${escapeText(illustAlt)}" class="sc-rp5asc-10 erYaF">
+                    <img src="${illustUrl}" style="object-fit: cover; object-position: center center; width: 100%; height: 100%;" alt="${escapeText(
+                illustAlt
+            )}" class="sc-rp5asc-10 erYaF">
                     ${ugoiraElement}
                 </div>
                 <div class="sc-rp5asc-12 Sxcoo">
@@ -598,14 +721,22 @@ function bookmarkAndTag_process(checkType, matches) {
             <div aria-haspopup="true" class="sc-1rx6dmq-0 icsUdQ">
                 <div class="sc-1rx6dmq-1 eMfHJB">
                     <a class="sc-d98f2c-0" data-gtm-value="${userId}" href="/users/${userId}">
-                        <div size="24" title="${escapeText(userName)}" role="img" class="sc-1asno00-0 hMqBzA">
-                            <img src="${userProfileImage}" style="object-fit: cover; object-position: center top;" width="24" height="24" alt="${escapeText(userName)}">
+                        <div size="24" title="${escapeText(
+                            userName
+                        )}" role="img" class="sc-1asno00-0 hMqBzA">
+                            <img src="${userProfileImage}" style="object-fit: cover; object-position: center top;" width="24" height="24" alt="${escapeText(
+                userName
+            )}">
                         </div>
                     </a>
                 </div>
-                <a class="sc-d98f2c-0 sc-1rx6dmq-2 kghgsn" data-gtm-value="${userId}" href="/users/${userId}">${escapeText(userName)}</a>
+                <a class="sc-d98f2c-0 sc-1rx6dmq-2 kghgsn" data-gtm-value="${userId}" href="/users/${userId}">${escapeText(
+                userName
+            )}</a>
             </div>`;
-            illustTitleElement = `<a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh eUXPuC" href="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapeText(illustTitle)}</a>`;
+            illustTitleElement = `<a class="sc-d98f2c-0 sc-iasfms-6 gqlfsh eUXPuC" href="/artworks/${illustId}" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 22px; font-size: 14px; font-weight: bold;">${escapeText(
+                illustTitle
+            )}</a>`;
             addBookmarkClass = " addBookmark";
         }
 
@@ -644,7 +775,9 @@ function bookmarkAndTag_process(checkType, matches) {
     function getIllustData(type, jsonBody, typeElement, typeClass, target, borderOffset, tag) {
         for (let i = 0; i < Object.keys(jsonBody).length; i++) {
             // タグ検索には1つだけ何も入っていないjsonBodyがあるので、そこだけ除外
-            if (!jsonBody[i].id) { continue; }
+            if (!jsonBody[i].id) {
+                continue;
+            }
             const illust = jsonBody[i];
             const illustId = illust.id;
             const illustTitle = illust.title;
@@ -657,7 +790,21 @@ function bookmarkAndTag_process(checkType, matches) {
             const userProfileImage = illust.profileImageUrl;
             const illustR18 = illust.tags[0];
             const illustMaskReason = illust.maskReason;
-            createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason);
+            createElement(
+                illustId,
+                illustTitle,
+                illustUrl,
+                userId,
+                userName,
+                illustPageCount,
+                illustBookmarkData,
+                illustAlt,
+                userProfileImage,
+                typeElement,
+                typeClass,
+                illustR18,
+                illustMaskReason
+            );
         }
         if (appendElements) {
             let ulClass;
@@ -671,16 +818,21 @@ function bookmarkAndTag_process(checkType, matches) {
 
             if (showDividingLine) {
                 appendElements = `
-                <div class="addElement-parents" style="border-top: 1px solid; text-align: center; font-size: 20px; color: gray; margin: 30px 0 20px 0; user-select: none;">
-                    ${borderOffset}
-                </div>
-                <ul class="${ulClass} addElement-parents">${appendElements}</ul>`
+                    <div class="addElement-parents" style="border-top: 1px solid; text-align: center; font-size: 20px; color: gray; margin: 30px 0 20px 0; user-select: none;">
+                        <a class="pis-pageurl" href="${addPageURLToDividingLine(
+                            borderOffset
+                        )}" target="_blank" rel="noopener noreferrer">${borderOffset}</a>
+                    </div>
+                    <ul class="${ulClass} addElement-parents">${appendElements}</ul>
+                `;
                 document.querySelector(target).insertAdjacentHTML("beforeend", appendElements);
             } else if (tag) {
                 // タグ検索の場合詰めて表示する
-                document.querySelector(".sc-l7cibp-1").insertAdjacentHTML("beforeend", appendElements);
+                document
+                    .querySelector(".sc-l7cibp-1")
+                    .insertAdjacentHTML("beforeend", appendElements);
             } else {
-                appendElements = `<ul class="${ulClass} addElement-parents">${appendElements}</ul>`
+                appendElements = `<ul class="${ulClass} addElement-parents">${appendElements}</ul>`;
                 document.querySelector(target).insertAdjacentHTML("beforeend", appendElements);
             }
         }
@@ -693,19 +845,21 @@ function bookmarkAndTag_process(checkType, matches) {
         // https://www.pixiv.net/users/*/bookmarks/artworks?p=2
 
         const illustItems = document.querySelectorAll(".sc-9y4be5-2");
-        if (illustItems.length < 48 && scrollPageCount == 1) { return; }
+        if (illustItems.length < 48 && scrollPageCount == 1) {
+            return;
+        }
 
         // URL作成
         let offset;
         let borderOffset;
         if (matches[3] && isValid) {
-            scrollPageCount == 0 ? saveScrollPageCount = Number(matches[3]) : "";
-            offset = (saveScrollPageCount * 48) + (scrollPageCount * 48);
+            scrollPageCount == 0 ? (saveScrollPageCount = Number(matches[3])) : "";
+            offset = saveScrollPageCount * 48 + scrollPageCount * 48;
             borderOffset = scrollPageCount + saveScrollPageCount + 1;
         } else {
-            scrollPageCount == 0 ? saveScrollPageCount = 0 : "";
+            scrollPageCount == 0 ? (saveScrollPageCount = 0) : "";
             isValid = false;
-            offset = 48 + (scrollPageCount * 48);
+            offset = 48 + scrollPageCount * 48;
             borderOffset = scrollPageCount + 2;
         }
         const tag = matches[2] ? matches[2] : "";
@@ -727,9 +881,19 @@ function bookmarkAndTag_process(checkType, matches) {
                 deleteAnimation(json.body.works, 47);
             }
 
-            const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq eLrjNK addElement" data-page="${scrollPageCount + 1}" style="display: block; margin: 12px; width: 184px order: 1;">`;
+            const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq eLrjNK addElement" data-page="${
+                scrollPageCount + 1
+            }" style="display: block; margin: 12px; width: 184px order: 1;">`;
             const target = ".sc-9y4be5-0";
-            getIllustData("bookmark", json.body.works, typeElement, "", target, borderOffset, false);
+            getIllustData(
+                "bookmark",
+                json.body.works,
+                typeElement,
+                "",
+                target,
+                borderOffset,
+                false
+            );
             mouseover();
         };
         (async () => {
@@ -743,7 +907,9 @@ function bookmarkAndTag_process(checkType, matches) {
         // https://www.pixiv.net/bookmark_new_illust.php?p=2
 
         const illustItems = document.querySelectorAll(".sc-9y4be5-2");
-        if (illustItems.length < 60 && scrollPageCount == 1) { return; }
+        if (illustItems.length < 60 && scrollPageCount == 1) {
+            return;
+        }
 
         // URL作成
         let offset;
@@ -758,7 +924,7 @@ function bookmarkAndTag_process(checkType, matches) {
             offset = saveScrollPageCount + scrollPageCount;
             borderOffset = scrollPageCount + saveScrollPageCount;
         } else {
-            scrollPageCount == 1 ? saveScrollPageCount = 0 : "";
+            scrollPageCount == 1 ? (saveScrollPageCount = 0) : "";
             isValid = false;
             offset = 1 + scrollPageCount;
             borderOffset = scrollPageCount + 1;
@@ -784,9 +950,19 @@ function bookmarkAndTag_process(checkType, matches) {
                 deleteAnimation(json.body.thumbnails.illust, 59);
             }
 
-            const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq JaPty addElement" data-page="${scrollPageCount + 1}" style="display: block; order: 3; margin: 12px; width: 184px">`;
+            const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq JaPty addElement" data-page="${
+                scrollPageCount + 1
+            }" style="display: block; order: 3; margin: 12px; width: 184px">`;
             const typeClass = "gtm-followlatestpage-thumbnail-link";
-            getIllustData("follow", json.body.thumbnails.illust, typeElement, typeClass, target, borderOffset, false);
+            getIllustData(
+                "follow",
+                json.body.thumbnails.illust,
+                typeElement,
+                typeClass,
+                target,
+                borderOffset,
+                false
+            );
             mouseover();
         };
         (async () => {
@@ -799,7 +975,9 @@ function bookmarkAndTag_process(checkType, matches) {
         // https://www.pixiv.net/ajax/search/artworks/*?word=*&order=date_d&mode=all&p=1&s_mode=s_tag_full&type=all
         // https://www.pixiv.net/tags/*/artworks?p=2
         const illustItems = document.querySelectorAll(".sc-l7cibp-2");
-        if (illustItems.length < 60 && scrollPageCount == 1) { return; }
+        if (illustItems.length < 60 && scrollPageCount == 1) {
+            return;
+        }
 
         // URL作成
         let offset;
@@ -814,7 +992,7 @@ function bookmarkAndTag_process(checkType, matches) {
             offset = saveScrollPageCount + scrollPageCount;
             borderOffset = scrollPageCount + saveScrollPageCount;
         } else {
-            scrollPageCount == 1 ? saveScrollPageCount = 0 : "";
+            scrollPageCount == 1 ? (saveScrollPageCount = 0) : "";
             isValid = false;
             offset = 1 + scrollPageCount;
             borderOffset = scrollPageCount + 1;
@@ -874,9 +1052,19 @@ function bookmarkAndTag_process(checkType, matches) {
                 deleteAnimation(json.body[insertIllustType].data, 59);
             }
 
-            const typeElement = `<li class="sc-l7cibp-2 dhTDfw addElement" data-page="${scrollPageCount + 1}" style="display: block; margin: 0px; order: 1;">`;
+            const typeElement = `<li class="sc-l7cibp-2 dhTDfw addElement" data-page="${
+                scrollPageCount + 1
+            }" style="display: block; margin: 0px; order: 1;">`;
             const target = ".sc-l7cibp-0 > .sc-1nr368f-4:first-child";
-            getIllustData("tag", json.body[insertIllustType].data, typeElement, "", target, borderOffset, true);
+            getIllustData(
+                "tag",
+                json.body[insertIllustType].data,
+                typeElement,
+                "",
+                target,
+                borderOffset,
+                true
+            );
             mouseover();
         };
         (async () => {
@@ -891,7 +1079,9 @@ function bookmarkAndTag_process(checkType, matches) {
         // https://www.pixiv.net/ajax/user/*/profile/illusts?ids[]=*&ids[]=*
 
         const illustItems = document.querySelectorAll(".sc-9y4be5-2");
-        if (illustItems.length < 48 && scrollPageCount == 1) { return; }
+        if (illustItems.length < 48 && scrollPageCount == 1) {
+            return;
+        }
 
         // https://www.pixiv.net/users/*/illustrations/風景
         // 上のURLのようにタグをつけた場合
@@ -900,13 +1090,13 @@ function bookmarkAndTag_process(checkType, matches) {
             let offset;
             let borderOffset;
             if (matches[4] && isValid) {
-                scrollPageCount == 0 ? saveScrollPageCount = Number(matches[4]) : "";
-                offset = (Number(matches[4]) * 48) + (scrollPageCount * 48);
+                scrollPageCount == 0 ? (saveScrollPageCount = Number(matches[4])) : "";
+                offset = Number(matches[4]) * 48 + scrollPageCount * 48;
                 borderOffset = scrollPageCount + saveScrollPageCount + 1;
             } else {
-                scrollPageCount == 0 ? saveScrollPageCount = 0 : "";
+                scrollPageCount == 0 ? (saveScrollPageCount = 0) : "";
                 isValid = false;
-                offset = 48 + (scrollPageCount * 48);
+                offset = 48 + scrollPageCount * 48;
                 borderOffset = scrollPageCount + 2;
             }
             scrollPageCount++;
@@ -936,9 +1126,19 @@ function bookmarkAndTag_process(checkType, matches) {
                     deleteAnimation(json.body.works, 47);
                 }
 
-                const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq lSsnI addElement" data-page="${scrollPageCount + 1}" style="display: block; margin: 12px; width: 184px order: 1;">`;
+                const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq lSsnI addElement" data-page="${
+                    scrollPageCount + 1
+                }" style="display: block; margin: 12px; width: 184px order: 1;">`;
                 const target = ".sc-9y4be5-0";
-                getIllustData("artwork", json.body.works, typeElement, "", target, borderOffset, false);
+                getIllustData(
+                    "artwork",
+                    json.body.works,
+                    typeElement,
+                    "",
+                    target,
+                    borderOffset,
+                    false
+                );
                 mouseover();
             };
             (async () => {
@@ -967,13 +1167,13 @@ function bookmarkAndTag_process(checkType, matches) {
                         matches[4] ? artworkIllustId.splice(-96) : artworkIllustId.splice(-48);
                     }
                     if (matches[2] == "illustrations") {
-                        artworkIllustId = arrayIllustId.map(item => "ids[]=" + item);
+                        artworkIllustId = arrayIllustId.map((item) => "ids[]=" + item);
                         deleteIllustId(artworkIllustId);
                     } else if (matches[2] == "manga") {
-                        artworkIllustId = arrayMangaId.map(item => "ids[]=" + item);
+                        artworkIllustId = arrayMangaId.map((item) => "ids[]=" + item);
                         deleteIllustId(artworkIllustId);
                     } else {
-                        artworkIllustId = arrayArtworks.map(item => "ids[]=" + item);
+                        artworkIllustId = arrayArtworks.map((item) => "ids[]=" + item);
                         deleteIllustId(artworkIllustId);
                     }
                 }
@@ -981,7 +1181,7 @@ function bookmarkAndTag_process(checkType, matches) {
                 scrollPageCount++;
                 let borderOffset;
                 if (matches[4] && isValid) {
-                    scrollPageCount == 1 ? saveScrollPageCount = Number(matches[4]) : "";
+                    scrollPageCount == 1 ? (saveScrollPageCount = Number(matches[4])) : "";
                     borderOffset = scrollPageCount + saveScrollPageCount;
                 } else {
                     borderOffset = scrollPageCount + 1;
@@ -998,7 +1198,9 @@ function bookmarkAndTag_process(checkType, matches) {
                 // 配列の後ろから48個取得して削除
                 const sliceIllustId = artworkIllustId.splice(-48);
 
-                const url2 = `https://www.pixiv.net/ajax/user/${matches[1]}/profile/illusts?${sliceIllustId.join("&")}&work_category=illust&is_first_page=0`
+                const url2 = `https://www.pixiv.net/ajax/user/${
+                    matches[1]
+                }/profile/illusts?${sliceIllustId.join("&")}&work_category=illust&is_first_page=0`;
 
                 const json2 = await fetchResponse(url2);
                 if (json2 == 0) {
@@ -1021,11 +1223,27 @@ function bookmarkAndTag_process(checkType, matches) {
                     const illustBookmarkData = illust.bookmarkData;
                     const illustAlt = illust.alt;
                     const userProfileImage = "";
-                    const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq eLrjNK addElement" data-page="${scrollPageCount + 1}" style="display: block; margin: 12px; width: 187px order: 1;">`;
+                    const typeElement = `<li size="1" offset="0" class="sc-9y4be5-2 sc-9y4be5-3 sc-1wcj34s-1 kFAPOq eLrjNK addElement" data-page="${
+                        scrollPageCount + 1
+                    }" style="display: block; margin: 12px; width: 187px order: 1;">`;
                     const typeClass = "";
                     const illustR18 = illust.tags[0];
                     const illustMaskReason = "";
-                    createElement(illustId, illustTitle, illustUrl, userId, userName, illustPageCount, illustBookmarkData, illustAlt, userProfileImage, typeElement, typeClass, illustR18, illustMaskReason);
+                    createElement(
+                        illustId,
+                        illustTitle,
+                        illustUrl,
+                        userId,
+                        userName,
+                        illustPageCount,
+                        illustBookmarkData,
+                        illustAlt,
+                        userProfileImage,
+                        typeElement,
+                        typeClass,
+                        illustR18,
+                        illustMaskReason
+                    );
                 }
                 if (appendElements) {
                     if (showDividingLine) {
@@ -1033,11 +1251,13 @@ function bookmarkAndTag_process(checkType, matches) {
                         <div class="addElement-parents" style="border-top: 1px solid; text-align: center; font-size: 20px; color: gray; margin: 30px 0 20px 0; user-select: none;">
                             ${borderOffset}
                         </div>
-                        <ul class="sc-9y4be5-1 jtUPOE addElement-parents">${appendElements}</ul>`
+                        <ul class="sc-9y4be5-1 jtUPOE addElement-parents">${appendElements}</ul>`;
                     } else {
-                        appendElements = `<ul class="sc-9y4be5-1 jtUPOE addElement-parents">${appendElements}</ul>`
+                        appendElements = `<ul class="sc-9y4be5-1 jtUPOE addElement-parents">${appendElements}</ul>`;
                     }
-                    document.querySelector(".sc-9y4be5-0").insertAdjacentHTML("beforeend", appendElements);
+                    document
+                        .querySelector(".sc-9y4be5-0")
+                        .insertAdjacentHTML("beforeend", appendElements);
                 }
                 mouseover();
             };
@@ -1051,7 +1271,6 @@ function bookmarkAndTag_process(checkType, matches) {
 }
 // -----------------------------------------------------------------------------------------
 
-
 // ページ数をURLに表示する--------------------------------------------------------------------
 // 元からあるイラスト
 function revertURL(illustItems, n, k) {
@@ -1059,11 +1278,11 @@ function revertURL(illustItems, n, k) {
     const pageAdded = location.href.includes("p=") ? location.href : false;
     for (let i = 0; i < illustItems.length; i++) {
         // n個ごとにIntersectionObserverを設置
-        if ((i % n) == 0 && i != k) {
+        if (i % n == 0 && i != k) {
             illustItems[i].classList.add("pageCount");
 
             const options = { rootMargin: "-45% 0%" };
-            const pageCountObserver = new IntersectionObserver(entries => {
+            const pageCountObserver = new IntersectionObserver((entries) => {
                 if (entries[0].isIntersecting) {
                     let newUrl;
                     if (pageAdded) {
@@ -1093,11 +1312,11 @@ function changeURL(matches, matches2, n, k) {
     for (let i = 0; i < pageCountElements.length; i++) {
         pageCountElements[i].classList.remove("addElement");
         // n個ごとにIntersectionObserverを設置
-        if ((i % n) == 0 && i != k) {
+        if (i % n == 0 && i != k) {
             pageCountElements[i].classList.add("pageCount");
 
             const options = { rootMargin: "-45% 0%" };
-            const pageCountObserver = new IntersectionObserver(entries => {
+            const pageCountObserver = new IntersectionObserver((entries) => {
                 if (entries[0].isIntersecting) {
                     const pageCountNumber = pageCountElements[i].dataset.page;
                     let newUrl;
@@ -1123,8 +1342,6 @@ function changeURL(matches, matches2, n, k) {
 }
 // -----------------------------------------------------------------------------------------
 
-
-
 // 新たに追加した要素でのブックマーク・フォロー機能---------------------------------------------
 // x-csrf-tokenを取得
 const getCsrfToken = async () => {
@@ -1138,10 +1355,11 @@ const getCsrfToken = async () => {
 function bookmarkAddDelete() {
     const buttonGrandElements = document.querySelectorAll(".addBookmark");
     for (let i = 0; i < buttonGrandElements.length; i++) {
-
         const buttonElement = buttonGrandElements[i].querySelector("button.sc-kgq5hw-0");
         const svgElement = buttonGrandElements[i].querySelector("svg.sc-j89e3c-1");
-        const getIdElement = buttonGrandElements[i].querySelector("a.sc-d98f2c-0[data-gtm-user-id]");
+        const getIdElement = buttonGrandElements[i].querySelector(
+            "a.sc-d98f2c-0[data-gtm-user-id]"
+        );
         const userId = getIdElement.getAttribute("data-gtm-user-id");
         const illustId = getIdElement.getAttribute("data-gtm-value");
         buttonGrandElements[i].classList.remove("addBookmark");
@@ -1164,25 +1382,26 @@ function bookmarkAddDelete() {
                         const response = await fetch(url, {
                             method: "post",
                             headers: {
-                                "Accept": "application/json",
+                                Accept: "application/json",
                                 "Content-Type": "application/json; charset=utf-8",
                                 "x-csrf-token": setCsrfToken,
                             },
                             body: JSON.stringify(addBookmarkBody),
-                            credentials: "same-origin"
+                            credentials: "same-origin",
                         });
                         const json = await response.json();
                         // ストレージにBookmarkIDを保存
                         sessionStorage.illustId = json.body.last_bookmark_id;
 
-                        if (!response.ok) { throw new Error(); }
+                        if (!response.ok) {
+                            throw new Error();
+                        }
 
                         buttonElement.removeAttribute("disabled");
                         svgElement.style.color = "rgb(255, 64, 96)";
                         svgElement.style.fill = "currentcolor";
                         svgElement.classList.remove("dxYRhf");
                         svgElement.classList.add("bXjFLc");
-
                     } catch (error) {
                         console.error(error);
                         buttonElement.removeAttribute("disabled");
@@ -1217,20 +1436,21 @@ function bookmarkAddDelete() {
                         const response = await fetch(url, {
                             method: "post",
                             headers: {
-                                "Accept": "application/json",
+                                Accept: "application/json",
                                 "x-csrf-token": setCsrfToken,
                             },
                             body: deleteBookmarkBody,
-                            credentials: "same-origin"
+                            credentials: "same-origin",
                         });
 
-                        if (!response.ok) { throw new Error(); }
+                        if (!response.ok) {
+                            throw new Error();
+                        }
 
                         buttonElement.removeAttribute("disabled");
                         svgElement.removeAttribute("style");
                         svgElement.classList.remove("bXjFLc");
                         svgElement.classList.add("dxYRhf");
-
                     } catch (error) {
                         console.error(error);
                         buttonElement.removeAttribute("disabled");
@@ -1245,7 +1465,6 @@ function bookmarkAddDelete() {
 function followAndUnfollow(setFollowLanguage) {
     const buttonElements = document.querySelectorAll(".follow");
     for (let i = 0; i < buttonElements.length; i++) {
-
         const buttonElement = buttonElements[i];
         const userId = buttonElement.getAttribute("data-gtm-user-id");
         buttonElement.classList.remove("follow");
@@ -1271,14 +1490,16 @@ function followAndUnfollow(setFollowLanguage) {
                         const response = await fetch(url, {
                             method: "post",
                             headers: {
-                                "Accept": "application/json",
+                                Accept: "application/json",
                                 "x-csrf-token": setCsrfToken,
                             },
                             body: followBody,
                             credentials: "same-origin",
                         });
 
-                        if (!response.ok) { throw new Error(); }
+                        if (!response.ok) {
+                            throw new Error();
+                        }
 
                         buttonElement.removeAttribute("disabled");
                         buttonElement.classList.remove("fOWAlD");
@@ -1290,7 +1511,6 @@ function followAndUnfollow(setFollowLanguage) {
                         buttonElement.style.borderRadius = "999999px";
                         buttonElement.style.height = "40px";
                         buttonElement.textContent = setFollowLanguage[0];
-
                     } catch (error) {
                         console.error(error);
                         buttonElement.removeAttribute("disabled");
@@ -1313,21 +1533,22 @@ function followAndUnfollow(setFollowLanguage) {
                         const response = await fetch(url, {
                             method: "post",
                             headers: {
-                                "Accept": "application/json",
+                                Accept: "application/json",
                                 "x-csrf-token": setCsrfToken,
                             },
                             body: unfollowBody,
                             credentials: "same-origin",
                         });
 
-                        if (!response.ok) { throw new Error(); }
+                        if (!response.ok) {
+                            throw new Error();
+                        }
 
                         buttonElement.removeAttribute("disabled");
                         buttonElement.classList.remove("cnpwVx");
                         buttonElement.classList.add("fOWAlD");
                         buttonElement.removeAttribute("style");
                         buttonElement.textContent = setFollowLanguage[1];
-
                     } catch (error) {
                         console.error(error);
                         buttonElement.removeAttribute("disabled");
@@ -1339,8 +1560,6 @@ function followAndUnfollow(setFollowLanguage) {
 }
 // -----------------------------------------------------------------------------------------
 
-
-
 let isProcessed = false;
 let saveScrollPageCount;
 let isValid = true;
@@ -1349,14 +1568,19 @@ let saveUrl;
 let scrollPageCount = 0;
 let observerCount = 0;
 let artworkIllustId = "";
-const followingRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/following(?:\/([^?]+))?(?:\?p=(\d+))?(?:(?:&|\?)(rest=hide))?(?:\&p=(\d+))?/;
-const bookmarkRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/bookmarks\/artworks(?:\/([^?]+))?(?:\?p=(\d+))?/;
-const followUserWorkRegex = /https:\/\/www\.pixiv\.net\/bookmark_new_illust(_r18)?\.php(?:\?p=(\d+))?(?:(?:&|\?)(tag=[^&]*))?(?:\&p=(\d+))?/;
-const tagRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/tags\/(.+)\/(artworks|illustrations|manga)(?:\?order=([^&]+))?(?:(?:&|\?)(mode=(?:r18|safe)))?(?:(?:&|\?)(scd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)(ecd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)p=(\d+))?(?:(?:&|\?)(s_mode=(?:s_tag|s_tc)))?(?:(?:&|\?)type=([^&]+))?(?:(?:&|\?)([^p]+))?(?:(?:&|\?)p=(\d+))?/;
-const artworkRegex = /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/(illustrations|manga|artworks)(?:\/(.[^?p=]+))?(?:\?p=(\d+))?/;
+const followingRegex =
+    /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/following(?:\/([^?]+))?(?:\?p=(\d+))?(?:(?:&|\?)(rest=hide))?(?:\&p=(\d+))?/;
+const bookmarkRegex =
+    /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/bookmarks\/artworks(?:\/([^?]+))?(?:\?p=(\d+))?/;
+const followUserWorkRegex =
+    /https:\/\/www\.pixiv\.net\/bookmark_new_illust(_r18)?\.php(?:\?p=(\d+))?(?:(?:&|\?)(tag=[^&]*))?(?:\&p=(\d+))?/;
+const tagRegex =
+    /https:\/\/www\.pixiv\.net(?:\/en)?\/tags\/(.+)\/(artworks|illustrations|manga)(?:\?order=([^&]+))?(?:(?:&|\?)(mode=(?:r18|safe)))?(?:(?:&|\?)(scd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)(ecd=\d{4}\-\d{2}-\d{2}))?(?:(?:&|\?)p=(\d+))?(?:(?:&|\?)(s_mode=(?:s_tag|s_tc)))?(?:(?:&|\?)type=([^&]+))?(?:(?:&|\?)([^p]+))?(?:(?:&|\?)p=(\d+))?/;
+const artworkRegex =
+    /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/(illustrations|manga|artworks)(?:\/(.[^?p=]+))?(?:\?p=(\d+))?/;
 
-const observer = new MutationObserver(mutations => {
-    mutations.forEach(mutation => {
+const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
         if (currentUrl && saveUrl) {
             // ページ数が含まれていないURLを作成
             // そのまま取得すると、?p=2の数字が変わった時に実行されてしまう
@@ -1383,7 +1607,11 @@ const observer = new MutationObserver(mutations => {
                 const loadAnimation = document.getElementById("load-animation");
                 loadAnimation ? loadAnimation.remove() : "";
                 // タグページ・プロフィールページで条件を変更した際に、追加した要素を削除する
-                if (tagRegex.test(location.href) || artworkRegex.test(location.href) || followUserWorkRegex.test(location.href)) {
+                if (
+                    tagRegex.test(location.href) ||
+                    artworkRegex.test(location.href) ||
+                    followUserWorkRegex.test(location.href)
+                ) {
                     const removeElements = document.querySelectorAll(".addElement-parents");
                     for (const removeElement of removeElements) {
                         removeElement.remove();
@@ -1398,12 +1626,12 @@ const observer = new MutationObserver(mutations => {
             currentUrl = location.href;
             // 初回のみURLを保存
             observerCount++;
-            observerCount == 1 ? saveUrl = location.href : "";
+            observerCount == 1 ? (saveUrl = location.href) : "";
             const intersectionTarget = document.querySelector(".sc-1y4z60g-4");
 
             if (intersectionTarget && !isProcessed) {
                 isProcessed = true;
-                const scrollObserver = new IntersectionObserver(entries => {
+                const scrollObserver = new IntersectionObserver((entries) => {
                     entries.forEach((entry) => {
                         if (entry.isIntersecting) {
                             following_process();
@@ -1412,7 +1640,9 @@ const observer = new MutationObserver(mutations => {
                         }
                     });
                 });
-                const observerElement = document.querySelector(".sc-1y4z60g-5:last-child").previousElementSibling;
+                const observerElement = document.querySelector(
+                    ".sc-1y4z60g-5:last-child"
+                ).previousElementSibling;
                 if (observerElement) {
                     if (scrollPageCount == 0 || scrollPageCount == 1) {
                         setTimeout(() => {
@@ -1423,13 +1653,18 @@ const observer = new MutationObserver(mutations => {
                     }
                 }
             }
-        } else if (bookmarkRegex.test(location.href) || followUserWorkRegex.test(location.href) || tagRegex.test(location.href) || artworkRegex.test(location.href)) {
+        } else if (
+            bookmarkRegex.test(location.href) ||
+            followUserWorkRegex.test(location.href) ||
+            tagRegex.test(location.href) ||
+            artworkRegex.test(location.href)
+        ) {
             addStyle();
             // ブックマーク・フォローユーザーの作品・タグ検索・プロフィールページ
             currentUrl = location.href;
             // 初回のみURLを保存
             observerCount++;
-            observerCount == 1 ? saveUrl = location.href : "";
+            observerCount == 1 ? (saveUrl = location.href) : "";
 
             let checkType;
             let matches;
@@ -1448,7 +1683,11 @@ const observer = new MutationObserver(mutations => {
             }
 
             let intersectionTarget;
-            if (bookmarkRegex.test(currentUrl) || followUserWorkRegex.test(currentUrl) || artworkRegex.test(currentUrl)) {
+            if (
+                bookmarkRegex.test(currentUrl) ||
+                followUserWorkRegex.test(currentUrl) ||
+                artworkRegex.test(currentUrl)
+            ) {
                 intersectionTarget = document.querySelector(".sc-9y4be5-1");
             } else {
                 intersectionTarget = document.querySelector(".sc-l7cibp-1 img");
@@ -1457,7 +1696,7 @@ const observer = new MutationObserver(mutations => {
             if (intersectionTarget && !isProcessed) {
                 isProcessed = true;
                 const options = { rootMargin: "0px 0px 300px 0px" };
-                const scrollObserver = new IntersectionObserver(entries => {
+                const scrollObserver = new IntersectionObserver((entries) => {
                     entries.forEach((entry) => {
                         if (entry.isIntersecting) {
                             bookmarkAndTag_process(checkType, matches);
@@ -1467,25 +1706,45 @@ const observer = new MutationObserver(mutations => {
                     });
                 }, options);
 
-                if (bookmarkRegex.test(currentUrl) || followUserWorkRegex.test(currentUrl) || artworkRegex.test(currentUrl)) {
+                if (
+                    bookmarkRegex.test(currentUrl) ||
+                    followUserWorkRegex.test(currentUrl) ||
+                    artworkRegex.test(currentUrl)
+                ) {
                     // ブックマーク・フォローユーザーの作品・プロフィールページ
                     // ページ読み込み後すぐスクロールするとページが飛ばされることがあるので、遅延して読み込む
                     if (scrollPageCount == 0 || scrollPageCount == 1) {
                         setTimeout(() => {
-                            scrollObserver.observe(document.querySelector(".sc-9y4be5-1:last-child > .sc-9y4be5-2:last-child"));
+                            scrollObserver.observe(
+                                document.querySelector(
+                                    ".sc-9y4be5-1:last-child > .sc-9y4be5-2:last-child"
+                                )
+                            );
                         }, 400);
                     } else {
-                        scrollObserver.observe(document.querySelector(".sc-9y4be5-1:last-child > .sc-9y4be5-2:last-child"));
+                        scrollObserver.observe(
+                            document.querySelector(
+                                ".sc-9y4be5-1:last-child > .sc-9y4be5-2:last-child"
+                            )
+                        );
                     }
                 } else {
                     // タグ検索
                     // 2ページ目と3ページ目が同時に読み込まれてしまうので、2ページ目もsetTimeoutを使用
                     if (scrollPageCount == 0 || scrollPageCount == 1) {
                         setTimeout(() => {
-                            scrollObserver.observe(document.querySelector(".sc-l7cibp-1:last-child > .sc-l7cibp-2:last-child"));
+                            scrollObserver.observe(
+                                document.querySelector(
+                                    ".sc-l7cibp-1:last-child > .sc-l7cibp-2:last-child"
+                                )
+                            );
                         }, 400);
                     } else {
-                        scrollObserver.observe(document.querySelector(".sc-l7cibp-1:last-child > .sc-l7cibp-2:last-child"));
+                        scrollObserver.observe(
+                            document.querySelector(
+                                ".sc-l7cibp-1:last-child > .sc-l7cibp-2:last-child"
+                            )
+                        );
                     }
                 }
             }
@@ -1494,7 +1753,6 @@ const observer = new MutationObserver(mutations => {
 });
 const config = { childList: true, subtree: true };
 observer.observe(document.querySelector("body"), config);
-
 
 // 区切り線の表示設定
 const browserLang = navigator.language;
