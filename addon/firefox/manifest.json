@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Pixiv Infinite Scroll",
-    "version": "1.6.1",
+    "version": "1.6.2",
     "description": "__MSG_extensionDescription__",
     "default_locale": "en",
     "icons": {
@@ -11,12 +11,8 @@
     },
     "content_scripts": [
         {
-            "matches": [
-                "https://www.pixiv.net/*"
-            ],
-            "js": [
-                "script/main.js"
-            ]
+            "matches": ["https://www.pixiv.net/*"],
+            "js": ["script/main.js"]
         }
     ],
     "browser_action": {
@@ -28,7 +24,5 @@
         },
         "default_popup": "script/popup.html"
     },
-    "permissions": [
-        "storage"
-    ]
+    "permissions": ["storage"]
 }
