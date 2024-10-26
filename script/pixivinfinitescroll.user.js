@@ -3,13 +3,13 @@
 // @name:ja              Pixiv Infinite Scroll
 // @name:zh-CN           Pixiv Infinite Scroll
 // @name:zh-TW           Pixiv Infinite Scroll
-// @namespace            https://github.com/chimaha/Pixiv-Infinite-Scroll
+// @namespace            https://github.com/hamachi25/Pixiv-Infinite-Scroll
 // @match                https://www.pixiv.net/*
 // @grant                GM_getValue
 // @grant                GM_setValue
 // @grant                GM_registerMenuCommand
-// @version              1.6.2
-// @author               chimaha
+// @version              1.6.3
+// @author               hamachi
 // @description          Add infinite scroll feature to Pixiv.
 // @description:ja       Pixivに無限スクロール機能を追加します。
 // @description:zh-CN    为 Pixiv 添加无限滚动功能。
@@ -17,13 +17,13 @@
 // @license              MIT license
 // @compatible           firefox
 // @compatible           chrome
-// @icon                 https://raw.githubusercontent.com/chimaha/Pixiv-Infinite-Scroll/main/icon.png
-// @downloadURL          https://github.com/chimaha/Pixiv-Infinite-Scroll/raw/main/script/pixivinfinitescroll.user.js
-// @updateURL            https://github.com/chimaha/Pixiv-Infinite-Scroll/raw/main/script/pixivinfinitescroll.user.js
-// @supportURL           https://github.com/chimaha/Pixiv-Infinite-Scroll/issues
+// @icon                 https://raw.githubusercontent.com/hamachi25/Pixiv-Infinite-Scroll/main/icon.png
+// @downloadURL          https://github.com/hamachi25/Pixiv-Infinite-Scroll/raw/main/script/pixivinfinitescroll.user.js
+// @updateURL            https://github.com/hamachi25/Pixiv-Infinite-Scroll/raw/main/script/pixivinfinitescroll.user.js
+// @supportURL           https://github.com/hamachi25/Pixiv-Infinite-Scroll/issues
 // ==/UserScript==
 
-/*! Pixiv Infinite Scroll | MIT license | https://github.com/chimaha/Pixiv-Infinite-Scroll/blob/main/LICENSE */
+/*! Pixiv Infinite Scroll | MIT license | https://github.com/hamachi25/Pixiv-Infinite-Scroll/blob/main/LICENSE */
 
 "use strict";
 
@@ -852,8 +852,8 @@ function bookmarkAndTag_process(checkType, matches) {
         // URL作成
         let offset;
         let borderOffset;
-        if (matches[3] && isValid) {
-            scrollPageCount == 0 ? (saveScrollPageCount = Number(matches[3])) : "";
+        if (matches[4] && isValid) {
+            scrollPageCount == 0 ? (saveScrollPageCount = Number(matches[4])) : "";
             offset = saveScrollPageCount * 48 + scrollPageCount * 48;
             borderOffset = scrollPageCount + saveScrollPageCount + 1;
         } else {
@@ -863,6 +863,8 @@ function bookmarkAndTag_process(checkType, matches) {
             borderOffset = scrollPageCount + 2;
         }
         const tag = matches[2] ? matches[2] : "";
+        const rest = matches[3] ? "hide" : "show";
+
         scrollPageCount++;
 
         if (scrollPageCount == 1) {
@@ -870,7 +872,7 @@ function bookmarkAndTag_process(checkType, matches) {
             loadAnimation("section.sc-jgyytr-0 > div:nth-child(3)");
         }
 
-        const url = `https://www.pixiv.net/ajax/user/${matches[1]}/illusts/bookmarks?tag=${tag}&offset=${offset}&limit=48&rest=show`;
+        const url = `https://www.pixiv.net/ajax/user/${matches[1]}/illusts/bookmarks?tag=${tag}&offset=${offset}&limit=48&rest=${rest}`;
 
         const fetchData = async () => {
             const json = await fetchResponse(url);
@@ -1571,7 +1573,7 @@ let artworkIllustId = "";
 const followingRegex =
     /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/following(?:\/([^?]+))?(?:\?p=(\d+))?(?:(?:&|\?)(rest=hide))?(?:\&p=(\d+))?/;
 const bookmarkRegex =
-    /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/bookmarks\/artworks(?:\/([^?]+))?(?:\?p=(\d+))?/;
+    /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/bookmarks\/artworks(?:\/([^?]+))?(?:(?:&|\?)(rest=hide))?(?:(?:&|\?)p=(\d+))?/;
 const followUserWorkRegex =
     /https:\/\/www\.pixiv\.net\/bookmark_new_illust(_r18)?\.php(?:\?p=(\d+))?(?:(?:&|\?)(tag=[^&]*))?(?:\&p=(\d+))?/;
 const tagRegex =

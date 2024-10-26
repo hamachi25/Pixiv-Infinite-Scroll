@@ -1,4 +1,4 @@
-/*! Pixiv Infinite Scroll | MIT license | https://github.com/chimaha/Pixiv-Infinite-Scroll/blob/main/LICENSE */
+/*! Pixiv Infinite Scroll | MIT license | https://github.com/hamachi25/Pixiv-Infinite-Scroll/blob/main/LICENSE */
 
 "use strict";
 
@@ -852,8 +852,8 @@ chrome.storage.local
                 // URL作成
                 let offset;
                 let borderOffset;
-                if (matches[3] && isValid) {
-                    scrollPageCount == 0 ? (saveScrollPageCount = Number(matches[3])) : "";
+                if (matches[4] && isValid) {
+                    scrollPageCount == 0 ? (saveScrollPageCount = Number(matches[4])) : "";
                     offset = saveScrollPageCount * 48 + scrollPageCount * 48;
                     borderOffset = scrollPageCount + saveScrollPageCount + 1;
                 } else {
@@ -863,6 +863,8 @@ chrome.storage.local
                     borderOffset = scrollPageCount + 2;
                 }
                 const tag = matches[2] ? matches[2] : "";
+                const rest = matches[3] ? "hide" : "show";
+
                 scrollPageCount++;
 
                 if (scrollPageCount == 1) {
@@ -870,7 +872,7 @@ chrome.storage.local
                     loadAnimation("section.sc-jgyytr-0 > div:nth-child(3)");
                 }
 
-                const url = `https://www.pixiv.net/ajax/user/${matches[1]}/illusts/bookmarks?tag=${tag}&offset=${offset}&limit=48&rest=show`;
+                const url = `https://www.pixiv.net/ajax/user/${matches[1]}/illusts/bookmarks?tag=${tag}&offset=${offset}&limit=48&rest=${rest}`;
 
                 const fetchData = async () => {
                     const json = await fetchResponse(url);
@@ -1577,7 +1579,7 @@ chrome.storage.local
         const followingRegex =
             /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/following(?:\/([^?]+))?(?:\?p=(\d+))?(?:(?:&|\?)(rest=hide))?(?:\&p=(\d+))?/;
         const bookmarkRegex =
-            /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/bookmarks\/artworks(?:\/([^?]+))?(?:\?p=(\d+))?/;
+            /https:\/\/www\.pixiv\.net(?:\/en)?\/users\/(\d+)\/bookmarks\/artworks(?:\/([^?]+))?(?:(?:&|\?)(rest=hide))?(?:(?:&|\?)p=(\d+))?/;
         const followUserWorkRegex =
             /https:\/\/www\.pixiv\.net\/bookmark_new_illust(_r18)?\.php(?:\?p=(\d+))?(?:(?:&|\?)(tag=[^&]*))?(?:\&p=(\d+))?/;
         const tagRegex =
