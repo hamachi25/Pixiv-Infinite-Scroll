@@ -7,14 +7,7 @@ Pixiv に無限スクロール機能を追加します。ページの下まで�
 
 ## インストール
 
-### 拡張機能
-
-<a href="https://chromewebstore.google.com/detail/d-record/blcncccafadeklhhhimddgbgojalmpgn"><img alt="Chrome WebStore" src="https://github.com/user-attachments/assets/2f068f6a-98d3-48f6-8b70-e9da682c6b25" height="60"></a> <a href="https://addons.mozilla.org/ja/firefox/addon/d-record/"><img alt="Firefox Add-ons" src="https://github.com/user-attachments/assets/f9b238c8-571c-4531-8e3f-c31f203e60ef" height="60"></a>
-
-### ユーザースクリプト
-
-1. Violetmonkey や Tampermonkey などのスクリプトマネージャー拡張機能をダウンロード
-2. [ユーザースクリプト](https://github.com/hamachi25/Pixiv-Infinite-Scroll/raw/main/script/pixivinfinitescroll.user.js)をダウンロード
+<a href="https://chromewebstore.google.com/detail/pixiv-infinite-scroll/ihbbldgmjgjfpglmceokpdjenkjedcnb"><img alt="Chrome WebStore" src="https://github.com/user-attachments/assets/2f068f6a-98d3-48f6-8b70-e9da682c6b25" height="60"></a> <a href="https://addons.mozilla.org/ja/firefox/addon/pixiv-infinite-scroll/"><img alt="Firefox Add-ons" src="https://github.com/user-attachments/assets/f9b238c8-571c-4531-8e3f-c31f203e60ef" height="60"></a>
 
 ## 機能
 
