@@ -1,0 +1,14 @@
+following:
+    follow: 팔로우하기
+    following: 팔로우 중
+request:
+    accept: 리퀘스트 모집중
+    closed: 리퀘스트 쉬는 중
+novel:
+    original: 창작
+    character: $1글자
+    minute: $1분
+illust:
+    r18: R-18 / R-18G
+    work: 작품
+    restrict: 열람 제한 중

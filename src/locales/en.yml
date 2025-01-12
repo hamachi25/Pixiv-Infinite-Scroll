@@ -1,0 +1,20 @@
+extension:
+    extDescription: Infinite scroll extension optimized for Pixiv
+popup:
+    openInNewTab:
+        title: Open link in a new tab
+        detail: Open the added illustrations and novels in a new tab.
+following:
+    follow: Follow
+    following: Following
+request:
+    accept: Accepting requests
+    closed: Request is closed
+novel:
+    original: Original
+    character: $1 character(s)
+    minute: $1 mins
+illust:
+    r18: R-18/R-18G
+    work: works
+    restrict: Restricted (Adult Content)
