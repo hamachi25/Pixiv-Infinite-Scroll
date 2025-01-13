@@ -1,4 +1,5 @@
 # Pixiv Infinite Scroll
+![Pixiv Infinite Scroll](https://github.com/user-attachments/assets/3a25b7ea-2575-4368-92a2-311e011877bb)
 
 Pixiv Infinite Scroll is an infinite scroll extension optimized for Pixiv.
 
