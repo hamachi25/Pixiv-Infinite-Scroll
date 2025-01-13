@@ -1,0 +1,14 @@
+following:
+    follow: 已关注
+    following: 加关注
+request:
+    accept: 接稿中
+    closed: 暂不接稿
+novel:
+    original: 原创
+    character: $1字
+    minute: $1分钟
+illust:
+    r18: R-18 / R-18G
+    work: 作品
+    restrict: 浏览受限（含成人内容）

@@ -1,0 +1,20 @@
+extension:
+    extDescription: Pixivに最適化された無限スクロール拡張機能
+popup:
+    openInNewTab:
+        title: リンクを新しいタブで開く
+        detail: 追加したイラスト・小説を新規タブで開きます。
+following:
+    follow: フォローする
+    following: フォロー中
+request:
+    accept: リクエスト募集中
+    closed: リクエストお休み中
+novel:
+    original: オリジナル
+    character: $1文字
+    minute: $1分
+illust:
+    r18: R18 / R18G
+    work: 作品
+    restrict: 閲覧制限中
