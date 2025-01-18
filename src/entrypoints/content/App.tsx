@@ -81,7 +81,7 @@ const ItemContent = memo(
 					}
 				}}
 			>
-				<PageHeader page={workTag} index={index} location={location} />
+				<PageHeader workTag={workTag} index={index} location={location} />
 				<InnerContent works={works} />
 			</InView>
 		) : (
@@ -128,10 +128,11 @@ export default () => {
 
 			// ユーザーのイラスト・小説のidをまとめて取得
 			if (
-				(new RegExp(pageRegex.userIllust).test(location.pathname) ||
-					new RegExp(pageRegex.userNovel).test(location.pathname)) &&
-				tag.path.other
+				pageRegex.userIllust.test(location.pathname) ||
+				pageRegex.userNovel.test(location.pathname)
 			) {
+				if (!tag.path.other) return;
+
 				const targetUrl = `https://www.pixiv.net/ajax/user/${tag.path.other[0]}/profile/all?sensitiveFilterMode=userSetting`;
 				await fetchData(targetUrl).then((data) => {
 					const { illusts, manga, novels } = data.body;
@@ -195,8 +196,7 @@ export default () => {
 			useWindowScroll
 			data={works}
 			endReached={loadMore}
-			increaseViewportBy={0}
-			components={{ Footer: () => <LoadingSpinner hasMore={hasMore} /> }}
+			components={{ Footer }}
 			itemContent={(index, works) => (
 				<ItemContent works={works} workTag={workTag} index={index} />
 			)}

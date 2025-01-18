@@ -1,18 +1,18 @@
 import type { WorkTag } from "../../type";
 
 interface Props {
-	page: React.RefObject<WorkTag | undefined>;
+	workTag: React.RefObject<WorkTag | undefined>;
 	index: number;
 	location: Location;
 }
 
-export const PageHeader = ({ page, index, location }: Props) => {
-	const currentPage = page.current?.param.p
-		? Number(page.current.param.p) + index + 1
+export const PageHeader = ({ workTag, index, location }: Props) => {
+	const page = workTag.current?.param?.p
+		? Number(workTag.current.param.p) + index + 1
 		: index + 2;
 
 	const oldUrl = new URL(location.href);
-	oldUrl.searchParams.set("p", currentPage.toString());
+	oldUrl.searchParams.set("p", page.toString());
 	const newUrl = oldUrl.toString();
 
 	return (
@@ -22,7 +22,7 @@ export const PageHeader = ({ page, index, location }: Props) => {
 				href={newUrl}
 				target="_blank"
 			>
-				{currentPage}
+				{page}
 			</a>
 		</div>
 	);
