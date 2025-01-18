@@ -1,9 +1,10 @@
 extension:
     extDescription: Infinite scroll extension optimized for Pixiv
 popup:
+    report: Bug Report / Feature Request
     openInNewTab:
         title: Open link in a new tab
-        detail: Open the added illustrations and novels in a new tab.
+        detail: Open illustrations and novels in a new tab.
 following:
     follow: Follow
     following: Following

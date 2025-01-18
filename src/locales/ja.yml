@@ -1,9 +1,10 @@
 extension:
     extDescription: Pixivに最適化された無限スクロール拡張機能
 popup:
+    report: 不具合報告・機能提案
     openInNewTab:
         title: リンクを新しいタブで開く
-        detail: 追加したイラスト・小説を新規タブで開きます。
+        detail: イラスト・小説を新しいタブで開きます。
 following:
     follow: フォローする
     following: フォロー中

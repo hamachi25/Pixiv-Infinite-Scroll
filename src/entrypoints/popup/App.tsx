@@ -1,5 +1,13 @@
 import { i18n } from "#i18n";
 import { settingsItem } from "@/utils/storage";
+import { GoReport } from "react-icons/go";
+
+const formsLinks = {
+	ja: "https://forms.gle/nWLZzi86qnWaAyEs7",
+	en: "https://forms.gle/viWPDzAzzwkVxjD18",
+};
+
+const formsLink = navigator.language === "ja" ? formsLinks.ja : formsLinks.en;
 
 export default () => {
 	const [isChecked, setIsChecked] = useState(false);
@@ -18,15 +26,29 @@ export default () => {
 
 	return (
 		<>
-			<div className="relative flex justify-center gap-3 border-b border-[var(--border-noraml)] px-2 pb-2">
-				<h1 className="mr-2 text-xl font-bold">Pixiv Infinite Scroll</h1>
-				<a
-					className="absolute right-3 self-end text-base text-[var(--text-pale)]"
-					target="_blank"
-					href={`https://github.com/hamachi25/Pixiv-Infinite-Scroll/releases/tag/${version}`}
-				>
-					v{version}
-				</a>
+			<div className="relative flex justify-between border-b border-[var(--border-noraml)] px-2 pb-2">
+				<div className="flex gap-3">
+					<h1 className="text-xl font-bold">Pixiv Infinite Scroll</h1>
+					<a
+						className="self-end text-base text-[var(--text-pale)]"
+						target="_blank"
+						href={`https://github.com/hamachi25/Pixiv-Infinite-Scroll/releases/tag/${version}`}
+					>
+						v{version}
+					</a>
+				</div>
+				<div className="flex items-center">
+					<div
+						className="tooltip tooltip-left before:text-xs"
+						data-tip={i18n.t("popup.report")}
+					>
+						<button>
+							<a href={formsLink} target="_blank" className="text-[var(--text-pale)]">
+								<GoReport size={21} />
+							</a>
+						</button>
+					</div>
+				</div>
 			</div>
 			<div className="form-control gap-2 px-2 pb-0.5 pt-3">
 				<label className="label cursor-pointer justify-between gap-4">
