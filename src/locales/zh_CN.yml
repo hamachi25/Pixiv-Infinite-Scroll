@@ -1,3 +1,10 @@
+extension:
+    extDescription: 为Pixiv优化的无限滚动扩展功能
+popup:
+    report: 问题报告和功能建议
+    openInNewTab:
+        title: 在新标签页中打开链接
+        detail: 在新标签页中打开插图和小说。
 following:
     follow: 已关注
     following: 加关注
