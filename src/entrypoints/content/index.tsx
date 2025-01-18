@@ -4,7 +4,6 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 
 import { getElementSelectorByUrl } from "./utils/getElementSelectorByUrl";
-import { waitForElement } from "./utils/waitForElement";
 import { pageRegex } from "./constants/pageRegex";
 import { Context } from "./context";
 export default defineContentScript({
@@ -15,9 +14,8 @@ export default defineContentScript({
 		const anchor = getElementSelectorByUrl(location);
 
 		let ui = await mountUi(ctx, anchor);
-		const isElement = await waitForElement(anchor);
 
-		if (isElement && isMatch(location)) ui?.mount();
+		if (isMatch(location)) ui?.autoMount();
 
 		ctx.addEventListener(window, "wxt:locationchange", async ({ newUrl }) => {
 			const params = new URLSearchParams(newUrl.search);
@@ -30,9 +28,7 @@ export default defineContentScript({
 				if (!anchor) return;
 
 				ui = await mountUi(ctx, anchor);
-				const isElement = await waitForElement(anchor);
-
-				if (ui && isElement) ui.mount();
+				ui.autoMount();
 			} else if (!isMatchFound) {
 				ui?.remove();
 			}
