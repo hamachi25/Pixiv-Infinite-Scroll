@@ -186,6 +186,10 @@ export default () => {
 		return () => observer.disconnect();
 	}, [workTag.current]);
 
+	// context propの使い方がわからないのでメモ化
+	// https://virtuoso.dev/footer/
+	const Footer = useCallback(() => <LoadingSpinner hasMore={hasMore} />, [hasMore]);
+
 	return (
 		<Virtuoso
 			useWindowScroll
