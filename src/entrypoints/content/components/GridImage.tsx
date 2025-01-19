@@ -1,5 +1,5 @@
 import type { Work } from "../type";
-import { SettingContext } from "../context";
+import { SettingContext, SensitiveContext } from "../context";
 
 interface Props {
 	illust: Work;
@@ -7,6 +7,7 @@ interface Props {
 
 export const GridImage = ({ illust }: Props) => {
 	const settings = useContext(SettingContext);
+	const isSensitive = useContext(SensitiveContext);
 
 	return (
 		<a href={`/artworks/${illust.id}`} target={settings?.openInNewTab ? "_blank" : undefined}>
@@ -36,9 +37,9 @@ export const GridImage = ({ illust }: Props) => {
 						/>
 					</svg>
 				)}
-				{/* センシティブ (現在の設定の取得方法がわからない) */}
-				{/* {(illust.sl === 4 || illust.sl === 6) && (
-					<div className="absolute inset-0 w-full h-full flex justify-center items-center bg-[rgba(0,0,0,0.08)] backdrop-blur-[20px]">
+				{/* センシティブ */}
+				{isSensitive && (illust.sl === 4 || illust.sl === 6) && (
+					<div className="absolute inset-0 flex h-full w-full items-center justify-center bg-[rgba(0,0,0,0.08)] backdrop-blur-[20px]">
 						<svg
 							viewBox="0 0 256 256"
 							fill="white"
@@ -49,7 +50,7 @@ export const GridImage = ({ illust }: Props) => {
 							<path d="M215.16 124.84C193.02 80.37 162.31 56 128.79 56c-8.63 0-17.15 1.66-25.42 4.86L87.16 28.42l-14.31 7.16 96 192 14.31-7.16-15.8-31.61c18.2-11.33 34.34-30.87 47.75-56.73 1.18-2.27 1.2-4.96.06-7.25zm-55.01 49.57-11.14-22.28c6.73-5.87 10.99-14.5 10.99-24.13 0-17.67-14.33-32-32-32-2.3 0-4.54.25-6.7.71l-10.71-21.43c6.14-2.21 12.24-3.28 18.21-3.28 24.07 0 49.63 17.01 70.19 56.33-11.94 22.02-25.16 37.2-38.83 46.08zM57.06 128.4c8.18-15.01 17.15-26.84 26.46-35.71l-7.43-14.86c-13.08 11.48-25.02 27.28-35.19 46.89a7.994 7.994 0 0 0 0 7.37c23.26 44.85 55.63 67.91 89 67.91 2.38 0 4.75-.13 7.09-.38l-7.81-15.63c-24.24-.32-50.92-16.79-72.11-55.59z" />
 						</svg>
 					</div>
-				)} */}
+				)}
 			</div>
 
 			<div className="pointer-events-none absolute left-0 right-0 top-0 flex items-start px-[4px] pt-[4px]">

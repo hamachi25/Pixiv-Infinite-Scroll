@@ -79,7 +79,7 @@ export const Following = ({ profiles }: Props) => {
 												<GridImage illust={illust} />
 												<BookmarkButton
 													bookmarkData={illust.bookmarkData}
-													workId={illust.id}
+													work={illust}
 													type="illust"
 												/>
 											</div>

@@ -54,6 +54,7 @@ export const transformData = (data: any, location: Location): Work[] => {
 		xRestrict: item.xRestrict,
 		maskReason: item.maskReason,
 		illustType: item.illustType,
+		sl: item.sl,
 
 		// フォロー中
 		userComment: item.userComment,

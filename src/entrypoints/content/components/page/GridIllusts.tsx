@@ -41,7 +41,7 @@ export const GridIllusts = ({ illusts, type }: Props) => {
 						{/* ブックマークボタン */}
 						<BookmarkButton
 							bookmarkData={illust.bookmarkData}
-							workId={illust.id}
+							work={illust}
 							type="illust"
 						/>
 					</div>

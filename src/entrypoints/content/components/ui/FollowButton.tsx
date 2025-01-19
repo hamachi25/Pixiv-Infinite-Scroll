@@ -1,7 +1,8 @@
 import { i18n } from "#i18n";
 import { postData } from "../../fetch/post";
 import { CsrfContext } from "../../context";
-import { fetchCsrfToken } from "../../fetch/fetchCsrfToken";
+import { fetchOrigin } from "../../fetch/fetch";
+import { extractCsrfToken } from "../../utils/extractDataFromOrigin";
 
 interface Props {
 	userId: string;
@@ -13,8 +14,10 @@ export const FollowButton = ({ userId }: Props) => {
 
 	const follow = async () => {
 		if (!csrfToken.current) {
-			await fetchCsrfToken().then((token) => {
+			await fetchOrigin().then((html) => {
+				const token = extractCsrfToken(html);
 				if (!token) return;
+
 				csrfToken.current = token;
 			});
 			if (!csrfToken.current) return;
@@ -42,8 +45,10 @@ export const FollowButton = ({ userId }: Props) => {
 
 	const unfollow = async () => {
 		if (!csrfToken.current) {
-			await fetchCsrfToken().then((token) => {
+			await fetchOrigin().then((html) => {
+				const token = extractCsrfToken(html);
 				if (!token) return;
+
 				csrfToken.current = token;
 			});
 			if (!csrfToken.current) return;

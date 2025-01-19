@@ -49,6 +49,7 @@ export type Work = {
 	maskReason?: string;
 	bookmarkData?: { id: string; private: boolean } | null;
 	illustType?: number;
+	sl: number; // 4と6がセンシティブ
 
 	// フォロー中
 	userComment?: string;

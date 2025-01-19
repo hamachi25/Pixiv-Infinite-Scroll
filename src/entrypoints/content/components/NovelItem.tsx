@@ -170,11 +170,7 @@ export const NovelItem = ({ novel, type }: Props) => {
 						<NovelInfo novel={novel} readingTime={readingTime} />
 					)}
 
-					<BookmarkButton
-						bookmarkData={novel.bookmarkData}
-						workId={novel.id}
-						type="novel"
-					/>
+					<BookmarkButton bookmarkData={novel.bookmarkData} work={novel} type="novel" />
 				</div>
 			</div>
 		</li>
