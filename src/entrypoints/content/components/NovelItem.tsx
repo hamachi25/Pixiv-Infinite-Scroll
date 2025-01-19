@@ -53,7 +53,7 @@ export const NovelItem = ({ novel, type }: Props) => {
 					target={settings?.openInNewTab ? "_blank" : undefined}
 				>
 					<img
-						className="rounded-[8px] object-cover transition-opacity duration-200 hover:opacity-80"
+						className="h-[112px] w-[80px] rounded-[8px] object-cover transition-opacity duration-200 hover:opacity-80"
 						src={novel.url}
 						alt={novel.alt}
 						width={80}
