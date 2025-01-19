@@ -17,11 +17,63 @@ Pixiv Infinite Scroll is an infinite scroll extension optimized for Pixiv.
 - Latest by followed
 - Bookmarks
 
-## Build
+If there are any unsupported pages, please make a feature request.
 
-We use [WXT](https://wxt.dev/).
+## Bug Reports / Feature Requests
+
+- [GitHub Issue](https://github.com/hamachi25/Pixiv-Infinite-Scroll/issues)
+- [Google Form](https://forms.gle/nWLZzi86qnWaAyEs7)
+
+## Development
+
+1. Install [NodeJS](https://nodejs.org) and [pnpm](https://pnpm.io)
+
+2. Install dependencies
+
+    ```shell
+    pnpm install
+    ```
+
+### Dev Mode
+
+When you save in the code editor, the page will automatically reload.
 
 ```shell
-pnpm install
+# Chrome
+pnpm dev
+```
+
+```shell
+# Firefox
+pnpm dev:firefox
+```
+
+If you want to load the extension into an existing browser, create `web-ext.config.ts`.
+It will be built into the `.output` folder.
+
+https://wxt.dev/guide/essentials/config/browser-startup.html#disable-opening-browser
+
+```ts
+// web-ext.config.ts
+import { defineRunnerConfig } from "wxt";
+
+export default defineRunnerConfig({
+	disabled: true,
+});
+```
+
+### Build
+
+```shell
+# Chrome
 pnpm build
 ```
+
+```shell
+# Firefox
+pnpm build:firefox
+```
+
+## Translation
+
+If you would like to help with translation, please check [src/locales/](https://github.com/hamachi25/Pixiv-Infinite-Scroll/tree/main/src/locales).
