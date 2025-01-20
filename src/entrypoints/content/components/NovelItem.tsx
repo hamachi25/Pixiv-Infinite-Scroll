@@ -3,30 +3,6 @@ import type { Work, NovelType } from "../type";
 import { BookmarkButton } from "./ui/BookmarkButton";
 import { SettingContext } from "../context";
 
-const NovelInfo = ({ novel, readingTime }: { novel: Work; readingTime: number | undefined }) => {
-	return (
-		<div className="my-[4px] flex gap-[8px] text-[12px] text-[var(--charcoal-text3)]">
-			{/* 文字数 */}
-			{novel.textCount && (
-				<span>{i18n.t("novel.character", [novel.textCount.toLocaleString()])}</span>
-			)}
-
-			{/* 読了時間 */}
-			{readingTime && <span>{i18n.t("novel.minute", [readingTime.toLocaleString()])}</span>}
-
-			{/* ブックマーク数 */}
-			{novel.bookmarkCount && novel.bookmarkCount > 0 && (
-				<span className="inline-flex items-center gap-[4px] align-top">
-					<svg className="h-[12px] w-[12px] fill-current" viewBox="0 0 12 12">
-						<path d="M9 0.75C10.6569 0.75 12 2.09315 12 3.75C12 7.71703 7.33709 10.7126 6.23256 11.3666C6.08717 11.4526 5.91283 11.4526 5.76744 11.3666C4.6629 10.7126 0 7.71703 0 3.75C0 2.09315 1.34315 0.75 3 0.75C4.1265 0.75 5.33911 1.60202 6 2.66823C6.66089 1.60202 7.8735 0.75 9 0.75Z" />
-					</svg>
-					<span>{novel.bookmarkCount.toLocaleString()}</span>
-				</span>
-			)}
-		</div>
-	);
-};
-
 interface Props {
 	novel: Work;
 	type: NovelType;
@@ -174,5 +150,31 @@ export const NovelItem = ({ novel, type }: Props) => {
 				</div>
 			</div>
 		</li>
+	);
+};
+
+const NovelInfo = ({ novel, readingTime }: { novel: Work; readingTime: number | undefined }) => {
+	return (
+		<div className="my-[4px] flex gap-[8px] text-[12px] text-[var(--charcoal-text3)]">
+			{/* 文字数 */}
+			{novel.textCount !== undefined && (
+				<span>{i18n.t("novel.character", [novel.textCount.toLocaleString()])}</span>
+			)}
+
+			{/* 読了時間 */}
+			{readingTime !== undefined && (
+				<span>{i18n.t("novel.minute", [readingTime.toLocaleString()])}</span>
+			)}
+
+			{/* ブックマーク数 */}
+			{novel.bookmarkCount !== undefined && novel.bookmarkCount > 0 && (
+				<span className="inline-flex items-center gap-[4px] align-top">
+					<svg className="h-[12px] w-[12px] fill-current" viewBox="0 0 12 12">
+						<path d="M9 0.75C10.6569 0.75 12 2.09315 12 3.75C12 7.71703 7.33709 10.7126 6.23256 11.3666C6.08717 11.4526 5.91283 11.4526 5.76744 11.3666C4.6629 10.7126 0 7.71703 0 3.75C0 2.09315 1.34315 0.75 3 0.75C4.1265 0.75 5.33911 1.60202 6 2.66823C6.66089 1.60202 7.8735 0.75 9 0.75Z" />
+					</svg>
+					<span>{novel.bookmarkCount.toLocaleString()}</span>
+				</span>
+			)}
+		</div>
 	);
 };
