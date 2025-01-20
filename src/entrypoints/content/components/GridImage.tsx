@@ -39,7 +39,7 @@ export const GridImage = ({ illust }: Props) => {
 				)}
 				{/* センシティブ */}
 				{isSensitive && (illust.sl === 4 || illust.sl === 6) && (
-					<div className="absolute inset-0 flex h-full w-full items-center justify-center bg-[rgba(0,0,0,0.08)] backdrop-blur-[20px]">
+					<div className="absolute inset-0 flex h-full w-full items-center justify-center rounded-[8px] bg-[rgba(0,0,0,0.08)] backdrop-blur-[20px]">
 						<svg
 							viewBox="0 0 256 256"
 							fill="white"
