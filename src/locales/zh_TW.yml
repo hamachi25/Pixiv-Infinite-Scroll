@@ -1,5 +1,5 @@
 extension:
-    extDescription: 針對Pixiv優化的無限滾動擴展功能
+    extDescription: 滾動時會自動加載下一頁，讓您舒適地瀏覽Pixiv的作品。
 popup:
     report: 問題報告・功能建議
     openInNewTab:

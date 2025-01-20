@@ -1,5 +1,5 @@
 extension:
-    extDescription: 为Pixiv优化的无限滚动扩展功能
+    extDescription: 滚动时会自动加载下一页，您可以舒适地浏览Pixiv的作品。
 popup:
     report: 问题报告和功能建议
     openInNewTab:

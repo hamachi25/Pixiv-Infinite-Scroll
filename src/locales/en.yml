@@ -1,5 +1,5 @@
 extension:
-    extDescription: Infinite scroll extension optimized for Pixiv
+    extDescription: By scrolling, the next page is automatically loaded, making it easy to browse works on Pixiv.
 popup:
     report: Bug Report / Feature Request
     openInNewTab:
