@@ -1,4 +1,4 @@
-import type { Work } from "../../type";
+import type { Work } from "@/types/type";
 import { NovelItem } from "../NovelItem";
 import { GridImage } from "../GridImage";
 import { BookmarkButton } from "../ui/BookmarkButton";
@@ -69,51 +69,55 @@ export const Following = ({ profiles }: Props) => {
 								</div>
 							</div>
 
-							{/* イラスト */}
-							<div className="ml-[24px]">
-								<ul className="flex gap-[24px]">
-									{/* イラスト */}
-									{profile.illusts?.map((illust) => (
-										<li key={illust.id} className="w-[184px]">
-											<div className="relative">
-												<GridImage illust={illust} />
-												<BookmarkButton
-													bookmarkData={illust.bookmarkData}
-													work={illust}
-													type="illust"
-												/>
-											</div>
-											<div className="mt-[4px] flex">
-												<a
-													className="overflow-hidden text-ellipsis whitespace-nowrap text-[14px] font-bold"
-													href={`/artworks/${illust.id}`}
-													target={
-														settings?.openInNewTab
-															? "_blank"
-															: undefined
-													}
-												>
-													{illust.title}
-												</a>
-											</div>
-										</li>
-									))}
+							{/* 作品 */}
+							<div className="ml-[24px] w-[calc((var(--columns)-4)*80px+(var(--columns)-5)*24px)]">
+								<div className="following-blur -mr-[72px] overflow-hidden">
+									<ul className="following-blur-2 flex gap-[24px] pr-[72px]">
+										{/* イラスト */}
+										{profile.illusts?.map((illust) => (
+											<li key={illust.id} className="w-[184px] min-w-[184px]">
+												<div className="relative">
+													<GridImage illust={illust} />
+													<BookmarkButton work={illust} type="illust" />
+												</div>
+												<div className="mt-[4px] flex">
+													<a
+														className="overflow-hidden text-ellipsis whitespace-nowrap text-[14px] font-bold"
+														href={`/artworks/${illust.id}`}
+														target={
+															settings?.openInNewTab
+																? "_blank"
+																: undefined
+														}
+													>
+														{illust.isMuted ? (
+															<span className="text-[var(--charcoal-text3)]">
+																{i18n.t("mute.muted")}
+															</span>
+														) : (
+															illust.title
+														)}
+													</a>
+												</div>
+											</li>
+										))}
 
-									{/* 小説 */}
-									{profile.illusts?.length === 0 &&
-										profile.novels?.map((novel) => {
-											return (
-												<NovelItem
-													key={novel.id}
-													novel={novel}
-													type="follow"
-												/>
-											);
-										})}
-									{displaySingleNovelItem && profile.novels && (
-										<NovelItem novel={profile.novels[0]} type="follow" />
-									)}
-								</ul>
+										{/* 小説 */}
+										{profile.illusts?.length === 0 &&
+											profile.novels?.map((novel) => {
+												return (
+													<NovelItem
+														key={novel.id}
+														novel={novel}
+														type="follow"
+													/>
+												);
+											})}
+										{displaySingleNovelItem && profile.novels && (
+											<NovelItem novel={profile.novels[0]} type="follow" />
+										)}
+									</ul>
+								</div>
 							</div>
 						</div>
 					</div>

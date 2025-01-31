@@ -3,9 +3,10 @@ import type { ContentScriptContext } from "wxt/client";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 
-import { getElementSelectorByUrl } from "./utils/getElementSelectorByUrl";
-import { pageRegex } from "./constants/pageRegex";
+import { getElementSelectorByUrl } from "@/utils/getElementSelectorByUrl";
+import { PAGE_REGEX } from "@/constants/urlRegex";
 import { Context } from "./context";
+
 export default defineContentScript({
 	matches: ["https://www.pixiv.net/*"],
 	cssInjectionMode: "ui",
@@ -37,7 +38,7 @@ export default defineContentScript({
 });
 
 const isMatch = (url: Location) =>
-	Object.values(pageRegex).some((pattern) => new RegExp(pattern).test(url.pathname));
+	Object.values(PAGE_REGEX).some((pattern) => pattern.test(url.pathname));
 
 const mountUi = async (ctx: ContentScriptContext, anchor: string) => {
 	const ui = await createShadowRootUi(ctx, {

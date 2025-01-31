@@ -5,6 +5,30 @@ popup:
     openInNewTab:
         title: 在新标签页中打开链接
         detail: 在新标签页中打开插图和小说。
+    mute:
+        title: 静音标签/用户
+        detail: 应用静音设置。
+        button: 静音设置
+options:
+    title: 静音设置
+
+    tag:
+        title: 静音标签
+        detail: 请输入要静音的标签名。
+        inputName: 标签名
+        exampleName: 例：
+        addButtonText: 添加
+        delButtonText: 删除标签
+    user:
+        title: 静音用户
+        detail: 请输入要静音的用户ID和用户名（可选）。
+        inputId: 用户ID
+        exampleId: 例：
+        inputIdError: 请输入半角数字。
+        inputName: 用户名（可选）
+        exampleName: 例：
+        addButtonText: 添加
+        delButtonText: 删除用户
 following:
     follow: 已关注
     following: 加关注
@@ -19,3 +43,5 @@ illust:
     r18: R-18 / R-18G
     work: 作品
     restrict: 浏览受限（含成人内容）
+mute:
+    muted: 屏蔽中

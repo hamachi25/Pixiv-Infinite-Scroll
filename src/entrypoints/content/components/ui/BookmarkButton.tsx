@@ -1,20 +1,16 @@
-import type { Work } from "../../type";
+import type { Work } from "@/types/type";
 import { postData } from "../../fetch/post";
 import { CsrfContext, SensitiveContext } from "../../context";
 import { fetchOrigin } from "../../fetch/fetch";
 import { extractCsrfToken } from "../../utils/extractDataFromOrigin";
 
 interface Props {
-	bookmarkData?: {
-		id: string;
-		private: boolean;
-	} | null;
 	work: Work;
 	type: "illust" | "novel";
 }
 
-export const BookmarkButton = ({ bookmarkData, work, type }: Props) => {
-	const [bookmarkId, setBookmarkId] = useState<string | undefined>(bookmarkData?.id);
+export const BookmarkButton = ({ work, type }: Props) => {
+	const [bookmarkId, setBookmarkId] = useState<string | undefined>(work.bookmarkData?.id);
 	const csrfToken = useContext(CsrfContext);
 	const isSensitive = useContext(SensitiveContext);
 
@@ -83,13 +79,18 @@ export const BookmarkButton = ({ bookmarkData, work, type }: Props) => {
 		});
 	};
 
+	const shouldDisplayBookmark =
+		(!(isSensitive && (work.sl === 4 || work.sl === 6)) || bookmarkId) &&
+		(type === "novel" || !work.isMuted);
+
 	return (
 		<>
-			{!isSensitive || bookmarkId ? (
+			{shouldDisplayBookmark ? (
 				<button
-					className="absolute bottom-0 right-0 flex h-[32px] w-[32px] cursor-pointer justify-end"
+					className={`${work.isMuted && !bookmarkId && "cursor-default opacity-40"} absolute bottom-0 right-0 flex h-[32px] w-[32px] cursor-pointer justify-end`}
 					type="button"
 					onClick={bookmarkId ? deleteBookmark : addBookmark}
+					disabled={work.isMuted && !bookmarkId}
 				>
 					<svg
 						className="transition-[fill,colors] duration-200"

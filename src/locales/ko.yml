@@ -5,6 +5,30 @@ popup:
     openInNewTab:
         title: 링크를 새 탭에서 열기
         detail: 일러스트 및 소설을 새 탭에서 엽니다.
+    mute:
+        title: 태그/사용자 음소거
+        detail: 음소거 설정을 적용합니다.
+        button: 음소거 설정
+options:
+    title: 뮤트 설정
+
+    tag:
+        title: 태그 뮤트
+        detail: 뮤트하고 싶은 태그명을 입력하세요.
+        inputName: 태그명
+        exampleName: "예: "
+        addButtonText: 추가
+        delButtonText: 태그 삭제
+    user:
+        title: 사용자 뮤트
+        detail: 뮤트하고 싶은 사용자 ID와 사용자명(선택)을 입력하세요.
+        inputId: 사용자 ID
+        exampleId: "예: "
+        inputIdError: 숫자를 입력하세요.
+        inputName: 사용자명(선택)
+        exampleName: "예: "
+        addButtonText: 추가
+        delButtonText: 사용자 삭제
 following:
     follow: 팔로우하기
     following: 팔로우 중
@@ -19,3 +43,5 @@ illust:
     r18: R-18 / R-18G
     work: 작품
     restrict: 열람 제한 중
+mute:
+    muted: 뮤트중

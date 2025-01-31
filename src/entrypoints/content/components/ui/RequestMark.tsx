@@ -1,5 +1,5 @@
 import { i18n } from "#i18n";
-import type { Work } from "../../type";
+import type { Work } from "@/types/type";
 import { SettingContext } from "../../context";
 
 interface Props {

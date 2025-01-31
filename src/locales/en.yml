@@ -5,6 +5,29 @@ popup:
     openInNewTab:
         title: Open link in a new tab
         detail: Open illustrations and novels in a new tab.
+    mute:
+        title: Mute Tag/User
+        detail: Apply mute settings.
+        button: Mute Settings
+options:
+    title: Mute Settings
+    tag:
+        title: Mute Tag
+        detail: Enter the tag name you want to mute.
+        inputName: Tag Name
+        exampleName: "e.g. "
+        addButtonText: Add
+        delButtonText: Delete Tag
+    user:
+        title: Mute User
+        detail: Enter the user ID and user name (optional) you want to mute.
+        inputId: User ID
+        exampleId: "e.g. "
+        inputIdError: Please enter a number.
+        inputName: User Name (optional)
+        exampleName: "e.g. "
+        addButtonText: Add
+        delButtonText: Delete User
 following:
     follow: Follow
     following: Following
@@ -18,4 +41,8 @@ novel:
 illust:
     r18: R-18/R-18G
     work: works
+    deleted: Deleted
+    private: or private
     restrict: Restricted (Adult Content)
+mute:
+    muted: Muted

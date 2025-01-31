@@ -5,6 +5,29 @@ popup:
     openInNewTab:
         title: リンクを新しいタブで開く
         detail: イラスト・小説を新しいタブで開きます。
+    mute:
+        title: タグ・ユーザーをミュート
+        detail: ミュート設定を適用します。
+        button: ミュート設定
+options:
+    title: ミュート設定
+    tag:
+        title: タグをミュート
+        detail: ミュートしたいタグ名を入力してください。
+        inputName: タグ名
+        exampleName: 例：
+        addButtonText: 追加
+        delButtonText: タグを削除
+    user:
+        title: ユーザーをミュート
+        detail: ミュートしたいユーザーIDとユーザー名（任意）を入力してください。
+        inputId: ユーザーID
+        exampleId: 例：
+        inputIdError: 半角数字を入力してください。
+        inputName: ユーザー名（任意）
+        exampleName: 例：
+        addButtonText: 追加
+        delButtonText: ユーザーを削除
 following:
     follow: フォローする
     following: フォロー中
@@ -18,4 +41,8 @@ novel:
 illust:
     r18: R18 / R18G
     work: 作品
+    deleted: 削除済み
+    private: もしくは非公開
     restrict: 閲覧制限中
+mute:
+    muted: ミュート中

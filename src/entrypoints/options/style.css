@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+	.scrollbar-thin {
+		scrollbar-width: thin;
+	}
+	.scrollbar-stable {
+		scrollbar-gutter: stable;
+	}
+}

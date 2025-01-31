@@ -1,6 +1,6 @@
 import { i18n } from "#i18n";
 import { settingsItem } from "@/utils/storage";
-import { GoReport } from "react-icons/go";
+import { GoReport, GoLinkExternal } from "react-icons/go";
 
 const formsLinks = {
 	ja: "https://forms.gle/nWLZzi86qnWaAyEs7",
@@ -10,17 +10,32 @@ const formsLinks = {
 const formsLink = navigator.language === "ja" ? formsLinks.ja : formsLinks.en;
 
 export default () => {
-	const [isChecked, setIsChecked] = useState(false);
+	const [openInNewTab, setOpenInNewTab] = useState(false);
+	const [isMute, setIsMute] = useState(false);
 	const { version } = browser.runtime.getManifest();
 
-	const handleCheckboxChange = () => {
-		setIsChecked((prev) => !prev);
-		settingsItem.setValue({ openInNewTab: !isChecked });
+	const handleNewtabCheckbox = () => {
+		setOpenInNewTab((prev) => {
+			settingsItem.getValue().then((settings) => {
+				settingsItem.setValue({ ...settings, openInNewTab: !prev });
+			});
+			return !prev;
+		});
+	};
+
+	const handleMuteCheckbox = () => {
+		setIsMute((prev) => {
+			settingsItem.getValue().then((settings) => {
+				settingsItem.setValue({ ...settings, mute: !prev });
+			});
+			return !prev;
+		});
 	};
 
 	useEffect(() => {
 		settingsItem.getValue().then((settings) => {
-			setIsChecked(settings.openInNewTab);
+			setOpenInNewTab(settings.openInNewTab);
+			setIsMute(settings.mute);
 		});
 	}, []);
 
@@ -50,7 +65,7 @@ export default () => {
 					</div>
 				</div>
 			</div>
-			<div className="form-control gap-2 px-2 pb-0.5 pt-3">
+			<div className="form-control px-2 pb-0.5 pt-3">
 				<label className="label cursor-pointer justify-between gap-4">
 					<span className="label-text text-[var(--text-normal)]">
 						{i18n.t("popup.openInNewTab.title")}
@@ -61,10 +76,36 @@ export default () => {
 					<input
 						type="checkbox"
 						className="toggle checked:text-[var(--pixiv-blue)]"
-						checked={isChecked}
-						onChange={handleCheckboxChange}
+						checked={openInNewTab}
+						onChange={handleNewtabCheckbox}
 					/>
 				</label>
+			</div>
+			<div className="form-control px-2 pb-0.5 pt-3">
+				<label className="label cursor-pointer justify-between gap-4">
+					<span className="label-text text-[var(--text-normal)]">
+						{i18n.t("popup.mute.title")}
+						<span className="block text-xs text-[var(--text-pale)]">
+							{i18n.t("popup.mute.detail")}
+						</span>
+					</span>
+					<input
+						type="checkbox"
+						className="toggle checked:text-[var(--pixiv-blue)]"
+						checked={isMute}
+						onChange={handleMuteCheckbox}
+					/>
+				</label>
+				<button className="btn h-11 min-h-11 p-0">
+					<a
+						className="flex h-full w-full items-center justify-center gap-1"
+						href={browser.runtime.getURL("/options.html")}
+						target="_blank"
+					>
+						{i18n.t("popup.mute.button")}
+						<GoLinkExternal size={14} />
+					</a>
+				</button>
 			</div>
 		</>
 	);

@@ -2,25 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-	--pixiv-blue: #0096fa;
-	--text-normal: rgb(43, 36, 66);
-	--text-pale: rgb(99, 104, 110);
-	--checkbox-border: rgba(0, 0, 0, 0.5);
-	--border-noraml: rgba(0, 0, 0, 0.2);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
 	:root {
-		--text-normal: white;
-		--text-pale: rgb(171, 178, 190);
-		--checkbox-border: rgba(255, 255, 255, 0.5);
-		--border-noraml: rgba(255, 255, 255, 0.3);
+		--pixiv-blue: #0096fa;
+		--text-normal: rgb(43, 36, 66);
+		--text-pale: rgb(99, 104, 110);
+		--checkbox-border: rgba(0, 0, 0, 0.5);
+		--border-noraml: rgba(0, 0, 0, 0.2);
 	}
-}
 
-body {
-	width: 390px;
-	padding: 1rem;
-	color: var(--text-normal);
+	@media (prefers-color-scheme: dark) {
+		:root {
+			--text-normal: white;
+			--text-pale: rgb(171, 178, 190);
+			--checkbox-border: rgba(255, 255, 255, 0.5);
+			--border-noraml: rgba(255, 255, 255, 0.3);
+		}
+	}
+
+	body {
+		width: 390px;
+		padding: 1rem;
+		color: var(--text-normal);
+	}
 }
