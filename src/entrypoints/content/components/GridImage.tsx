@@ -12,6 +12,7 @@ export const GridImage = ({ illust }: Props) => {
 	return (
 		<a href={`/artworks/${illust.id}`} target={settings?.openInNewTab ? "_blank" : undefined}>
 			{illust.isMuted ? (
+				// ミュート
 				<div className="flex h-[184px] w-[184px] items-center justify-center rounded-[8px] bg-[var(--charcoal-background2)]">
 					<div className="-mb-[1px] flex h-[122px] w-[122px] select-none flex-col items-center justify-center gap-[4px] text-[var(--charcoal-text4)]">
 						<svg className="h-[48px] w-[48px] fill-current" viewBox="0 0 24 24">

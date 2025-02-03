@@ -16,18 +16,14 @@ export default () => {
 
 	const handleNewtabCheckbox = () => {
 		setOpenInNewTab((prev) => {
-			settingsItem.getValue().then((settings) => {
-				settingsItem.setValue({ ...settings, openInNewTab: !prev });
-			});
+			settingsItem.setValue({ openInNewTab: !prev, mute: isMute });
 			return !prev;
 		});
 	};
 
 	const handleMuteCheckbox = () => {
 		setIsMute((prev) => {
-			settingsItem.getValue().then((settings) => {
-				settingsItem.setValue({ ...settings, mute: !prev });
-			});
+			settingsItem.setValue({ openInNewTab, mute: !prev });
 			return !prev;
 		});
 	};

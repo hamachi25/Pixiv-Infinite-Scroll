@@ -2,7 +2,7 @@ import { memo } from "react";
 import { Virtuoso } from "react-virtuoso";
 import { InView } from "react-intersection-observer";
 
-import type { UserWorks } from "./type";
+import type { TransformUserWorks } from "./type";
 import type { Work } from "@/types/type";
 
 import { GridIllusts } from "./components/page/GridIllusts";
@@ -76,15 +76,19 @@ const ItemContent = memo(
 				onChange={(inView) => {
 					if (inView) {
 						const oldUrl = new URL(location.href);
-						const currentPage = firstPage.current + index + 1;
+						const currentPage = firstPage.current + index;
 						oldUrl.searchParams.set("p", currentPage.toString());
-
 						const newUrl = oldUrl.toString();
-						history.pushState(null, "", newUrl);
+
+						const isFirst =
+							index === 0
+								? !new URLSearchParams(location.search).has("p")
+								: location.href === newUrl;
+						if (!isFirst) history.pushState(null, "", newUrl);
 					}
 				}}
 			>
-				<PageHeader firstPage={firstPage.current} index={index} />
+				{index !== 0 && <PageHeader firstPage={firstPage.current} index={index} />}
 				<InnerContent works={works} />
 			</InView>
 		) : (
@@ -95,34 +99,36 @@ const ItemContent = memo(
 
 export default () => {
 	const [works, setWorks] = useState<Work[][]>(() => []);
-	const [hasMore, setHasMore] = useState(true); // さらに読み込むかどうか
+	const [hasMore, setHasMore] = useState<boolean | undefined>(false); // さらに読み込むかどうか
 	const hasRun = useRef(false); // useEffectを初回のみ実行
+	const prevScrollY = useRef(window.scrollY); // 前回のスクロール位置
 
 	const firstPage = useRef(0); // 初期ページ(変動しない)
 	const currentPage = useRef(1); // 現在のページ
 
 	// main worldからのデータ
-	const userWorks = useRef<UserWorks>({});
+	const userWorks = useRef<TransformUserWorks>({});
 	const apiUrl = useRef("");
 
 	const muteSettings = useContext(MuteContext);
 
 	const loadMore = () => {
-		if (!hasMore) return;
+		if (hasMore === undefined || !apiUrl.current) return;
 
+		setHasMore(true);
 		const requestUrl = generateRequestUrl(
 			apiUrl.current,
 			currentPage.current,
 			userWorks.current,
 		);
 		if (!requestUrl) {
-			setHasMore(false);
+			setHasMore(undefined);
 			return;
 		}
 
 		fetchData(requestUrl).then((data) => {
 			if (!data) {
-				setHasMore(false);
+				setHasMore(undefined);
 				return;
 			}
 
@@ -130,83 +136,89 @@ export default () => {
 			setWorks((prevWorks) => [...prevWorks, transformedData]);
 			currentPage.current += 1;
 
-			if (transformedData.length === 0) setHasMore(false);
+			if (transformedData.length === 0) {
+				setHasMore(undefined);
+			} else {
+				setHasMore(false);
+			}
 		});
 	};
 
+	// TODO: レスポンス遅延の限度が決まっているため、改善したい
+	/*
+	 * main worldからデータを、onMessageで受け取ればレスポンスが遅くても問題なくなる
+	 * ただしレスポンスが早い場合は、content scriptが実行される前に送信されてしまう
+	 */
+
+	// main worldでのレスポンスが遅い場合は、繰り返し実行する
+	const RETRY_INTERVAL = 200;
+	const MAX_RETRIES = 8;
 	useEffect(() => {
 		if (muteSettings.tags[0] === "null" || hasRun.current) return;
-		hasRun.current = true;
 
-		(async () => {
-			// リクエストURLとユーザー作品一覧をmain worldから取得
-			const fetchedFirstRequest = await pisFetchMessenger.sendMessage(
-				"firstPageRequest",
-				null,
-			);
+		let retryCount = 0;
+		let timeoutId: NodeJS.Timeout;
 
-			if (!fetchedFirstRequest.apiUrl) {
-				setHasMore(false);
-				return;
+		const fetchApiUrl = async () => {
+			try {
+				const fetchedFirstRequest = await pisFetchMessenger.sendMessage(
+					"firstPageRequest",
+					null,
+				);
+
+				if (!fetchedFirstRequest.apiUrl) {
+					if (retryCount < MAX_RETRIES) {
+						retryCount++;
+						timeoutId = setTimeout(fetchApiUrl, RETRY_INTERVAL);
+						return;
+					}
+					setHasMore(undefined);
+					return;
+				}
+
+				// APIUrl取得成功時の処理
+				if (fetchedFirstRequest.userWorks) {
+					const { illusts, manga, novels } = fetchedFirstRequest.userWorks.body;
+					const combined = { ...illusts, ...manga };
+					const illustMangaKeys = Object.keys(combined).sort(
+						(a, b) => Number(b) - Number(a),
+					);
+
+					userWorks.current = {
+						illusts: Object.keys(illusts).reverse(),
+						manga: Object.keys(manga).reverse(),
+						illustManga: illustMangaKeys,
+						novels: Object.keys(novels).reverse(),
+					};
+				}
+
+				apiUrl.current = fetchedFirstRequest.apiUrl;
+
+				const page = Number(new URLSearchParams(location.search).get("p"));
+				firstPage.current = page || 1;
+				currentPage.current = page || 1;
+
+				const transformedData = transformData(
+					fetchedFirstRequest.firstPageWorks,
+					location,
+					muteSettings,
+				);
+				setWorks(() => [transformedData]);
+				hasRun.current = true;
+			} catch (error) {
+				console.error("Error fetching API URL:", error);
+				setHasMore(undefined);
 			}
+		};
 
-			if (fetchedFirstRequest.userWorks) {
-				const { illusts, manga, novels } = fetchedFirstRequest.userWorks.body;
+		fetchApiUrl();
 
-				const combined = { ...illusts, ...manga };
-				const illustMangaKeys = Object.keys(combined).sort((a, b) => Number(b) - Number(a));
-
-				userWorks.current = {
-					illusts: Object.keys(illusts).reverse(),
-					manga: Object.keys(manga).reverse(),
-					illustManga: illustMangaKeys,
-					novels: Object.keys(novels).reverse(),
-				};
-			}
-
-			apiUrl.current = fetchedFirstRequest.apiUrl;
-
-			const page = Number(new URLSearchParams(location.search).get("p"));
-			firstPage.current = page || 1;
-			currentPage.current = page || 1;
-
-			loadMore();
-		})();
+		return () => {
+			clearTimeout(timeoutId);
+		};
 	}, [muteSettings]);
 
-	// 1ページ目にURLを書き換えるIntersectionObserverを追加
-	useEffect(() => {
-		if (firstPage.current === 0) return;
-
-		const anchor = getElementSelectorByUrl(location);
-		const firstPageElement = document.querySelector(anchor);
-		if (!firstPageElement) return;
-
-		const oldUrl = new URL(location.href);
-		oldUrl.searchParams.set("p", firstPage.current.toString());
-		const newUrl = oldUrl.toString();
-
-		const observer = new IntersectionObserver(
-			(entries) => {
-				for (const entry of entries) {
-					if (entry.isIntersecting) {
-						const isFirst =
-							firstPage.current === 1
-								? !new URLSearchParams(location.search).has("p")
-								: location.href === newUrl;
-						if (!isFirst) history.pushState(null, "", newUrl);
-					}
-				}
-			},
-			{
-				rootMargin: "-50% 0px",
-			},
-		);
-
-		observer.observe(firstPageElement);
-		return () => observer.disconnect();
-	}, [firstPage.current]);
-
+	// muteのオンオフをリアルタイムで反映
 	useEffect(() => {
 		setWorks((prevWorks) =>
 			prevWorks.map((work) =>
@@ -232,26 +244,31 @@ export default () => {
 		);
 	}, [muteSettings.isMute]);
 
-	// ユーザー作品ページでミュートを行うと、空のdivが追加されるので非表示
-	useEffect(() => {
-		const style = document.createElement("style");
-		style.textContent = "div:empty:has(+div>div>ul){display:none}";
-		document.head.append(style);
-	}, []);
-
 	// context propの使い方がわからないのでメモ化
 	// https://virtuoso.dev/footer/
 	const Footer = useCallback(() => <LoadingSpinner hasMore={hasMore} />, [hasMore]);
 
 	return (
-		<Virtuoso
-			useWindowScroll
-			data={works}
-			endReached={loadMore}
-			components={{ Footer }}
-			itemContent={(index, works) => (
-				<ItemContent works={works} index={index} firstPage={firstPage} />
-			)}
-		/>
+		<InView
+			as="div"
+			rootMargin="-140% 0px"
+			onChange={async (inView) => {
+				// 下にスクロールしたときのみ、読み込む
+				const isScrollingDown = window.scrollY > prevScrollY.current;
+				if (!inView && isScrollingDown) {
+					prevScrollY.current = window.scrollY;
+					loadMore();
+				}
+			}}
+		>
+			<Virtuoso
+				useWindowScroll
+				data={works}
+				components={{ Footer }}
+				itemContent={(index, works) => (
+					<ItemContent works={works} index={index} firstPage={firstPage} />
+				)}
+			/>
+		</InView>
 	);
 };

@@ -88,6 +88,8 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
 	// リンクを新規タブで開く
 	useEffect(() => {
 		const anchor = getElementSelectorByUrl(location);
+		if (!anchor) return;
+
 		const firstPageElement = document.querySelector(anchor);
 		if (!firstPageElement) return;
 

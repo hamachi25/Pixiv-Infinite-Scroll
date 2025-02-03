@@ -1,10 +1,10 @@
-import type { UserWorks } from "../type";
+import type { TransformUserWorks } from "../type";
 import { API_REGEX } from "@/constants/urlRegex";
 
 export const generateRequestUrl = (
 	url: string,
 	currentPage: number,
-	userWorks: UserWorks,
+	userWorks: TransformUserWorks,
 ): string | undefined => {
 	const newUrl = new URL(url);
 	const params = new URLSearchParams(newUrl.search);

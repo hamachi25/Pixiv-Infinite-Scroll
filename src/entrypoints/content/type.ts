@@ -1,6 +1,6 @@
 import { UserMute } from "@/types/type";
 
-export type UserWorks = {
+export type TransformUserWorks = {
 	illusts?: string[];
 	manga?: string[];
 	illustManga?: string[];

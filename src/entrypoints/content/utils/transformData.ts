@@ -10,18 +10,13 @@ const isIllustItem = (item: Work | AdContainer): item is Work => {
 	return !("isAdContainer" in item);
 };
 
-const isMuted = (
+const filterMuted = (
 	item: Work,
 	muteSettings: MuteSettings,
 	type: "following" | "normal",
 ): boolean | undefined => {
-	// ブックマークは除外
-	const pathName = location.pathname;
-	if (PAGE_REGEX.bookmarkIllust.test(pathName) || PAGE_REGEX.bookmarkNovel.test(pathName)) {
-		return undefined;
-	}
-
 	// フォロー中ページは、作品にのみミュート適用
+	const pathName = location.pathname;
 	if (type === "normal" && PAGE_REGEX.following.test(pathName)) {
 		return undefined;
 	}
@@ -102,11 +97,11 @@ export const transformData = (
 		userComment: item.userComment,
 		illusts: item.illusts?.map((illust) => ({
 			...illust,
-			isMuted: isMuted(illust, muteSettings, "following"),
+			isMuted: filterMuted(illust, muteSettings, "following"),
 		})),
 		novels: item.novels?.map((novel) => ({
 			...novel,
-			isMuted: isMuted(novel, muteSettings, "following"),
+			isMuted: filterMuted(novel, muteSettings, "following"),
 		})),
 		commission: item.commission,
 
@@ -119,6 +114,6 @@ export const transformData = (
 		description: item.description,
 		seriesTitle: item.seriesTitle,
 		seriesId: item.seriesId,
-		isMuted: isMuted(item, muteSettings, "normal"),
+		isMuted: filterMuted(item, muteSettings, "normal"),
 	}));
 };

@@ -27,9 +27,6 @@
 	.following-blur {
 		mask-image: linear-gradient(to right, rgb(0, 0, 0) calc(100% - 72px), transparent);
 	}
-	.following-blur-2 {
-		mask: linear-gradient(to right, transparent, rgb(0, 0, 0) 72px) -72px 0px;
-	}
 }
 
 @keyframes charcoal-loading-spinner-icon-scale-out {

@@ -23,6 +23,7 @@ export const Following = ({ profiles }: Props) => {
 					profile.illusts.length <= 2 &&
 					profile.novels &&
 					profile.novels.length >= 1;
+
 				return (
 					<div
 						key={profile.userId}
@@ -72,7 +73,7 @@ export const Following = ({ profiles }: Props) => {
 							{/* 作品 */}
 							<div className="ml-[24px] w-[calc((var(--columns)-4)*80px+(var(--columns)-5)*24px)]">
 								<div className="following-blur -mr-[72px] overflow-hidden">
-									<ul className="following-blur-2 flex gap-[24px] pr-[72px]">
+									<ul className="flex gap-[24px] pr-[72px]">
 										{/* イラスト */}
 										{profile.illusts?.map((illust) => (
 											<li key={illust.id} className="w-[184px] min-w-[184px]">

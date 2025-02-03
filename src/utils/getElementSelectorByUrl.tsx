@@ -39,12 +39,14 @@ const SELECTOR_PATTERN: { pattern: RegExp; selector: string }[] = [
 	},
 ];
 
-export const getElementSelectorByUrl = (url: Location): string => {
+export const getElementSelectorByUrl = (url: Location): string | null => {
 	for (const { pattern, selector } of SELECTOR_PATTERN) {
 		if (pattern.test(url.pathname)) {
 			return selector;
 		}
 	}
 
-	return "section ul";
+	return null;
+
+	// return "section ul";
 };

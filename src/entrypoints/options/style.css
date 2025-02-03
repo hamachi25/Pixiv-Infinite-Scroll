@@ -2,6 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+	:root {
+		--pixiv-blue: #0096fa;
+		--text-normal: rgb(43, 36, 66);
+		--text-pale: rgb(99, 104, 110);
+		--delete-button: rgba(0, 0, 0, 0.1);
+		--delete-button-hover: rgba(0, 0, 0, 0.2);
+		--border-noraml: rgba(0, 0, 0, 0.2);
+	}
+
+	@media (prefers-color-scheme: dark) {
+		:root {
+			--text-normal: white;
+			--text-pale: rgb(171, 178, 190);
+			--delete-button: rgba(255, 255, 255, 0.2);
+			--delete-button-hover: rgba(255, 255, 255, 0.1);
+			--border-noraml: rgba(255, 255, 255, 0.3);
+		}
+	}
+
+	body {
+		color: var(--text-normal);
+	}
+}
+
 @layer utilities {
 	.scrollbar-thin {
 		scrollbar-width: thin;

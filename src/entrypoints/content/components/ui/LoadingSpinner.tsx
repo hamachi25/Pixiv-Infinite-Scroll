@@ -1,5 +1,5 @@
 interface Props {
-	hasMore: boolean;
+	hasMore: boolean | undefined;
 }
 
 export const LoadingSpinner = ({ hasMore }: Props) => {

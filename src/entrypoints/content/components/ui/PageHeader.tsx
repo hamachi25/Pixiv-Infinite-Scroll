@@ -4,7 +4,7 @@ interface Props {
 }
 
 export const PageHeader = ({ firstPage, index }: Props) => {
-	const currentPage = firstPage + index + 1;
+	const currentPage = firstPage + index;
 
 	const url = new URL(location.href);
 	url.searchParams.set("p", currentPage.toString());
