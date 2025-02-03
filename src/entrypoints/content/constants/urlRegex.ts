@@ -1,4 +1,4 @@
-export const pageRegex = {
+export const PAGE_REGEX = {
 	tagIllust: /\/tags\/.+\/(illustrations|manga|artworks)/,
 	tagNovel: /\/tags\/.+\/novels/,
 	newIllust: /\/bookmark_new_illust(_r18)?\.php/,

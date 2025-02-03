@@ -4,7 +4,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 
 import { getElementSelectorByUrl } from "./utils/getElementSelectorByUrl";
-import { pageRegex } from "./constants/pageRegex";
+import { PAGE_REGEX } from "./constants/urlRegex";
 import { Context } from "./context";
 export default defineContentScript({
 	matches: ["https://www.pixiv.net/*"],
@@ -15,11 +15,11 @@ export default defineContentScript({
 
 		let ui = await mountUi(ctx, anchor);
 
-		if (isMatch(location)) ui?.autoMount();
+		if (isMatchUrl(location)) ui?.autoMount();
 
 		ctx.addEventListener(window, "wxt:locationchange", async ({ newUrl }) => {
 			const params = new URLSearchParams(newUrl.search);
-			const isMatchFound = isMatch(location);
+			const isMatchFound = isMatchUrl(location);
 
 			if (isMatchFound && !params.has("p")) {
 				ui?.remove();
@@ -36,8 +36,8 @@ export default defineContentScript({
 	},
 });
 
-const isMatch = (url: Location) =>
-	Object.values(pageRegex).some((pattern) => new RegExp(pattern).test(url.pathname));
+const isMatchUrl = (url: Location) =>
+	Object.values(PAGE_REGEX).some((pattern) => pattern.test(url.pathname));
 
 const mountUi = async (ctx: ContentScriptContext, anchor: string) => {
 	const ui = await createShadowRootUi(ctx, {

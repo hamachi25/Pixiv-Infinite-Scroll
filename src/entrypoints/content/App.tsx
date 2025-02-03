@@ -15,39 +15,39 @@ import { transformData } from "./utils/transformData";
 import { extractWorkTag } from "./utils/extractWorkTag";
 import { generateRequestUrl } from "./utils/generateRequestUrl";
 import { getElementSelectorByUrl } from "./utils/getElementSelectorByUrl";
-import { pageRegex } from "./constants/pageRegex";
+import { PAGE_REGEX } from "./constants/urlRegex";
 import { fetchData } from "./fetch/fetch";
 
 const InnerContent = ({ works }: { works: Work[] }) => {
 	const pathName = location.pathname;
 
 	// フォロー中
-	if (pageRegex.following.test(pathName)) {
+	if (PAGE_REGEX.following.test(pathName)) {
 		return <Following profiles={works} />;
 	}
 
 	// ユーザーの小説一覧
-	if (pageRegex.userNovel.test(pathName)) {
+	if (PAGE_REGEX.userNovel.test(pathName)) {
 		return <Novels novels={works} type="user" />;
 	}
 
 	// タグ検索の小説
-	if (pageRegex.tagNovel.test(pathName)) {
+	if (PAGE_REGEX.tagNovel.test(pathName)) {
 		return <Novels novels={works} type="tag" />;
 	}
 
 	// フォロー新着の小説
-	if (pageRegex.newNovel.test(pathName)) {
+	if (PAGE_REGEX.newNovel.test(pathName)) {
 		return <Novels novels={works} type="newNovel" />;
 	}
 
 	// ブックマークの小説
-	if (pageRegex.bookmarkNovel.test(pathName)) {
+	if (PAGE_REGEX.bookmarkNovel.test(pathName)) {
 		return <Novels novels={works} type="bookmark" />;
 	}
 
 	// ユーザーのイラスト一覧
-	if (pageRegex.userIllust.test(pathName)) {
+	if (PAGE_REGEX.userIllust.test(pathName)) {
 		return <GridIllusts illusts={works} type="user" />;
 	}
 
@@ -92,8 +92,8 @@ const ItemContent = memo(
 
 export default () => {
 	const [works, setWorks] = useState<Work[][]>(() => []);
-	const [hasMore, setHasMore] = useState(true);
-	const userWorks = useRef<UserWorks>({});
+	const [hasMore, setHasMore] = useState(true); // さらに読み込むかどうか
+	const userWorks = useRef<UserWorks>({}); // ユーザーの作品一覧
 	const workTag = useRef<WorkTag | undefined>(undefined);
 	const page = useRef(2);
 	const prevScrollY = useRef(window.scrollY); // 前回のスクロール位置
@@ -129,8 +129,8 @@ export default () => {
 
 			// ユーザーのイラスト・小説のidをまとめて取得
 			if (
-				pageRegex.userIllust.test(location.pathname) ||
-				pageRegex.userNovel.test(location.pathname)
+				PAGE_REGEX.userIllust.test(location.pathname) ||
+				PAGE_REGEX.userNovel.test(location.pathname)
 			) {
 				if (!tag.path.other) return;
 
