@@ -192,7 +192,7 @@ export default () => {
 	}, [workTag.current]);
 
 	const { ref } = useInView({
-		rootMargin: "-150% 0px",
+		rootMargin: "50% 0px",
 		onChange: (inView) => {
 			const isScrollingDown = window.scrollY > prevScrollY.current;
 			if (inView && isScrollingDown) {
