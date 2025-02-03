@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { Virtuoso } from "react-virtuoso";
-import { InView } from "react-intersection-observer";
+import { InView, useInView } from "react-intersection-observer";
 
 import type { WorkTag, Work, UserWorks } from "./type";
 
@@ -92,18 +92,19 @@ const ItemContent = memo(
 
 export default () => {
 	const [works, setWorks] = useState<Work[][]>(() => []);
-	const [hasMore, setHasMore] = useState(true); // さらに読み込むかどうか
+	const [hasMore, setHasMore] = useState<boolean | undefined>(false); // さらに読み込むかどうか
 	const userWorks = useRef<UserWorks>({}); // ユーザーの作品一覧
 	const workTag = useRef<WorkTag | undefined>(undefined);
 	const page = useRef(2);
-	const prevScrollY = useRef(window.scrollY); // 前回のスクロール位置
+	const prevScrollY = useRef(window.scrollY); // 前回のスクロール位置s
 
 	const loadMore = () => {
-		if (!hasMore) return;
+		if (hasMore === undefined) return;
 
+		setHasMore(true);
 		const requestUrl = generateRequestUrl(workTag.current, page.current, userWorks.current);
 		if (!requestUrl) {
-			setHasMore(false);
+			setHasMore(undefined);
 			return;
 		}
 
@@ -114,7 +115,11 @@ export default () => {
 			setWorks((prevWorks) => [...prevWorks, transformedData]);
 			page.current += 1;
 
-			if (transformedData.length === 0) setHasMore(false);
+			if (transformedData.length === 0) {
+				setHasMore(undefined);
+			} else {
+				setHasMore(false);
+			}
 		});
 	};
 
@@ -186,31 +191,27 @@ export default () => {
 		return () => observer.disconnect();
 	}, [workTag.current]);
 
-	// context propの使い方がわからないのでメモ化
-	// https://virtuoso.dev/footer/
-	const Footer = useCallback(() => <LoadingSpinner hasMore={hasMore} />, [hasMore]);
+	const { ref } = useInView({
+		rootMargin: "-150% 0px",
+		onChange: (inView) => {
+			const isScrollingDown = window.scrollY > prevScrollY.current;
+			if (inView && isScrollingDown) {
+				prevScrollY.current = window.scrollY;
+				loadMore();
+			}
+		},
+	});
 
 	return (
-		<InView
-			as="div"
-			rootMargin="-150% 0px"
-			onChange={(inView) => {
-				// 下にスクロールしたときのみ、読み込む
-				const isScrollingDown = window.scrollY > prevScrollY.current;
-				if (!inView && isScrollingDown) {
-					prevScrollY.current = window.scrollY;
-					loadMore();
-				}
-			}}
-		>
+		<>
 			<Virtuoso
 				useWindowScroll
 				data={works}
-				components={{ Footer }}
 				itemContent={(index, works) => (
 					<ItemContent works={works} workTag={workTag} index={index} />
 				)}
 			/>
-		</InView>
+			<LoadingSpinner ref={ref} hasMore={hasMore} />
+		</>
 	);
 };
