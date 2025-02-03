@@ -96,6 +96,7 @@ export default () => {
 	const userWorks = useRef<UserWorks>({});
 	const workTag = useRef<WorkTag | undefined>(undefined);
 	const page = useRef(2);
+	const prevScrollY = useRef(window.scrollY); // 前回のスクロール位置
 
 	const loadMore = () => {
 		if (!hasMore) return;
@@ -148,8 +149,6 @@ export default () => {
 					};
 				});
 			}
-
-			loadMore();
 		})();
 	}, []);
 
@@ -192,14 +191,26 @@ export default () => {
 	const Footer = useCallback(() => <LoadingSpinner hasMore={hasMore} />, [hasMore]);
 
 	return (
-		<Virtuoso
-			useWindowScroll
-			data={works}
-			endReached={loadMore}
-			components={{ Footer }}
-			itemContent={(index, works) => (
-				<ItemContent works={works} workTag={workTag} index={index} />
-			)}
-		/>
+		<InView
+			as="div"
+			rootMargin="-150% 0px"
+			onChange={(inView) => {
+				// 下にスクロールしたときのみ、読み込む
+				const isScrollingDown = window.scrollY > prevScrollY.current;
+				if (!inView && isScrollingDown) {
+					prevScrollY.current = window.scrollY;
+					loadMore();
+				}
+			}}
+		>
+			<Virtuoso
+				useWindowScroll
+				data={works}
+				components={{ Footer }}
+				itemContent={(index, works) => (
+					<ItemContent works={works} workTag={workTag} index={index} />
+				)}
+			/>
+		</InView>
 	);
 };
