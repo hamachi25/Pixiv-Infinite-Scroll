@@ -18,4 +18,6 @@ novel:
 illust:
     r18: R-18 / R-18G
     work: 작품
+    deleted: 삭제됨
+    private: 혹은 비공개
     restrict: 열람 제한 중

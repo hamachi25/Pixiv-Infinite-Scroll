@@ -18,4 +18,6 @@ novel:
 illust:
     r18: R-18/R-18G
     work: works
+    deleted: Deleted
+    private: or private
     restrict: Restricted (Adult Content)

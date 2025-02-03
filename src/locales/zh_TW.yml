@@ -18,4 +18,6 @@ novel:
 illust:
     r18: R-18 / R-18G
     work: 作品
+    deleted: 已刪除
+    private: 或非公開
     restrict: 瀏覽受限（含成人內容）

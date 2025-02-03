@@ -46,7 +46,7 @@ export type Work = {
 	userName: string;
 	profileImageUrl: string;
 	xRestrict?: 0 | 1 | 2; // 0: 公開, 1: R18, 2: R18G
-	maskReason?: string;
+	maskReason?: "r18" | "r18g" | "unknown"; // unknown: 削除済み
 	bookmarkData?: { id: string; private: boolean } | null;
 	illustType?: number;
 	sl: number; // 4と6がセンシティブ

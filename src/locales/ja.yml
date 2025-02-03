@@ -18,4 +18,6 @@ novel:
 illust:
     r18: R18 / R18G
     work: 作品
+    deleted: 削除済み
+    private: もしくは非公開
     restrict: 閲覧制限中
