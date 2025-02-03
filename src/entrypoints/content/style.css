@@ -2,23 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-	font-family:
-		win-bug-omega,
-		system-ui,
-		-apple-system,
-		"Segoe UI",
-		Roboto,
-		Ubuntu,
-		Cantarell,
-		"Noto Sans",
-		"Hiragino Kaku Gothic ProN",
-		Meiryo,
-		sans-serif;
+@layer base {
+	* {
+		font-family:
+			win-bug-omega,
+			system-ui,
+			-apple-system,
+			"Segoe UI",
+			Roboto,
+			Ubuntu,
+			Cantarell,
+			"Noto Sans",
+			"Hiragino Kaku Gothic ProN",
+			Meiryo,
+			sans-serif;
+	}
+
+	body {
+		@apply text-[var(--charcoal-text1)];
+	}
 }
 
-body {
-	@apply text-[var(--charcoal-text1)];
+@layer utilities {
+	.following-blur {
+		mask-image: linear-gradient(to right, rgb(0, 0, 0) calc(100% - 72px), transparent);
+	}
 }
 
 @keyframes charcoal-loading-spinner-icon-scale-out {
