@@ -46,7 +46,10 @@ const mountUi = async (ctx: ContentScriptContext, anchor: string) => {
 		append: "after",
 		anchor: anchor,
 		onMount: (container) => {
-			const root = ReactDOM.createRoot(container);
+			const app = document.createElement("div");
+			container.append(app);
+
+			const root = ReactDOM.createRoot(app);
 			root.render(
 				<Context>
 					<App />

@@ -65,7 +65,12 @@ export const Following = ({ profiles }: Props) => {
 													: comment}
 											</div>
 										)}
-										<FollowButton userId={profile.userId} />
+										<div className="mt-[16px]">
+											<FollowButton
+												userId={profile.userId}
+												following={profile.following || false}
+											/>
+										</div>
 									</div>
 								</div>
 							</div>

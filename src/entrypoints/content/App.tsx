@@ -2,19 +2,19 @@ import { memo } from "react";
 import { Virtuoso } from "react-virtuoso";
 import { InView, useInView } from "react-intersection-observer";
 
-import type { WorkTag, Work, UserWorks } from "./type";
-
 import { GridIllusts } from "./components/page/GridIllusts";
 import { Following } from "./components/page/Following";
 import { Novels } from "./components/page/Novels";
-
 import { PageHeader } from "./components/ui/PageHeader";
 import { LoadingSpinner } from "./components/ui/LoadingSpinner";
+import { ProfilePopup } from "./components/ProfilePopup";
 
 import { transformData } from "./utils/transformData";
 import { extractWorkTag } from "./utils/extractWorkTag";
 import { generateRequestUrl } from "./utils/generateRequestUrl";
 import { getElementSelectorByUrl } from "./utils/getElementSelectorByUrl";
+
+import type { WorkTag, Work, UserWorks } from "./type";
 import { PAGE_REGEX } from "./constants/urlRegex";
 import { fetchData } from "./fetch/fetch";
 
@@ -96,7 +96,7 @@ export default () => {
 	const userWorks = useRef<UserWorks>({}); // ユーザーの作品一覧
 	const workTag = useRef<WorkTag | undefined>(undefined);
 	const page = useRef(2);
-	const prevScrollY = useRef(window.scrollY); // 前回のスクロール位置s
+	const prevScrollY = useRef(window.scrollY); // 前回のスクロール位置
 
 	const loadMore = () => {
 		if (hasMore === undefined) return;
@@ -212,6 +212,7 @@ export default () => {
 				)}
 			/>
 			<LoadingSpinner ref={ref} hasMore={hasMore} />
+			<ProfilePopup />
 		</>
 	);
 };

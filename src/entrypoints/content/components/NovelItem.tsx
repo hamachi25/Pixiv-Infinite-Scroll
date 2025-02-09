@@ -1,7 +1,13 @@
 import { i18n } from "#i18n";
 import type { Work, NovelType } from "../type";
 import { BookmarkButton } from "./ui/BookmarkButton";
-import { SettingContext } from "../context";
+import {
+	SettingContext,
+	SetProfilePopupContext,
+	HoverTimeoutContext,
+	SetHoverTimeouContext,
+} from "../context";
+import { handleProfileMouseEnter, handleProfileMouseLeave } from "../utils/profilePopup";
 
 interface Props {
 	novel: Work;
@@ -35,7 +41,12 @@ const NovelInfo = ({ novel, readingTime }: { novel: Work; readingTime: number | 
 };
 
 export const NovelItem = ({ novel, type }: Props) => {
+	const mouseEnterTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
+
 	const settings = useContext(SettingContext);
+	const setProfilePopupData = useContext(SetProfilePopupContext);
+	const hoverTimeout = useContext(HoverTimeoutContext);
+	const setHoverTimeout = useContext(SetHoverTimeouContext);
 
 	const readingTime = novel.readingTime ? Math.floor(novel.readingTime / 60) : undefined;
 	const description = novel.description?.replace(/<[^>]*>/g, "");
@@ -86,7 +97,24 @@ export const NovelItem = ({ novel, type }: Props) => {
 
 					{/* プロフィール */}
 					{(type === "tag" || type === "newNovel" || type === "bookmark") && (
-						<div className="flex gap-[4px]">
+						<div
+							className="flex w-fit gap-[4px]"
+							onMouseEnter={(e) =>
+								handleProfileMouseEnter(e, novel, {
+									mouseEnterTimeout,
+									setProfilePopupData,
+									hoverTimeout,
+									setHoverTimeout,
+								})
+							}
+							onMouseLeave={() =>
+								handleProfileMouseLeave({
+									mouseEnterTimeout,
+									setProfilePopupData,
+									setHoverTimeout,
+								})
+							}
+						>
 							{type !== "bookmark" && (
 								<a
 									className="my-auto"
@@ -104,7 +132,7 @@ export const NovelItem = ({ novel, type }: Props) => {
 								</a>
 							)}
 							<a
-								className="overflow-hidden text-ellipsis whitespace-nowrap"
+								className={`${type === "bookmark" ? "text-[14px]" : "text-[12px]"} overflow-hidden text-ellipsis whitespace-nowrap text-[var(--charcoal-text2)]`}
 								href={`/users/${novel.userId}`}
 								target={settings?.openInNewTab ? "_blank" : undefined}
 							>

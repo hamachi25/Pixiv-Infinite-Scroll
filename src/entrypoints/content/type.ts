@@ -55,6 +55,7 @@ export type Work = {
 	userComment?: string;
 	illusts?: Work[];
 	novels?: Work[];
+	following?: boolean;
 
 	commission: {
 		acceptRequest: boolean;
