@@ -1,23 +1,21 @@
-import type { ProfilePopupType } from "@/types/content";
+import type { ProfilePopupContextType } from "../type";
 import { Work } from "../type";
 
 interface ProfileHandlerProps {
 	mouseEnterTimeout: React.RefObject<NodeJS.Timeout | undefined>;
-	setProfilePopupData:
-		| React.Dispatch<React.SetStateAction<ProfilePopupType | undefined>>
-		| undefined;
-	hoverTimeout: NodeJS.Timeout | undefined;
-	setHoverTimeout: React.Dispatch<React.SetStateAction<NodeJS.Timeout | undefined>> | undefined;
+	profilePopupData: ProfilePopupContextType | undefined;
 }
 
 export const handleProfileMouseEnter = (
 	e: React.MouseEvent<HTMLDivElement>,
 	work: Work,
-	{ mouseEnterTimeout, setProfilePopupData, hoverTimeout, setHoverTimeout }: ProfileHandlerProps,
+	{ mouseEnterTimeout, profilePopupData }: ProfileHandlerProps,
 ) => {
-	if (hoverTimeout && setHoverTimeout) {
-		clearTimeout(hoverTimeout);
-		setHoverTimeout(undefined);
+	if (!profilePopupData) return;
+
+	if (profilePopupData.hoverTimeout) {
+		clearTimeout(profilePopupData.hoverTimeout);
+		profilePopupData.setHoverTimeout(undefined);
 	}
 
 	const hostRect = (e.currentTarget.getRootNode() as ShadowRoot).host.getBoundingClientRect();
@@ -26,17 +24,16 @@ export const handleProfileMouseEnter = (
 	const offsetLeft = rect.left - hostRect.left - (168 - rect.width / 2);
 
 	const timeout = setTimeout(() => {
-		setProfilePopupData &&
-			setProfilePopupData({
-				userId: work.userId,
-				position: {
-					rectTop: rect.top,
-					top: offsetTop,
-					left: offsetLeft,
-					width: rect.width,
-					height: rect.height,
-				},
-			});
+		profilePopupData.setProfilePopup({
+			userId: work.userId,
+			position: {
+				rectTop: rect.top,
+				top: offsetTop,
+				left: offsetLeft,
+				width: rect.width,
+				height: rect.height,
+			},
+		});
 	}, 200);
 
 	mouseEnterTimeout.current = timeout;
@@ -44,16 +41,17 @@ export const handleProfileMouseEnter = (
 
 export const handleProfileMouseLeave = ({
 	mouseEnterTimeout,
-	setProfilePopupData,
-	setHoverTimeout,
+	profilePopupData,
 }: Omit<ProfileHandlerProps, "hoverTimeout">) => {
+	if (!profilePopupData) return;
+
 	if (mouseEnterTimeout.current) {
 		clearTimeout(mouseEnterTimeout.current);
 		mouseEnterTimeout.current = undefined;
 	}
 
 	const timeout = setTimeout(() => {
-		setProfilePopupData && setProfilePopupData(undefined);
+		profilePopupData.setProfilePopup(undefined);
 	}, 200);
-	setHoverTimeout && setHoverTimeout(timeout);
+	profilePopupData.setHoverTimeout(timeout);
 };

@@ -1,11 +1,5 @@
 import { memo, useLayoutEffect } from "react";
-import {
-	SettingContext,
-	ProfilePopupContext,
-	SetProfilePopupContext,
-	HoverTimeoutContext,
-	SetHoverTimeouContext,
-} from "../context";
+import { SettingContext, ProfilePopupContext } from "../context";
 import { fetchData } from "../fetch/fetch";
 import { FollowButton } from "./ui/FollowButton";
 import { IllustCount } from "./ui/IllustCount";
@@ -51,19 +45,18 @@ export const ProfilePopup = memo(() => {
 
 	const settings = useContext(SettingContext);
 	const profilePopupData = useContext(ProfilePopupContext);
-	const setProfilePopupData = useContext(SetProfilePopupContext);
-	const hoverTimeout = useContext(HoverTimeoutContext);
-	const setHoverTimeout = useContext(SetHoverTimeouContext);
 
 	// データ取得
 	useLayoutEffect(() => {
-		if (!profilePopupData) return;
+		if (!profilePopupData?.profilePopup) return;
 		setProfileData(undefined); // 前のデータをクリア
 
 		Promise.all([
-			fetchDataWithCache(`https://www.pixiv.net/ajax/user/${profilePopupData.userId}?full=1`),
 			fetchDataWithCache(
-				`https://www.pixiv.net/ajax/user/${profilePopupData.userId}/works/latest`,
+				`https://www.pixiv.net/ajax/user/${profilePopupData.profilePopup.userId}?full=1`,
+			),
+			fetchDataWithCache(
+				`https://www.pixiv.net/ajax/user/${profilePopupData.profilePopup.userId}/works/latest`,
 			),
 		]).then(([profileResponse, worksResponse]) => {
 			const illusts: ProfileWork[] = Object.values(worksResponse.body.illusts)
@@ -90,8 +83,8 @@ export const ProfilePopup = memo(() => {
 
 	// ポップアップの位置
 	useLayoutEffect(() => {
-		if (popupRef.current && profilePopupData) {
-			const { top, rectTop, height, left } = profilePopupData.position;
+		if (popupRef.current && profilePopupData?.profilePopup) {
+			const { top, rectTop, height, left } = profilePopupData.profilePopup.position;
 			const calculatedTop =
 				top -
 				(rectTop > window.innerHeight / 2
@@ -106,7 +99,7 @@ export const ProfilePopup = memo(() => {
 	}, [profileData, profilePopupData]);
 
 	// データ取得されるまで、ポップアップを表示しない
-	if (!profileData || !profilePopupData) return null;
+	if (!profileData || !profilePopupData?.profilePopup) return null;
 
 	const filteredComments =
 		profileData.comment.length > 39
@@ -114,17 +107,17 @@ export const ProfilePopup = memo(() => {
 			: profileData.comment;
 
 	const handleProfileMouseEnter = () => {
-		if (hoverTimeout && setHoverTimeout) {
-			clearTimeout(hoverTimeout);
-			setHoverTimeout(undefined);
+		if (profilePopupData.hoverTimeout) {
+			clearTimeout(profilePopupData.hoverTimeout);
+			profilePopupData.setHoverTimeout(undefined);
 		}
 	};
 
 	const handleProfileMouseLeave = () => {
 		const timeout = setTimeout(() => {
-			setProfilePopupData && setProfilePopupData(undefined);
+			profilePopupData.setProfilePopup(undefined);
 		}, 200);
-		setHoverTimeout && setHoverTimeout(timeout);
+		profilePopupData.setHoverTimeout(timeout);
 	};
 
 	return (
@@ -138,7 +131,7 @@ export const ProfilePopup = memo(() => {
 			{profileData.background?.url && (
 				<a
 					className="-mb-[64px] -mt-[24px] h-[168px] w-full"
-					href={`/users/${profilePopupData.userId}`}
+					href={`/users/${profilePopupData.profilePopup.userId}`}
 					target={settings?.openInNewTab ? "_blank" : undefined}
 				>
 					<div
@@ -149,7 +142,7 @@ export const ProfilePopup = memo(() => {
 			)}
 			<div className="pointer-events-none flex flex-col items-center px-[24px] text-center [&>*]:pointer-events-auto">
 				<a
-					href={`/users/${profilePopupData.userId}`}
+					href={`/users/${profilePopupData.profilePopup.userId}`}
 					target={settings?.openInNewTab ? "_blank" : undefined}
 				>
 					<img
@@ -161,7 +154,7 @@ export const ProfilePopup = memo(() => {
 				</a>
 				<a
 					className="mt-[4px] text-[16px] font-bold text-[var(--charcoal-text1)]"
-					href={`/users/${profilePopupData.userId}`}
+					href={`/users/${profilePopupData.profilePopup.userId}`}
 					target={settings?.openInNewTab ? "_blank" : undefined}
 				>
 					{profileData.name}
@@ -171,14 +164,14 @@ export const ProfilePopup = memo(() => {
 				)}
 				<a
 					className="text-[var(--charcoal-text3)]"
-					href={`/users/${profilePopupData.userId}`}
+					href={`/users/${profilePopupData.profilePopup.userId}`}
 					target={settings?.openInNewTab ? "_blank" : undefined}
 				>
 					プロフィールを見る
 				</a>
 				<div className="mb-[24px] mt-[12px]">
 					<FollowButton
-						userId={profilePopupData.userId}
+						userId={profilePopupData.profilePopup.userId}
 						following={profileData.isFollowed}
 					/>
 				</div>

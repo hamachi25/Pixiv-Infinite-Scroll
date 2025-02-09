@@ -2,12 +2,7 @@ import { i18n } from "#i18n";
 import type { Work } from "../../type";
 import { GridImage } from "../GridImage";
 import { BookmarkButton } from "../ui/BookmarkButton";
-import {
-	SettingContext,
-	SetProfilePopupContext,
-	HoverTimeoutContext,
-	SetHoverTimeouContext,
-} from "../../context";
+import { SettingContext, ProfilePopupContext } from "../../context";
 import { handleProfileMouseEnter, handleProfileMouseLeave } from "../../utils/profilePopup";
 
 interface Props {
@@ -19,9 +14,7 @@ export const GridIllusts = ({ illusts, type }: Props) => {
 	const mouseEnterTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
 
 	const settings = useContext(SettingContext);
-	const setProfilePopupData = useContext(SetProfilePopupContext);
-	const hoverTimeout = useContext(HoverTimeoutContext);
-	const setHoverTimeout = useContext(SetHoverTimeouContext);
+	const profilePopupData = useContext(ProfilePopupContext);
 
 	return (
 		<ul className="mt-[24px] grid grid-cols-[repeat(auto-fit,184px)] gap-[24px]">
@@ -111,16 +104,13 @@ export const GridIllusts = ({ illusts, type }: Props) => {
 							onMouseEnter={(e) =>
 								handleProfileMouseEnter(e, illust, {
 									mouseEnterTimeout,
-									setProfilePopupData,
-									hoverTimeout,
-									setHoverTimeout,
+									profilePopupData,
 								})
 							}
 							onMouseLeave={() =>
 								handleProfileMouseLeave({
 									mouseEnterTimeout,
-									setProfilePopupData,
-									setHoverTimeout,
+									profilePopupData,
 								})
 							}
 						>

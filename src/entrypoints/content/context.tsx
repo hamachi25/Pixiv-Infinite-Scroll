@@ -1,6 +1,6 @@
 import { createContext } from "react";
 import type { Settings } from "@/types/storage";
-import type { ProfilePopupType } from "@/types/content";
+import type { ProfilePopupType, ProfilePopupContextType } from "./type";
 import { settingsItem } from "@/utils/storage";
 import { fetchOrigin } from "./fetch/fetch";
 import { getElementSelectorByUrl } from "./utils/getElementSelectorByUrl";
@@ -13,14 +13,7 @@ interface HTMLAnchorElementWithHandleClick extends HTMLAnchorElement {
 
 export const SettingContext = createContext<Settings | undefined>(undefined);
 export const SensitiveContext = createContext<boolean>(false);
-export const ProfilePopupContext = createContext<ProfilePopupType | undefined>(undefined);
-export const SetProfilePopupContext = createContext<
-	React.Dispatch<React.SetStateAction<ProfilePopupType | undefined>> | undefined
->(undefined);
-export const HoverTimeoutContext = createContext<NodeJS.Timeout | undefined>(undefined);
-export const SetHoverTimeouContext = createContext<
-	React.Dispatch<React.SetStateAction<NodeJS.Timeout | undefined>> | undefined
->(undefined);
+export const ProfilePopupContext = createContext<ProfilePopupContextType | undefined>(undefined);
 export const CsrfContext = createContext<React.RefObject<string | undefined>>({
 	current: undefined,
 });
@@ -90,14 +83,10 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<SettingContext value={settings}>
 			<SensitiveContext value={isSensitive}>
-				<ProfilePopupContext value={profilePopup}>
-					<SetProfilePopupContext value={setProfilePopup}>
-						<HoverTimeoutContext value={hoverTimeout}>
-							<SetHoverTimeouContext value={setHoverTimeout}>
-								<CsrfContext value={csrfToken}>{children}</CsrfContext>
-							</SetHoverTimeouContext>
-						</HoverTimeoutContext>
-					</SetProfilePopupContext>
+				<ProfilePopupContext
+					value={{ profilePopup, setProfilePopup, hoverTimeout, setHoverTimeout }}
+				>
+					<CsrfContext value={csrfToken}>{children}</CsrfContext>
 				</ProfilePopupContext>
 			</SensitiveContext>
 		</SettingContext>
