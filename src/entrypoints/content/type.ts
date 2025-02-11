@@ -82,13 +82,7 @@ export type UserWorks = {
 export type NovelType = "tag" | "user" | "newNovel" | "follow" | "bookmark";
 
 export type ProfilePopupType = {
+	hoverTimeout: NodeJS.Timeout | undefined;
 	userId: string;
 	position: { rectTop: number; top: number; left: number; width: number; height: number };
-};
-
-export type ProfilePopupContextType = {
-	profilePopup: ProfilePopupType | undefined;
-	setProfilePopup: React.Dispatch<React.SetStateAction<ProfilePopupType | undefined>>;
-	hoverTimeout: NodeJS.Timeout | undefined;
-	setHoverTimeout: React.Dispatch<React.SetStateAction<NodeJS.Timeout | undefined>>;
 };

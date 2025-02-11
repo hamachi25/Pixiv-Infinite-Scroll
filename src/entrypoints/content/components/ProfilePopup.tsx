@@ -1,8 +1,14 @@
 import { memo, useLayoutEffect } from "react";
-import { SettingContext, ProfilePopupContext } from "../context";
+import { SettingContext } from "../context";
 import { fetchData } from "../fetch/fetch";
 import { FollowButton } from "./ui/FollowButton";
 import { IllustCount } from "./ui/IllustCount";
+import type { ProfilePopupType } from "../type";
+
+interface Props {
+	profilePopupData: ProfilePopupType | undefined;
+	setProfilePopupData: React.Dispatch<React.SetStateAction<ProfilePopupType | undefined>>;
+}
 
 type ProfileWork = {
 	workType: string;
@@ -19,6 +25,7 @@ type ProfileData = {
 	};
 	imageBig: string;
 	name: string;
+	userId: string;
 	comment: string;
 	isFollowed: boolean;
 };
@@ -34,9 +41,9 @@ const fetchDataWithCache = async (url: string): Promise<any> => {
 	return data;
 };
 
-export const ProfilePopup = memo(() => {
+export const ProfilePopup = memo(({ profilePopupData, setProfilePopupData }: Props) => {
 	const popupRef = useRef<HTMLDivElement>(null);
-	const [profileData, setProfileData] = useState<ProfileData | undefined>(undefined);
+	const [profileFetchData, setProfileFetchData] = useState<ProfileData | undefined>(undefined);
 	const [latestWorks, setLatestWorks] = useState<ProfileWork[]>([]);
 	const [position, setPosition] = useState<{ top: string; left: string }>({
 		top: "0px",
@@ -44,19 +51,16 @@ export const ProfilePopup = memo(() => {
 	});
 
 	const settings = useContext(SettingContext);
-	const profilePopupData = useContext(ProfilePopupContext);
 
 	// データ取得
 	useLayoutEffect(() => {
-		if (!profilePopupData?.profilePopup) return;
-		setProfileData(undefined); // 前のデータをクリア
+		if (!profilePopupData) return;
+		setProfileFetchData(undefined); // 前のデータをクリア
 
 		Promise.all([
+			fetchDataWithCache(`https://www.pixiv.net/ajax/user/${profilePopupData.userId}?full=1`),
 			fetchDataWithCache(
-				`https://www.pixiv.net/ajax/user/${profilePopupData.profilePopup.userId}?full=1`,
-			),
-			fetchDataWithCache(
-				`https://www.pixiv.net/ajax/user/${profilePopupData.profilePopup.userId}/works/latest`,
+				`https://www.pixiv.net/ajax/user/${profilePopupData.userId}/works/latest`,
 			),
 		]).then(([profileResponse, worksResponse]) => {
 			const illusts: ProfileWork[] = Object.values(worksResponse.body.illusts)
@@ -77,14 +81,14 @@ export const ProfilePopup = memo(() => {
 			}
 
 			setLatestWorks(resultWorks);
-			setProfileData(profileResponse.body);
+			setProfileFetchData(profileResponse.body);
 		});
 	}, [profilePopupData]);
 
 	// ポップアップの位置
 	useLayoutEffect(() => {
-		if (popupRef.current && profilePopupData?.profilePopup) {
-			const { top, rectTop, height, left } = profilePopupData.profilePopup.position;
+		if (popupRef.current && profilePopupData) {
+			const { top, rectTop, height, left } = profilePopupData.position;
 			const calculatedTop =
 				top -
 				(rectTop > window.innerHeight / 2
@@ -96,28 +100,27 @@ export const ProfilePopup = memo(() => {
 				left: `${left}px`,
 			});
 		}
-	}, [profileData, profilePopupData]);
+	}, [profileFetchData, profilePopupData]);
 
 	// データ取得されるまで、ポップアップを表示しない
-	if (!profileData || !profilePopupData?.profilePopup) return null;
+	if (!profilePopupData || !profileFetchData) return null;
 
 	const filteredComments =
-		profileData.comment.length > 39
-			? `${profileData.comment.substring(0, 39)}…`
-			: profileData.comment;
+		profileFetchData.comment.length > 39
+			? `${profileFetchData.comment.substring(0, 39)}…`
+			: profileFetchData.comment;
 
 	const handleProfileMouseEnter = () => {
-		if (profilePopupData.hoverTimeout) {
+		if (profilePopupData?.hoverTimeout) {
 			clearTimeout(profilePopupData.hoverTimeout);
-			profilePopupData.setHoverTimeout(undefined);
 		}
 	};
 
 	const handleProfileMouseLeave = () => {
 		const timeout = setTimeout(() => {
-			profilePopupData.setProfilePopup(undefined);
+			setProfilePopupData(undefined);
 		}, 200);
-		profilePopupData.setHoverTimeout(timeout);
+		setProfilePopupData((prev) => (prev ? { ...prev, hoverTimeout: timeout } : undefined));
 	};
 
 	return (
@@ -128,51 +131,51 @@ export const ProfilePopup = memo(() => {
 			onMouseEnter={handleProfileMouseEnter}
 			onMouseLeave={handleProfileMouseLeave}
 		>
-			{profileData.background?.url && (
+			{profileFetchData.background?.url && (
 				<a
 					className="-mb-[64px] -mt-[24px] h-[168px] w-full"
-					href={`/users/${profilePopupData.profilePopup.userId}`}
+					href={`/users/${profileFetchData.userId}`}
 					target={settings?.openInNewTab ? "_blank" : undefined}
 				>
 					<div
 						className={`flex h-full w-full items-end rounded-t-[8px] bg-cover bg-[center_top] after:block after:h-[64px] after:w-full after:bg-[linear-gradient(rgba(0,0,0,0)0%,var(--charcoal-surface1)100%)]`}
-						style={{ backgroundImage: `url(${profileData.background.url})` }}
+						style={{ backgroundImage: `url(${profileFetchData.background.url})` }}
 					/>
 				</a>
 			)}
 			<div className="pointer-events-none flex flex-col items-center px-[24px] text-center [&>*]:pointer-events-auto">
 				<a
-					href={`/users/${profilePopupData.profilePopup.userId}`}
+					href={`/users/${profileFetchData.userId}`}
 					target={settings?.openInNewTab ? "_blank" : undefined}
 				>
 					<img
 						className="h-[64px] w-[64px] rounded-full object-cover object-[center_top]"
-						src={profileData.imageBig}
-						alt={profileData.name}
-						title={profileData.name}
+						src={profileFetchData.imageBig}
+						alt={profileFetchData.name}
+						title={profileFetchData.name}
 					/>
 				</a>
 				<a
 					className="mt-[4px] text-[16px] font-bold text-[var(--charcoal-text1)]"
-					href={`/users/${profilePopupData.profilePopup.userId}`}
+					href={`/users/${profileFetchData.userId}`}
 					target={settings?.openInNewTab ? "_blank" : undefined}
 				>
-					{profileData.name}
+					{profileFetchData.name}
 				</a>
-				{profileData.comment && profileData.comment.length > 0 && (
+				{profileFetchData.comment && profileFetchData.comment.length > 0 && (
 					<p className="text-[var(--charcoal-text2)]">{filteredComments}</p>
 				)}
 				<a
 					className="text-[var(--charcoal-text3)]"
-					href={`/users/${profilePopupData.profilePopup.userId}`}
+					href={`/users/${profileFetchData.userId}`}
 					target={settings?.openInNewTab ? "_blank" : undefined}
 				>
 					{i18n.t("profilePopup.view")}
 				</a>
 				<div className="mb-[24px] mt-[12px]">
 					<FollowButton
-						userId={profilePopupData.profilePopup.userId}
-						following={profileData.isFollowed}
+						userId={profileFetchData.userId}
+						following={profileFetchData.isFollowed}
 					/>
 				</div>
 			</div>

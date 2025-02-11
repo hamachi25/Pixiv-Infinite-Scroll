@@ -1,6 +1,5 @@
 import { createContext } from "react";
 import type { Settings } from "@/types/storage";
-import type { ProfilePopupType, ProfilePopupContextType } from "./type";
 import { settingsItem } from "@/utils/storage";
 import { fetchOrigin } from "./fetch/fetch";
 import { getElementSelectorByUrl } from "./utils/getElementSelectorByUrl";
@@ -13,7 +12,6 @@ interface HTMLAnchorElementWithHandleClick extends HTMLAnchorElement {
 
 export const SettingContext = createContext<Settings | undefined>(undefined);
 export const SensitiveContext = createContext<boolean>(false);
-export const ProfilePopupContext = createContext<ProfilePopupContextType | undefined>(undefined);
 export const CsrfContext = createContext<React.RefObject<string | undefined>>({
 	current: undefined,
 });
@@ -21,8 +19,6 @@ export const CsrfContext = createContext<React.RefObject<string | undefined>>({
 export const Context = ({ children }: { children: React.ReactNode }) => {
 	const [settings, setSettings] = useState<Settings | undefined>(undefined);
 	const [isSensitive, setIsSensitive] = useState<boolean>(false);
-	const [profilePopup, setProfilePopup] = useState<ProfilePopupType | undefined>(undefined);
-	const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | undefined>(undefined);
 	const csrfToken = useRef<string | undefined>(undefined);
 
 	useEffect(() => {
@@ -83,11 +79,7 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<SettingContext value={settings}>
 			<SensitiveContext value={isSensitive}>
-				<ProfilePopupContext
-					value={{ profilePopup, setProfilePopup, hoverTimeout, setHoverTimeout }}
-				>
-					<CsrfContext value={csrfToken}>{children}</CsrfContext>
-				</ProfilePopupContext>
+				<CsrfContext value={csrfToken}>{children}</CsrfContext>
 			</SensitiveContext>
 		</SettingContext>
 	);

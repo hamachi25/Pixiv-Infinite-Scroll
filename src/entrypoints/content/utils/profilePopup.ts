@@ -1,21 +1,13 @@
-import type { ProfilePopupContextType } from "../type";
-import { Work } from "../type";
-
-interface ProfileHandlerProps {
-	mouseEnterTimeout: React.RefObject<NodeJS.Timeout | undefined>;
-	profilePopupData: ProfilePopupContextType | undefined;
-}
+import { Work, ProfilePopupType } from "../type";
 
 export const handleProfileMouseEnter = (
 	e: React.MouseEvent<HTMLDivElement>,
 	work: Work,
-	{ mouseEnterTimeout, profilePopupData }: ProfileHandlerProps,
+	profilePopupData: ProfilePopupType | undefined,
+	setProfilePopupData: React.Dispatch<React.SetStateAction<ProfilePopupType | undefined>>,
 ) => {
-	if (!profilePopupData) return;
-
-	if (profilePopupData.hoverTimeout) {
+	if (profilePopupData?.hoverTimeout) {
 		clearTimeout(profilePopupData.hoverTimeout);
-		profilePopupData.setHoverTimeout(undefined);
 	}
 
 	const hostRect = (e.currentTarget.getRootNode() as ShadowRoot).host.getBoundingClientRect();
@@ -24,7 +16,8 @@ export const handleProfileMouseEnter = (
 	const offsetLeft = rect.left - hostRect.left - (168 - rect.width / 2);
 
 	const timeout = setTimeout(() => {
-		profilePopupData.setProfilePopup({
+		setProfilePopupData({
+			hoverTimeout: timeout,
 			userId: work.userId,
 			position: {
 				rectTop: rect.top,
@@ -35,23 +28,18 @@ export const handleProfileMouseEnter = (
 			},
 		});
 	}, 200);
-
-	mouseEnterTimeout.current = timeout;
 };
 
-export const handleProfileMouseLeave = ({
-	mouseEnterTimeout,
-	profilePopupData,
-}: Omit<ProfileHandlerProps, "hoverTimeout">) => {
-	if (!profilePopupData) return;
-
-	if (mouseEnterTimeout.current) {
-		clearTimeout(mouseEnterTimeout.current);
-		mouseEnterTimeout.current = undefined;
+export const handleProfileMouseLeave = (
+	profilePopupData: ProfilePopupType | undefined,
+	setProfilePopupData: React.Dispatch<React.SetStateAction<ProfilePopupType | undefined>>,
+) => {
+	if (profilePopupData?.hoverTimeout) {
+		clearTimeout(profilePopupData.hoverTimeout);
 	}
 
 	const timeout = setTimeout(() => {
-		profilePopupData.setProfilePopup(undefined);
+		setProfilePopupData(undefined);
 	}, 200);
-	profilePopupData.setHoverTimeout(timeout);
+	setProfilePopupData((prev) => (prev ? { ...prev, hoverTimeout: timeout } : undefined));
 };

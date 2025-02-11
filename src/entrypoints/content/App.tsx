@@ -7,7 +7,6 @@ import { Following } from "./components/page/Following";
 import { Novels } from "./components/page/Novels";
 import { PageHeader } from "./components/ui/PageHeader";
 import { LoadingSpinner } from "./components/ui/LoadingSpinner";
-import { ProfilePopup } from "./components/ProfilePopup";
 
 import { transformData } from "./utils/transformData";
 import { extractWorkTag } from "./utils/extractWorkTag";
@@ -212,7 +211,6 @@ export default () => {
 				)}
 			/>
 			<LoadingSpinner ref={ref} hasMore={hasMore} />
-			<ProfilePopup />
 		</>
 	);
 };
