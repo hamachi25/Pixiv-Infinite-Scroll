@@ -21,3 +21,5 @@ illust:
     deleted: 삭제됨
     private: 혹은 비공개
     restrict: 열람 제한 중
+profilePopup:
+    view: 프로필 보기

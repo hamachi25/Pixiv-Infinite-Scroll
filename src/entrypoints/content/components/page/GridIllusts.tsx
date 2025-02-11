@@ -1,20 +1,15 @@
-import { i18n } from "#i18n";
 import type { Work } from "../../type";
 import { GridImage } from "../GridImage";
 import { BookmarkButton } from "../ui/BookmarkButton";
-import { SettingContext, ProfilePopupContext } from "../../context";
-import { handleProfileMouseEnter, handleProfileMouseLeave } from "../../utils/profilePopup";
-
+import { IllustProfile } from "../ui/Profile";
+import { SettingContext } from "../../context";
 interface Props {
 	illusts: Work[];
 	type: string;
 }
 
 export const GridIllusts = ({ illusts, type }: Props) => {
-	const mouseEnterTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
-
 	const settings = useContext(SettingContext);
-	const profilePopupData = useContext(ProfilePopupContext);
 
 	return (
 		<ul className="mt-[24px] grid grid-cols-[repeat(auto-fit,184px)] gap-[24px]">
@@ -98,48 +93,7 @@ export const GridIllusts = ({ illusts, type }: Props) => {
 					</div>
 
 					{/* プロフィール */}
-					{type === "other" && (
-						<div
-							className="mt-[4px] flex w-fit items-center gap-x-[4px]"
-							onMouseEnter={(e) =>
-								handleProfileMouseEnter(e, illust, {
-									mouseEnterTimeout,
-									profilePopupData,
-								})
-							}
-							onMouseLeave={() =>
-								handleProfileMouseLeave({
-									mouseEnterTimeout,
-									profilePopupData,
-								})
-							}
-						>
-							{illust.maskReason !== "r18" && illust.maskReason !== "r18g" && (
-								<>
-									<a
-										href={`/users/${illust.userId}`}
-										title={illust.userName}
-										target={settings?.openInNewTab ? "_blank" : undefined}
-									>
-										<img
-											className="h-[24px] w-[24px] rounded-full"
-											src={illust.profileImageUrl}
-											alt={illust.userName}
-											width={24}
-											height={24}
-										/>
-									</a>
-									<a
-										className="overflow-hidden text-ellipsis whitespace-nowrap"
-										href={`/users/${illust.userId}`}
-										target={settings?.openInNewTab ? "_blank" : undefined}
-									>
-										{illust.userName}
-									</a>
-								</>
-							)}
-						</div>
-					)}
+					{type === "other" && <IllustProfile illust={illust} />}
 				</li>
 			))}
 		</ul>

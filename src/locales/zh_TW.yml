@@ -21,3 +21,5 @@ illust:
     deleted: 已刪除
     private: 或非公開
     restrict: 瀏覽受限（含成人內容）
+profilePopup:
+    view: 查看個人資料

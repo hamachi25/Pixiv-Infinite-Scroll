@@ -1,6 +1,7 @@
 import { i18n } from "#i18n";
 import type { Work, NovelType } from "../type";
 import { BookmarkButton } from "./ui/BookmarkButton";
+import { NovelProfile } from "./ui/Profile";
 import { SettingContext, ProfilePopupContext } from "../context";
 import { handleProfileMouseEnter, handleProfileMouseLeave } from "../utils/profilePopup";
 
@@ -90,45 +91,7 @@ export const NovelItem = ({ novel, type }: Props) => {
 
 					{/* プロフィール */}
 					{(type === "tag" || type === "newNovel" || type === "bookmark") && (
-						<div
-							className="flex w-fit gap-[4px]"
-							onMouseEnter={(e) =>
-								handleProfileMouseEnter(e, novel, {
-									mouseEnterTimeout,
-									profilePopupData,
-								})
-							}
-							onMouseLeave={() =>
-								handleProfileMouseLeave({
-									mouseEnterTimeout,
-									profilePopupData,
-								})
-							}
-						>
-							{type !== "bookmark" && (
-								<a
-									className="my-auto"
-									href={`/users/${novel.userId}`}
-									title={novel.userName}
-									target={settings?.openInNewTab ? "_blank" : undefined}
-								>
-									<img
-										className="h-[16px] w-[16px] rounded-full object-cover"
-										src={novel.profileImageUrl}
-										alt={novel.userName}
-										width={16}
-										height={16}
-									/>
-								</a>
-							)}
-							<a
-								className={`${type === "bookmark" ? "text-[14px]" : "text-[12px]"} overflow-hidden text-ellipsis whitespace-nowrap text-[var(--charcoal-text2)]`}
-								href={`/users/${novel.userId}`}
-								target={settings?.openInNewTab ? "_blank" : undefined}
-							>
-								{novel.userName}
-							</a>
-						</div>
+						<NovelProfile novel={novel} type={type} />
 					)}
 
 					{(type === "user" || type === "follow" || type === "bookmark") && (

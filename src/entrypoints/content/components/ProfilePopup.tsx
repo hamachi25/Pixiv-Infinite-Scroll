@@ -167,7 +167,7 @@ export const ProfilePopup = memo(() => {
 					href={`/users/${profilePopupData.profilePopup.userId}`}
 					target={settings?.openInNewTab ? "_blank" : undefined}
 				>
-					プロフィールを見る
+					{i18n.t("profilePopup.view")}
 				</a>
 				<div className="mb-[24px] mt-[12px]">
 					<FollowButton
