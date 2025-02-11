@@ -88,8 +88,8 @@ export const ProfilePopup = memo(() => {
 			const calculatedTop =
 				top -
 				(rectTop > window.innerHeight / 2
-					? popupRef.current.getBoundingClientRect().height + 5
-					: -height - 5);
+					? popupRef.current.getBoundingClientRect().height + 4
+					: -height - 4);
 
 			setPosition({
 				top: `${calculatedTop}px`,
