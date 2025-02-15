@@ -95,7 +95,6 @@ export default () => {
 	const userWorks = useRef<UserWorks>({}); // ユーザーの作品一覧
 	const workTag = useRef<WorkTag | undefined>(undefined);
 	const page = useRef(2);
-	const prevScrollY = useRef(window.scrollY); // 前回のスクロール位置
 
 	const loadMore = () => {
 		if (hasMore === undefined) return;
@@ -193,9 +192,7 @@ export default () => {
 	const { ref } = useInView({
 		rootMargin: "50% 0px",
 		onChange: (inView) => {
-			const isScrollingDown = window.scrollY > prevScrollY.current;
-			if (inView && isScrollingDown) {
-				prevScrollY.current = window.scrollY;
+			if (inView) {
 				loadMore();
 			}
 		},
