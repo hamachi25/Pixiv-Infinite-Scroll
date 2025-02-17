@@ -1,17 +1,16 @@
-import { i18n } from "#i18n";
-import type { Work } from "../../type";
-import { GridImage } from "../GridImage";
-import { BookmarkButton } from "../ui/BookmarkButton";
-import { SettingContext } from "../../context";
+import type { Work } from "../../../type";
+import { GridImage } from "../../ui/GridImage";
+import { BookmarkButton } from "../../ui/BookmarkButton";
+
+import { WorkTitle } from "./WorkTitle";
+import { Profile } from "./Profile";
 
 interface Props {
 	illusts: Work[];
 	type: string;
 }
 
-export const GridIllusts = ({ illusts, type }: Props) => {
-	const settings = useContext(SettingContext);
-
+export default ({ illusts, type }: Props) => {
 	return (
 		<ul className="mt-[24px] grid grid-cols-[repeat(auto-fit,184px)] gap-[24px]">
 			{illusts.map((illust) => (
@@ -70,58 +69,10 @@ export const GridIllusts = ({ illusts, type }: Props) => {
 					</div>
 
 					{/* タイトル */}
-					<div className="mt-[4px] flex">
-						{!illust.maskReason ? (
-							<a
-								className="overflow-hidden text-ellipsis whitespace-nowrap font-bold visited:text-[var(--charcoal-text1Visited)]"
-								href={`/artworks/${illust.id}`}
-								target={settings?.openInNewTab ? "_blank" : undefined}
-							>
-								{illust.title}
-							</a>
-						) : (
-							// R18・R18G・削除済み
-							<>
-								{illust.maskReason === "unknown" ? (
-									<span className="font-bold">-----</span>
-								) : (
-									<span className="font-bold text-[var(--charcoal-text3)]">
-										{i18n.t("illust.restrict")}
-									</span>
-								)}
-							</>
-						)}
-					</div>
+					<WorkTitle illust={illust} />
 
 					{/* プロフィール */}
-					{type === "other" && (
-						<div className="mt-[4px] flex items-center gap-x-[4px]">
-							{illust.maskReason !== "r18" && illust.maskReason !== "r18g" && (
-								<>
-									<a
-										href={`/users/${illust.userId}`}
-										title={illust.userName}
-										target={settings?.openInNewTab ? "_blank" : undefined}
-									>
-										<img
-											className="h-[24px] w-[24px] rounded-full"
-											src={illust.profileImageUrl}
-											alt={illust.userName}
-											width={24}
-											height={24}
-										/>
-									</a>
-									<a
-										className="overflow-hidden text-ellipsis whitespace-nowrap"
-										href={`/users/${illust.userId}`}
-										target={settings?.openInNewTab ? "_blank" : undefined}
-									>
-										{illust.userName}
-									</a>
-								</>
-							)}
-						</div>
-					)}
+					{type === "other" && <Profile illust={illust} />}
 				</li>
 			))}
 		</ul>

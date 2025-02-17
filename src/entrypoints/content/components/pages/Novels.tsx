@@ -1,12 +1,12 @@
 import type { Work, NovelType } from "../../type";
-import { NovelItem } from "../NovelItem";
+import { NovelItem } from "../../components/NovelItem";
 
 interface Props {
 	novels: Work[];
 	type: NovelType;
 }
 
-export const Novels = ({ novels, type }: Props) => {
+export default ({ novels, type }: Props) => {
 	return (
 		<ul className="-mx-[12px] flex flex-wrap @container">
 			{novels.map((novel) => (

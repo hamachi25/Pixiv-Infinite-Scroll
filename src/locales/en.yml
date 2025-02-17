@@ -21,3 +21,5 @@ illust:
     deleted: Deleted
     private: or private
     restrict: Restricted (Adult Content)
+profilePopup:
+    view: View Profile

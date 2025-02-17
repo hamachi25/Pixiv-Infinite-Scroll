@@ -21,3 +21,5 @@ illust:
     deleted: 削除済み
     private: もしくは非公開
     restrict: 閲覧制限中
+profilePopup:
+    view: プロフィールを見る

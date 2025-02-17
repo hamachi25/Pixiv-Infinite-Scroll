@@ -60,6 +60,7 @@ export const transformData = (data: any, location: Location): Work[] => {
 		userComment: item.userComment,
 		illusts: item.illusts,
 		novels: item.novels,
+		following: item.following,
 		commission: item.commission,
 
 		// 小説
