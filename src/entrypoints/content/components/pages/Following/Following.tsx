@@ -1,18 +1,19 @@
-import type { Work } from "../../type";
-import { NovelItem } from "../NovelItem";
-import { GridImage } from "../GridImage";
-import { BookmarkButton } from "../ui/BookmarkButton";
-import { FollowButton } from "../ui/FollowButton";
-import { RequestMark } from "../ui/RequestMark";
-import { SettingContext } from "../../context";
+import type { Work } from "../../../type";
+import { NovelItem } from "../../NovelItem";
+import { GridImage } from "../../ui/GridImage";
+import { BookmarkButton } from "../../ui/BookmarkButton";
+import { FollowButton } from "../../ui/FollowButton";
+import { RequestMark } from "../../ui/RequestMark";
+
+import { ProfileImage } from "./ProfileImage";
+import { UserName } from "./UserName";
+import { WorkTitle } from "./WorkTitle";
 
 interface Props {
 	profiles: Work[];
 }
 
-export const Following = ({ profiles }: Props) => {
-	const settings = useContext(SettingContext);
-
+export default ({ profiles }: Props) => {
 	return (
 		<>
 			{profiles.map((profile) => {
@@ -33,30 +34,19 @@ export const Following = ({ profiles }: Props) => {
 							{/* プロフィール */}
 							<div className="w-[392px] flex-[0_0_auto]">
 								<div className="flex">
-									<a
-										href={`/users/${profile.userId}`}
-										title={profile.userName}
-										target={settings?.openInNewTab ? "_blank" : undefined}
-									>
-										<img
-											className="h-[80px] w-[80px] rounded-full object-cover"
-											src={profile.profileImageUrl}
-											alt={profile.userName}
-											width={80}
-											height={80}
-										/>
-									</a>
+									<ProfileImage profile={profile} />
 									<div className="ml-[16px] flex-[1_1_0%]">
-										<a
-											className="font-bold"
-											href={`/users/${profile.userId}`}
-											target={settings?.openInNewTab ? "_blank" : undefined}
-										>
-											{profile.userName}
-										</a>
+										<UserName profile={profile} />
 
 										{/* リクエスト */}
-										{profile.commission && <RequestMark profile={profile} />}
+										{profile.commission && (
+											<div className="mt-[8px]">
+												<RequestMark
+													acceptRequest={profile.commission.acceptRequest}
+													userId={profile.userId}
+												/>
+											</div>
+										)}
 
 										{comment && (
 											<div className="mt-[16px] break-all text-[12px]">
@@ -65,6 +55,7 @@ export const Following = ({ profiles }: Props) => {
 													: comment}
 											</div>
 										)}
+
 										<div className="mt-[16px]">
 											<FollowButton
 												userId={profile.userId}
@@ -90,19 +81,7 @@ export const Following = ({ profiles }: Props) => {
 														type="illust"
 													/>
 												</div>
-												<div className="mt-[4px] flex">
-													<a
-														className="overflow-hidden text-ellipsis whitespace-nowrap text-[14px] font-bold"
-														href={`/artworks/${illust.id}`}
-														target={
-															settings?.openInNewTab
-																? "_blank"
-																: undefined
-														}
-													>
-														{illust.title}
-													</a>
-												</div>
+												<WorkTitle illust={illust} />
 											</li>
 										))}
 

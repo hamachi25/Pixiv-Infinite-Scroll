@@ -1,20 +1,19 @@
-import { i18n } from "#i18n";
-import type { Work } from "../../type";
 import { SettingContext } from "../../context";
 
 interface Props {
-	profile: Work;
+	acceptRequest: boolean;
+	userId: string;
 }
 
-export const RequestMark = ({ profile }: Props) => {
+export const RequestMark = ({ acceptRequest, userId }: Props) => {
 	const settings = useContext(SettingContext);
 
 	return (
-		<div className="mt-[8px]">
-			{profile.commission?.acceptRequest ? (
+		<>
+			{acceptRequest ? (
 				<a
 					className="flex items-center gap-[2px] text-[var(--charcoal-request)]"
-					href={`/users/${profile.userId}/request`}
+					href={`/users/${userId}/request`}
 					target={settings?.openInNewTab ? "_blank" : undefined}
 				>
 					<svg
@@ -94,6 +93,6 @@ export const RequestMark = ({ profile }: Props) => {
 					<div className="text-[12px] font-bold">{i18n.t("request.closed")}</div>
 				</span>
 			)}
-		</div>
+		</>
 	);
 };

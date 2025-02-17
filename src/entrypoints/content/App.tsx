@@ -2,9 +2,9 @@ import { memo } from "react";
 import { Virtuoso } from "react-virtuoso";
 import { InView, useInView } from "react-intersection-observer";
 
-import { GridIllusts } from "./components/page/GridIllusts";
-import { Following } from "./components/page/Following";
-import { Novels } from "./components/page/Novels";
+import GridIllusts from "./components/pages/GridIllusts/GridIllusts";
+import Following from "./components/pages/Following/Following";
+import Novels from "./components/pages/Novels";
 import { PageHeader } from "./components/ui/PageHeader";
 import { LoadingSpinner } from "./components/ui/LoadingSpinner";
 
@@ -107,7 +107,10 @@ export default () => {
 		}
 
 		fetchData(requestUrl).then((data) => {
-			if (!data) return;
+			if (!data) {
+				setHasMore(false);
+				return;
+			}
 
 			const transformedData = transformData(data, location);
 			setWorks((prevWorks) => [...prevWorks, transformedData]);

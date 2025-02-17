@@ -1,12 +1,13 @@
-import type { Work } from "../type";
-import { SettingContext, SensitiveContext } from "../context";
-import { IllustCount } from "./ui/IllustCount";
+import { memo } from "react";
+import type { Work } from "../../type";
+import { SettingContext, SensitiveContext } from "../../context";
+import { IllustCount } from "./IllustCount";
 
 interface Props {
 	illust: Work;
 }
 
-export const GridImage = ({ illust }: Props) => {
+export const GridImage = memo(({ illust }: Props) => {
 	const settings = useContext(SettingContext);
 	const isSensitive = useContext(SensitiveContext);
 
@@ -66,4 +67,4 @@ export const GridImage = ({ illust }: Props) => {
 			</div>
 		</a>
 	);
-};
+});

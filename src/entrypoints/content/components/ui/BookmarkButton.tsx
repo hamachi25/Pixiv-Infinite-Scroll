@@ -83,9 +83,13 @@ export const BookmarkButton = ({ bookmarkData, work, type }: Props) => {
 		});
 	};
 
+	const showBookmarkButton = () => {
+		return !(isSensitive && (work.sl === 4 || work.sl === 6)) || bookmarkId;
+	};
+
 	return (
 		<>
-			{!isSensitive || bookmarkId ? (
+			{showBookmarkButton() ? (
 				<button
 					className="absolute bottom-0 right-0 flex h-[32px] w-[32px] cursor-pointer justify-end"
 					type="button"

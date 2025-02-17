@@ -35,8 +35,9 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
 	// センシティブ作品の表示設定を取得
 	useEffect(() => {
 		const pathname = location.pathname;
-		if (!PAGE_REGEX.newIllust.test(pathname) && !PAGE_REGEX.bookmarkIllust.test(pathname))
+		if (!PAGE_REGEX.newIllust.test(pathname) && !PAGE_REGEX.bookmarkIllust.test(pathname)) {
 			return;
+		}
 
 		fetchOrigin().then((html) => {
 			const token = extractCsrfToken(html);

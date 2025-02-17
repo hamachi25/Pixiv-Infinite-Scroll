@@ -1,4 +1,4 @@
-import type { Work, NovelType, ProfilePopupType } from "../type";
+import type { Work, NovelType } from "../type";
 import { BookmarkButton } from "./ui/BookmarkButton";
 import { SettingContext } from "../context";
 import { handleProfileMouseEnter, handleProfileMouseLeave } from "../utils/profilePopup";
@@ -6,8 +6,6 @@ import { handleProfileMouseEnter, handleProfileMouseLeave } from "../utils/profi
 interface Props {
 	novel: Work;
 	type: NovelType;
-	profilePopupData?: ProfilePopupType | undefined;
-	setProfilePopupData?: React.Dispatch<React.SetStateAction<ProfilePopupType | undefined>>;
 }
 
 const NovelInfo = ({ novel, readingTime }: { novel: Work; readingTime: number | undefined }) => {
@@ -36,9 +34,134 @@ const NovelInfo = ({ novel, readingTime }: { novel: Work; readingTime: number | 
 	);
 };
 
-export const NovelItem = ({ novel, type, profilePopupData, setProfilePopupData }: Props) => {
+const NovelImage = ({ novel }: { novel: Work }) => {
 	const settings = useContext(SettingContext);
+	return (
+		<a
+			className="mr-[16px] flex-[0_0_auto]"
+			href={`/novel/show.php?id=${novel.id}`}
+			target={settings?.openInNewTab ? "_blank" : undefined}
+		>
+			<img
+				className="h-[112px] w-[80px] rounded-[8px] object-cover transition-opacity duration-200 hover:opacity-80"
+				src={novel.url}
+				alt={novel.alt}
+				width={80}
+				height={112}
+			/>
+		</a>
+	);
+};
 
+const NovelSeriesTitle = ({ novel }: { novel: Work }) => {
+	const settings = useContext(SettingContext);
+	return (
+		<a
+			className="overflow-hidden text-ellipsis whitespace-nowrap text-[14px] text-[var(--charcoal-text3)]"
+			href={`/novel/series/${novel.seriesId}`}
+			title={novel.seriesTitle}
+			target={settings?.openInNewTab ? "_blank" : undefined}
+		>
+			{novel.seriesTitle}
+		</a>
+	);
+};
+
+const NovelTitle = ({ novel }: { novel: Work }) => {
+	const settings = useContext(SettingContext);
+	return (
+		<a
+			className="overflow-hidden text-ellipsis whitespace-nowrap text-[14px] text-[var(--charcoal-text3)]"
+			href={`/novel/series/${novel.seriesId}`}
+			title={novel.seriesTitle}
+			target={settings?.openInNewTab ? "_blank" : undefined}
+		>
+			{novel.seriesTitle}
+		</a>
+	);
+};
+
+const Profile = ({ novel, type }: { novel: Work; type: NovelType }) => {
+	const settings = useContext(SettingContext);
+	return (
+		<div
+			className="flex w-fit gap-[4px]"
+			onMouseEnter={(e) => handleProfileMouseEnter(e, novel)}
+			onMouseLeave={handleProfileMouseLeave}
+		>
+			{type !== "bookmark" && (
+				<a
+					className="my-auto"
+					href={`/users/${novel.userId}`}
+					title={novel.userName}
+					target={settings?.openInNewTab ? "_blank" : undefined}
+				>
+					<img
+						className="h-[16px] w-[16px] rounded-full object-cover"
+						src={novel.profileImageUrl}
+						alt={novel.userName}
+						width={16}
+						height={16}
+					/>
+				</a>
+			)}
+			<a
+				className={`${type === "bookmark" ? "text-[14px]" : "text-[12px]"} overflow-hidden text-ellipsis whitespace-nowrap text-[var(--charcoal-text2)]`}
+				href={`/users/${novel.userId}`}
+				target={settings?.openInNewTab ? "_blank" : undefined}
+			>
+				{novel.userName}
+			</a>
+		</div>
+	);
+};
+
+const R18Tag = ({ novel }: { novel: Work }) => {
+	const settings = useContext(SettingContext);
+	return (
+		<li className="inline">
+			<a
+				className="break-words font-bold text-[var(--charcoal-r18)]"
+				href={`/tags/${novel.xRestrict === 1 ? "R-18" : "R-18G"}/novels`}
+				target={settings?.openInNewTab ? "_blank" : undefined}
+			>
+				{novel.xRestrict === 1 ? "R-18" : "R-18G"}
+			</a>
+		</li>
+	);
+};
+
+const OriginalTag = () => {
+	const settings = useContext(SettingContext);
+	return (
+		<li className="inline">
+			<a
+				className="break-words font-bold text-[var(--charcoal-link1)]"
+				href="/tags/%E3%82%AA%E3%83%AA%E3%82%B8%E3%83%8A%E3%83%AB/novels"
+				target={settings?.openInNewTab ? "_blank" : undefined}
+			>
+				{i18n.t("novel.original")}
+			</a>
+		</li>
+	);
+};
+
+const OtherTag = ({ tag }: { tag: string }) => {
+	const settings = useContext(SettingContext);
+	return (
+		<li className="inline">
+			<a
+				className="break-words text-[var(--charcoal-link1)] before:content-['#']"
+				href={`/tags/${encodeURIComponent(tag)}/novels`}
+				target={settings?.openInNewTab ? "_blank" : undefined}
+			>
+				{tag}
+			</a>
+		</li>
+	);
+};
+
+export const NovelItem = ({ novel, type }: Props) => {
 	const readingTime = novel.readingTime ? Math.floor(novel.readingTime / 60) : undefined;
 	const description = novel.description?.replace(/<[^>]*>/g, "");
 	return (
@@ -51,81 +174,18 @@ export const NovelItem = ({ novel, type, profilePopupData, setProfilePopupData }
 				className={`${type !== "tag" && "w-[392px]"} relative flex h-full min-h-[112px] pr-[40px]`}
 			>
 				{/* メイン画像 */}
-				<a
-					className="mr-[16px] flex-[0_0_auto]"
-					href={`/novel/show.php?id=${novel.id}`}
-					target={settings?.openInNewTab ? "_blank" : undefined}
-				>
-					<img
-						className="h-[112px] w-[80px] rounded-[8px] object-cover transition-opacity duration-200 hover:opacity-80"
-						src={novel.url}
-						alt={novel.alt}
-						width={80}
-						height={112}
-					/>
-				</a>
+				<NovelImage novel={novel} />
+
 				<div className="-my-[4px] flex min-w-[0px] flex-[1_1_0%] flex-col">
 					{/* シリーズタイトル */}
-					{novel.seriesTitle && (
-						<a
-							className="overflow-hidden text-ellipsis whitespace-nowrap text-[14px] text-[var(--charcoal-text3)]"
-							href={`/novel/series/${novel.seriesId}`}
-							title={novel.seriesTitle}
-							target={settings?.openInNewTab ? "_blank" : undefined}
-						>
-							{novel.seriesTitle}
-						</a>
-					)}
+					{novel.seriesTitle && <NovelSeriesTitle novel={novel} />}
+
 					{/* タイトル */}
-					<a
-						className={`${type !== "tag" && "whitespace-nowrap text-[16px]"} overflow-hidden text-ellipsis font-bold`}
-						href={`/novel/show.php?id=${novel.id}`}
-						title={novel.title}
-						target={settings?.openInNewTab ? "_blank" : undefined}
-					>
-						{novel.title}
-					</a>
+					<NovelTitle novel={novel} />
 
 					{/* プロフィール */}
 					{(type === "tag" || type === "newNovel" || type === "bookmark") && (
-						<div
-							className="flex w-fit gap-[4px]"
-							onMouseEnter={(e) =>
-								handleProfileMouseEnter(
-									e,
-									novel,
-									profilePopupData,
-									setProfilePopupData!,
-								)
-							}
-							onMouseLeave={() =>
-								handleProfileMouseLeave(profilePopupData, setProfilePopupData!)
-							}
-						>
-							{type !== "bookmark" && (
-								<a
-									className="my-auto"
-									href={`/users/${novel.userId}`}
-									title={novel.userName}
-									target={settings?.openInNewTab ? "_blank" : undefined}
-								>
-									<img
-										className="h-[16px] w-[16px] rounded-full object-cover"
-										src={novel.profileImageUrl}
-										alt={novel.userName}
-										width={16}
-										height={16}
-									/>
-								</a>
-							)}
-							<a
-								className={`${type === "bookmark" ? "text-[14px]" : "text-[12px]"} overflow-hidden text-ellipsis whitespace-nowrap text-[var(--charcoal-text2)]`}
-								href={`/users/${novel.userId}`}
-								target={settings?.openInNewTab ? "_blank" : undefined}
-							>
-								{novel.userName}
-							</a>
-						</div>
+						<Profile novel={novel} type={type} />
 					)}
 
 					{(type === "user" || type === "follow" || type === "bookmark") && (
@@ -134,39 +194,11 @@ export const NovelItem = ({ novel, type, profilePopupData, setProfilePopupData }
 
 					{/* タグ */}
 					<ul className="[&>li:not(:last-child)]:mr-[8px]">
-						{novel.xRestrict !== 0 && (
-							<li className="inline">
-								<a
-									className="break-words font-bold text-[var(--charcoal-r18)]"
-									href={`/tags/${novel.xRestrict === 1 ? "R-18" : "R-18G"}/novels`}
-									target={settings?.openInNewTab ? "_blank" : undefined}
-								>
-									{novel.xRestrict === 1 ? "R-18" : "R-18G"}
-								</a>
-							</li>
-						)}
-						{novel.isOriginal && (
-							<li className="inline">
-								<a
-									className="break-words font-bold text-[var(--charcoal-link1)]"
-									href="/tags/%E3%82%AA%E3%83%AA%E3%82%B8%E3%83%8A%E3%83%AB/novels"
-									target={settings?.openInNewTab ? "_blank" : undefined}
-								>
-									{i18n.t("novel.original")}
-								</a>
-							</li>
-						)}
-						{novel.tags?.map((tag) => (
-							<li key={tag} className="inline">
-								<a
-									className="break-words text-[var(--charcoal-link1)] before:content-['#']"
-									href={`/tags/${encodeURIComponent(tag)}/novels`}
-									target={settings?.openInNewTab ? "_blank" : undefined}
-								>
-									{tag}
-								</a>
-							</li>
-						))}
+						{novel.xRestrict !== 0 && <R18Tag novel={novel} />}
+
+						{novel.isOriginal && <OriginalTag />}
+
+						{novel.tags?.map((tag) => <OtherTag key={tag} tag={tag} />)}
 					</ul>
 
 					{description && (

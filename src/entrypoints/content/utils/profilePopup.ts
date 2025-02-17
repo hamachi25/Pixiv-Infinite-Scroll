@@ -1,13 +1,16 @@
-import { Work, ProfilePopupType } from "../type";
+import { Work } from "../type";
+import { useStore } from "../store";
 
-export const handleProfileMouseEnter = (
-	e: React.MouseEvent<HTMLDivElement>,
-	work: Work,
-	profilePopupData: ProfilePopupType | undefined,
-	setProfilePopupData: React.Dispatch<React.SetStateAction<ProfilePopupType | undefined>>,
-) => {
-	if (profilePopupData?.hoverTimeout) {
-		clearTimeout(profilePopupData.hoverTimeout);
+export const handleProfileMouseEnter = (e: React.MouseEvent<HTMLDivElement>, work: Work) => {
+	const { hoverTimeout, setHoverTimeout, profilePopupData, setProfilePopupData } =
+		useStore.getState();
+
+	if (hoverTimeout) {
+		clearTimeout(hoverTimeout);
+	}
+
+	if (profilePopupData?.userId === work.userId) {
+		return;
 	}
 
 	const hostRect = (e.currentTarget.getRootNode() as ShadowRoot).host.getBoundingClientRect();
@@ -17,7 +20,6 @@ export const handleProfileMouseEnter = (
 
 	const timeout = setTimeout(() => {
 		setProfilePopupData({
-			hoverTimeout: timeout,
 			userId: work.userId,
 			position: {
 				rectTop: rect.top,
@@ -28,18 +30,18 @@ export const handleProfileMouseEnter = (
 			},
 		});
 	}, 200);
+	setHoverTimeout(timeout);
 };
 
-export const handleProfileMouseLeave = (
-	profilePopupData: ProfilePopupType | undefined,
-	setProfilePopupData: React.Dispatch<React.SetStateAction<ProfilePopupType | undefined>>,
-) => {
-	if (profilePopupData?.hoverTimeout) {
-		clearTimeout(profilePopupData.hoverTimeout);
+export const handleProfileMouseLeave = () => {
+	const { hoverTimeout, setHoverTimeout, setProfilePopupData } = useStore.getState();
+
+	if (hoverTimeout) {
+		clearTimeout(hoverTimeout);
 	}
 
 	const timeout = setTimeout(() => {
 		setProfilePopupData(undefined);
 	}, 200);
-	setProfilePopupData((prev) => (prev ? { ...prev, hoverTimeout: timeout } : undefined));
+	setHoverTimeout(timeout);
 };
