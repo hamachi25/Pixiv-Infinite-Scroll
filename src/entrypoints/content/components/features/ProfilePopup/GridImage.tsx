@@ -1,5 +1,5 @@
-import type { ProfileWork } from "../../../type";
-import { SettingContext } from "../../../context";
+import type { ProfileWork } from "@content/type";
+import { SettingContext } from "@content/context";
 import { IllustCount } from "../../ui/IllustCount";
 
 interface Props {

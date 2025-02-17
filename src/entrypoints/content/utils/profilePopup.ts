@@ -1,5 +1,5 @@
 import { Work } from "../type";
-import { useStore } from "../store";
+import { useStore } from "@content/store";
 
 export const handleProfileMouseEnter = (e: React.MouseEvent<HTMLDivElement>, work: Work) => {
 	const { hoverTimeout, setHoverTimeout, profilePopupData, setProfilePopupData } =

@@ -1,9 +1,9 @@
 import { useLayoutEffect } from "react";
-import type { ProfileData, ProfileWork } from "../../../type";
+import type { ProfileData, ProfileWork } from "@content/type";
 import { fetchData } from "../../../fetch/fetch";
 import { FollowButton } from "../../ui/FollowButton";
 import { RequestMark } from "../../ui/RequestMark";
-import { useStore } from "../../../store";
+import { useStore } from "@content/store";
 
 import { BackgroundImage } from "./BackgroundImage";
 import { Profile } from "./Profile";
@@ -36,7 +36,7 @@ const handleMouseLeave = () => {
 	setHoverTimeout(timeout);
 };
 
-export default () => {
+export const ProfilePopupContainer = () => {
 	const popupRef = useRef<HTMLDivElement>(null);
 	const [profileFetchData, setProfileFetchData] = useState<ProfileData | undefined>(undefined);
 	const [latestWorks, setLatestWorks] = useState<ProfileWork[]>([]);

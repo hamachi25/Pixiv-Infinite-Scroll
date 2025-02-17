@@ -1,5 +1,5 @@
-import type { ProfileData } from "../../../type";
-import { SettingContext } from "../../../context";
+import type { ProfileData } from "@content/type";
+import { SettingContext } from "@content/context";
 
 interface Props {
 	profileFetchData: ProfileData;

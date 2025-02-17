@@ -1,5 +1,5 @@
-import type { Work } from "../../../type";
-import { NovelItem } from "../../NovelItem";
+import type { Work } from "@content/type";
+import { NovelContainer } from "../Novel";
 import { GridImage } from "../../ui/GridImage";
 import { BookmarkButton } from "../../ui/BookmarkButton";
 import { FollowButton } from "../../ui/FollowButton";
@@ -13,7 +13,7 @@ interface Props {
 	profiles: Work[];
 }
 
-export default ({ profiles }: Props) => {
+export const FollowingContainer = ({ profiles }: Props) => {
 	return (
 		<>
 			{profiles.map((profile) => {
@@ -87,17 +87,18 @@ export default ({ profiles }: Props) => {
 
 										{/* 小説 */}
 										{profile.illusts?.length === 0 &&
-											profile.novels?.map((novel) => {
-												return (
-													<NovelItem
-														key={novel.id}
-														novel={novel}
-														type="follow"
-													/>
-												);
-											})}
+											profile.novels?.map((novel) => (
+												<NovelContainer
+													key={novel.id}
+													novel={novel}
+													type="follow"
+												/>
+											))}
 										{displaySingleNovelItem && profile.novels && (
-											<NovelItem novel={profile.novels[0]} type="follow" />
+											<NovelContainer
+												novel={profile.novels[0]}
+												type="follow"
+											/>
 										)}
 									</ul>
 								</div>

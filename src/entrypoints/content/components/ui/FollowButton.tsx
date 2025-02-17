@@ -1,6 +1,5 @@
-import { i18n } from "#i18n";
 import { postData } from "../../fetch/post";
-import { CsrfContext } from "../../context";
+import { CsrfContext } from "@content/context";
 import { fetchOrigin } from "../../fetch/fetch";
 import { extractCsrfToken } from "../../utils/extractDataFromOrigin";
 

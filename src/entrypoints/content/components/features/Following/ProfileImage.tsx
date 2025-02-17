@@ -1,5 +1,5 @@
-import type { Work } from "../../../type";
-import { SettingContext } from "../../../context";
+import type { Work } from "@content/type";
+import { SettingContext } from "@content/context";
 
 interface Props {
 	profile: Work;

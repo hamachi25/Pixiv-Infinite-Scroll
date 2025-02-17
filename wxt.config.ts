@@ -11,4 +11,7 @@ export default defineConfig({
 		default_locale: "en",
 		permissions: ["storage"],
 	},
+	alias: {
+		"@content": "src/entrypoints/content",
+	},
 });

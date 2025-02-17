@@ -2,7 +2,7 @@ import "./style.css";
 import type { ContentScriptContext } from "wxt/client";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import ProfilePopup from "./components/pages/ProfilePopup/ProfilePopup";
+import ProfilePopup from "./pages/ProfilePopup.tsx";
 
 import { getElementSelectorByUrl } from "./utils/getElementSelectorByUrl";
 import { PAGE_REGEX } from "./constants/urlRegex";

@@ -2,9 +2,9 @@ import { memo } from "react";
 import { Virtuoso } from "react-virtuoso";
 import { InView, useInView } from "react-intersection-observer";
 
-import GridIllusts from "./components/pages/GridIllusts/GridIllusts";
-import Following from "./components/pages/Following/Following";
-import Novels from "./components/pages/Novels";
+import GridIllusts from "./pages/GridIllusts.tsx";
+import Following from "./pages/Following.tsx";
+import Novels from "./pages/Novels.tsx";
 import { PageHeader } from "./components/ui/PageHeader";
 import { LoadingSpinner } from "./components/ui/LoadingSpinner";
 
@@ -13,7 +13,7 @@ import { extractWorkTag } from "./utils/extractWorkTag";
 import { generateRequestUrl } from "./utils/generateRequestUrl";
 import { getElementSelectorByUrl } from "./utils/getElementSelectorByUrl";
 
-import type { WorkTag, Work, UserWorks } from "./type";
+import type { WorkTag, Work, UserWorks } from "@content/type";
 import { PAGE_REGEX } from "./constants/urlRegex";
 import { fetchData } from "./fetch/fetch";
 

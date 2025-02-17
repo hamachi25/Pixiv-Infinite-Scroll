@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { ProfilePopupType } from "./type";
+import type { ProfilePopupType } from "@content/type";
 
 type State = {
 	hoverTimeout: NodeJS.Timeout | undefined;
