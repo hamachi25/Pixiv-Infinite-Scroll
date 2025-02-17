@@ -2,10 +2,12 @@ import "./style.css";
 import type { ContentScriptContext } from "wxt/client";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import ProfilePopup from "./pages/ProfilePopup.tsx";
 
 import { getElementSelectorByUrl } from "./utils/getElementSelectorByUrl";
 import { PAGE_REGEX } from "./constants/urlRegex";
 import { Context } from "./context";
+
 export default defineContentScript({
 	matches: ["https://www.pixiv.net/*"],
 	cssInjectionMode: "ui",
@@ -46,10 +48,14 @@ const mountUi = async (ctx: ContentScriptContext, anchor: string) => {
 		append: "after",
 		anchor: anchor,
 		onMount: (container) => {
-			const root = ReactDOM.createRoot(container);
+			const app = document.createElement("div");
+			container.append(app);
+
+			const root = ReactDOM.createRoot(app);
 			root.render(
 				<Context>
 					<App />
+					<ProfilePopup />
 				</Context>,
 			);
 			return root;

@@ -1,4 +1,4 @@
-import type { WorkTag, UserWorks } from "../type";
+import type { WorkTag, UserWorks } from "@content/type";
 
 export const generateRequestUrl = (
 	tag: WorkTag | undefined,
@@ -22,6 +22,7 @@ export const generateRequestUrl = (
 		}
 	}
 
+	// TODO: 読みにくいのでリファクタリングする
 	const pathName = tag.path;
 	if (pathName.type === "users" && pathName.other) {
 		params.delete("p");

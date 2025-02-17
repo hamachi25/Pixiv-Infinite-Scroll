@@ -19,7 +19,7 @@
 	}
 
 	body {
-		@apply text-[var(--charcoal-text1)];
+		@apply relative text-[var(--charcoal-text1)];
 	}
 }
 

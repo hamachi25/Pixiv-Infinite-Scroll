@@ -1,4 +1,4 @@
-import type { WorkTag } from "../../type";
+import type { WorkTag } from "@content/type";
 
 interface Props {
 	workTag: React.RefObject<WorkTag | undefined>;

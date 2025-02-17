@@ -55,6 +55,7 @@ export type Work = {
 	userComment?: string;
 	illusts?: Work[];
 	novels?: Work[];
+	following?: boolean;
 
 	commission: {
 		acceptRequest: boolean;
@@ -79,3 +80,31 @@ export type UserWorks = {
 };
 
 export type NovelType = "tag" | "user" | "newNovel" | "follow" | "bookmark";
+
+export type ProfilePopupType = {
+	userId: string;
+	position: { rectTop: number; top: number; left: number; width: number; height: number };
+};
+
+export type ProfileData = {
+	background: {
+		url: string;
+	};
+	commission: {
+		acceptRequest: boolean;
+	} | null;
+	imageBig: string;
+	name: string;
+	userId: string;
+	comment: string;
+	isFollowed: boolean;
+};
+
+export type ProfileWork = {
+	workType: string;
+	id: string;
+	url: string;
+	alt: string;
+	title: string;
+	pageCount?: number;
+};

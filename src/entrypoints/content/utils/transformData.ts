@@ -1,4 +1,4 @@
-import type { Work } from "../type";
+import type { Work } from "@content/type";
 import { PAGE_REGEX } from "../constants/urlRegex";
 
 type AdContainer = {
@@ -41,35 +41,5 @@ export const transformData = (data: any, location: Location): Work[] => {
 		illustData = data.body.novel.data;
 	}
 
-	return illustData.filter(isIllustItem).map((item: Work) => ({
-		id: item.id,
-		title: item.title,
-		url: item.url,
-		alt: item.alt,
-		pageCount: item.pageCount,
-		userId: item.userId,
-		userName: item.userName,
-		profileImageUrl: item.profileImageUrl,
-		bookmarkData: item.bookmarkData,
-		xRestrict: item.xRestrict,
-		maskReason: item.maskReason,
-		illustType: item.illustType,
-		sl: item.sl,
-
-		// フォロー中
-		userComment: item.userComment,
-		illusts: item.illusts,
-		novels: item.novels,
-		commission: item.commission,
-
-		// 小説
-		textCount: item.textCount,
-		readingTime: item.readingTime,
-		bookmarkCount: item.bookmarkCount,
-		isOriginal: item.isOriginal,
-		tags: item.tags,
-		description: item.description,
-		seriesTitle: item.seriesTitle,
-		seriesId: item.seriesId,
-	}));
+	return illustData.filter(isIllustItem);
 };

@@ -1,4 +1,4 @@
-import type { WorkTag } from "../type";
+import type { WorkTag } from "@content/type";
 
 export const extractWorkTag = (url: Location): WorkTag | null => {
 	const path = url.pathname.replace("/en", "").split("/").filter(Boolean);

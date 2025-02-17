@@ -45,6 +45,5 @@ export const getElementSelectorByUrl = (url: Location): string => {
 			return selector;
 		}
 	}
-
 	return "section ul";
 };
