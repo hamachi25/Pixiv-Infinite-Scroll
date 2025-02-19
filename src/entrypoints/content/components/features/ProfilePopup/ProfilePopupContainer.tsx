@@ -10,9 +10,9 @@ import { Profile } from "./Profile";
 import { ViewProfile } from "./ViewProfile";
 import { GridImage } from "./GridImage";
 
-const cache = new Map<string, any>();
+const cache = new Map<string, unknown>();
 
-const fetchDataWithCache = async (url: string): Promise<any> => {
+const fetchDataWithCache = async (url: string) => {
 	if (cache.has(url)) {
 		return cache.get(url);
 	}
@@ -58,15 +58,15 @@ export const ProfilePopupContainer = () => {
 				`https://www.pixiv.net/ajax/user/${profilePopupData.userId}/works/latest`,
 			),
 		]).then(([profileResponse, worksResponse]) => {
-			const illusts: ProfileWork[] = Object.values(worksResponse.body.illusts)
-				.filter((work: any) => work !== null)
+			const illusts = Object.values(worksResponse.body.illusts)
+				.filter((work: unknown): work is ProfileWork => work !== null)
 				.reverse()
-				.map((work: any) => ({ ...work, workType: "illust" }));
+				.map((work: ProfileWork) => ({ ...work, workType: "illust" }));
 
 			const novels: ProfileWork[] = Object.values(worksResponse.body.novels)
-				.filter((work: any) => work !== null)
+				.filter((work: unknown): work is ProfileWork => work !== null)
 				.reverse()
-				.map((work: any) => ({ ...work, workType: "novel" }));
+				.map((work: ProfileWork) => ({ ...work, workType: "novel" }));
 
 			let resultWorks: ProfileWork[] = [];
 			if (illusts.length >= 3) {
@@ -140,7 +140,9 @@ export const ProfilePopupContainer = () => {
 					/>
 				</div>
 			</div>
-			<div className="flex">{latestWorks?.map((work) => <GridImage work={work} />)}</div>
+			<div className="flex">
+				{latestWorks?.map((work) => <GridImage key={work.id} work={work} />)}
+			</div>
 		</div>
 	);
 };

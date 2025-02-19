@@ -13,6 +13,7 @@ export const ViewProfile = ({ profileFetchData }: Props) => {
 			className="text-[var(--charcoal-text3)]"
 			href={`/users/${profileFetchData.userId}`}
 			target={settings?.openInNewTab ? "_blank" : undefined}
+			rel="noreferrer"
 		>
 			{i18n.t("profilePopup.view")}
 		</a>

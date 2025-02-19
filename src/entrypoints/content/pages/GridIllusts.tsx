@@ -1,5 +1,5 @@
 import type { Work } from "@content/type";
-import { GridIllustsContainer } from "../components/features/GridIllusts";
+import { GridIllustsContainer } from "../components/features/GridIllusts/GridIllustsContainer";
 
 interface Props {
 	illusts: Work[];

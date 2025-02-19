@@ -13,6 +13,7 @@ export const ProfileImage = ({ profile }: Props) => {
 			href={`/users/${profile.userId}`}
 			title={profile.userName}
 			target={settings?.openInNewTab ? "_blank" : undefined}
+			rel="noreferrer"
 		>
 			<img
 				className="h-[80px] w-[80px] rounded-full object-cover"

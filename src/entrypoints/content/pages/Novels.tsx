@@ -1,5 +1,5 @@
 import type { Work, NovelType } from "@content/type";
-import { NovelContainer } from "../components/features/Novel";
+import { NovelContainer } from "../components/features/Novel/NovelContainer";
 
 interface Props {
 	novels: Work[];

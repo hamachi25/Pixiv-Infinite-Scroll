@@ -1,4 +1,4 @@
-import { ProfilePopupContainer } from "../components/features/ProfilePopup";
+import { ProfilePopupContainer } from "../components/features/ProfilePopup/ProfilePopupContainer";
 
 const ProfilePopup = () => {
 	return <ProfilePopupContainer />;

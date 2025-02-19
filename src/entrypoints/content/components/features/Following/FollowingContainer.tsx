@@ -1,5 +1,5 @@
 import type { Work } from "@content/type";
-import { NovelContainer } from "../Novel";
+import { NovelContainer } from "../Novel/NovelContainer";
 import { GridImage } from "../../ui/GridImage";
 import { BookmarkButton } from "../../ui/BookmarkButton";
 import { FollowButton } from "../../ui/FollowButton";

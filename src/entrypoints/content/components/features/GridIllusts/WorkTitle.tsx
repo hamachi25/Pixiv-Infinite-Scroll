@@ -15,6 +15,7 @@ export const WorkTitle = ({ illust }: Props) => {
 					className="overflow-hidden text-ellipsis whitespace-nowrap font-bold visited:text-[var(--charcoal-text1Visited)]"
 					href={`/artworks/${illust.id}`}
 					target={settings?.openInNewTab ? "_blank" : undefined}
+					rel="noreferrer"
 				>
 					{illust.title}
 				</a>

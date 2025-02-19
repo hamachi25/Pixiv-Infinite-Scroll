@@ -9,6 +9,7 @@ const isIllustItem = (item: Work | AdContainer): item is Work => {
 	return !("isAdContainer" in item);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const transformData = (data: any, location: Location): Work[] => {
 	const pathName = location.pathname;
 	let illustData = null;

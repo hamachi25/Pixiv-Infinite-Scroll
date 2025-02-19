@@ -13,6 +13,7 @@ export const Profile = ({ profileFetchData }: Props) => {
 			<a
 				href={`/users/${profileFetchData.userId}`}
 				target={settings?.openInNewTab ? "_blank" : undefined}
+				rel="noreferrer"
 			>
 				<img
 					className="h-[64px] w-[64px] rounded-full object-cover object-[center_top]"
@@ -25,6 +26,7 @@ export const Profile = ({ profileFetchData }: Props) => {
 				className="mt-[4px] text-[16px] font-bold text-[var(--charcoal-text1)]"
 				href={`/users/${profileFetchData.userId}`}
 				target={settings?.openInNewTab ? "_blank" : undefined}
+				rel="noreferrer"
 			>
 				{profileFetchData.name}
 			</a>

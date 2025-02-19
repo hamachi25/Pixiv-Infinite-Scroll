@@ -21,6 +21,7 @@ export const PageHeader = ({ workTag, index, location }: Props) => {
 				className="block w-full rounded-[4px] transition-colors duration-200 hover:bg-[var(--charcoal-surface1-hover)]"
 				href={newUrl}
 				target="_blank"
+				rel="noreferrer"
 			>
 				{page}
 			</a>

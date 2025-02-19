@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+import containerQueries from "@tailwindcss/container-queries";
+import daisyui from "daisyui";
+
 export default {
 	content: ["src/assets/**", "src/entrypoints/**", "src/components/**"],
 	theme: {
@@ -9,5 +12,5 @@ export default {
 			},
 		},
 	},
-	plugins: [require("@tailwindcss/container-queries"), require("daisyui")],
+	plugins: [containerQueries, daisyui],
 };

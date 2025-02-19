@@ -1,5 +1,5 @@
 import type { Work } from "@content/type";
-import { FollowingContainer } from "../components/features/Following";
+import { FollowingContainer } from "../components/features/Following/FollowingContainer";
 
 interface Props {
 	profiles: Work[];

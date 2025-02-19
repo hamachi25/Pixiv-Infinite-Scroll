@@ -14,7 +14,11 @@ export const GridImage = memo(({ illust }: Props) => {
 	const isSensitive = useContext(SensitiveContext);
 
 	return (
-		<a href={`/artworks/${illust.id}`} target={settings?.openInNewTab ? "_blank" : undefined}>
+		<a
+			href={`/artworks/${illust.id}`}
+			target={settings?.openInNewTab ? "_blank" : undefined}
+			rel="noreferrer"
+		>
 			<div className="relative flex items-center justify-center">
 				<img
 					className="rounded-[8px] transition-opacity duration-200 hover:opacity-80"
@@ -48,3 +52,4 @@ export const GridImage = memo(({ illust }: Props) => {
 		</a>
 	);
 });
+GridImage.displayName = "GridImage";

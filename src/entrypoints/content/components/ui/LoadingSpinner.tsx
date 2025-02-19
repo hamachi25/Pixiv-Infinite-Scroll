@@ -24,3 +24,4 @@ export const LoadingSpinner = memo(({ ref, hasMore }: Props) => {
 		<></>
 	);
 });
+LoadingSpinner.displayName = "LoadingSpinner";

@@ -9,7 +9,7 @@ const formsLinks = {
 
 const formsLink = navigator.language === "ja" ? formsLinks.ja : formsLinks.en;
 
-export default () => {
+const App = () => {
 	const [isChecked, setIsChecked] = useState(false);
 	const { version } = browser.runtime.getManifest();
 
@@ -33,6 +33,7 @@ export default () => {
 						className="self-end text-base text-[var(--text-pale)]"
 						target="_blank"
 						href={`https://github.com/hamachi25/Pixiv-Infinite-Scroll/releases/tag/${version}`}
+						rel="noreferrer"
 					>
 						v{version}
 					</a>
@@ -43,7 +44,12 @@ export default () => {
 						data-tip={i18n.t("popup.report")}
 					>
 						<button>
-							<a href={formsLink} target="_blank" className="text-[var(--text-pale)]">
+							<a
+								href={formsLink}
+								target="_blank"
+								className="text-[var(--text-pale)]"
+								rel="noreferrer"
+							>
 								<GoReport size={21} />
 							</a>
 						</button>
@@ -69,3 +75,4 @@ export default () => {
 		</>
 	);
 };
+export default App;

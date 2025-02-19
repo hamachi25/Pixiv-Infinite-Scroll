@@ -17,6 +17,7 @@ export const GridImage = ({ work }: Props) => {
 					href={`/artworks/${work.id}`}
 					title={work.title}
 					target={settings?.openInNewTab ? "_blank" : undefined}
+					rel="noreferrer"
 				>
 					<img
 						className="h-full w-full rounded-[4px] bg-[var(--charcoal-background1)] object-cover object-center transition-opacity duration-200 group-hover:opacity-80"
@@ -33,6 +34,7 @@ export const GridImage = ({ work }: Props) => {
 					href={`/novel/show.php?id=${work.id}`}
 					title={work.title}
 					target={settings?.openInNewTab ? "_blank" : undefined}
+					rel="noreferrer"
 				>
 					<img
 						className="h-full w-full rounded-b-[4px] rounded-t-[8px] bg-[var(--charcoal-background1)] object-cover object-center transition-opacity duration-200 group-hover:opacity-80"

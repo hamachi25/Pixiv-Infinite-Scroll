@@ -17,6 +17,7 @@ export const RequestMark = ({ acceptRequest, userId }: Props) => {
 					className="flex items-center gap-[2px] text-[var(--charcoal-request)]"
 					href={`/users/${userId}/request`}
 					target={settings?.openInNewTab ? "_blank" : undefined}
+					rel="noreferrer"
 				>
 					<AcceptRequest />
 					<div className="text-[12px] font-bold">{i18n.t("request.accept")}</div>

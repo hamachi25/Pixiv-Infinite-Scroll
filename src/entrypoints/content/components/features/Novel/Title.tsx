@@ -10,6 +10,7 @@ export const NovelSeriesTitle = ({ novel }: { novel: Work }) => {
 				href={`/novel/series/${novel.seriesId}`}
 				title={novel.seriesTitle}
 				target={settings?.openInNewTab ? "_blank" : undefined}
+				rel="noreferrer"
 			>
 				{novel.seriesTitle}
 			</a>
@@ -25,6 +26,7 @@ export const NovelTitle = ({ novel, type }: { novel: Work; type: NovelType }) =>
 			href={`/novel/show.php?id=${novel.id}`}
 			title={novel.title}
 			target={settings?.openInNewTab ? "_blank" : undefined}
+			rel="noreferrer"
 		>
 			{novel.title}
 		</a>

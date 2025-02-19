@@ -13,6 +13,7 @@ export const UserName = ({ profile }: Props) => {
 			className="font-bold"
 			href={`/users/${profile.userId}`}
 			target={settings?.openInNewTab ? "_blank" : undefined}
+			rel="noreferrer"
 		>
 			{profile.userName}
 		</a>

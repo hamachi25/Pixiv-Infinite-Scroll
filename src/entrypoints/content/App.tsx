@@ -88,8 +88,9 @@ const ItemContent = memo(
 		);
 	},
 );
+ItemContent.displayName = "ItemContent";
 
-export default () => {
+const App = () => {
 	const [works, setWorks] = useState<Work[][]>(() => []);
 	const [hasMore, setHasMore] = useState<boolean | undefined>(false); // さらに読み込むかどうか
 	const userWorks = useRef<UserWorks>({}); // ユーザーの作品一覧
@@ -214,3 +215,4 @@ export default () => {
 		</>
 	);
 };
+export default App;

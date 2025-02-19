@@ -101,7 +101,6 @@ export type ProfileData = {
 };
 
 export type ProfileWork = {
-	workType: string;
 	id: string;
 	url: string;
 	alt: string;

@@ -13,6 +13,7 @@ export const WorkTitle = ({ illust }: Props) => {
 				className="overflow-hidden text-ellipsis whitespace-nowrap text-[14px] font-bold"
 				href={`/artworks/${illust.id}`}
 				target={settings?.openInNewTab ? "_blank" : undefined}
+				rel="noreferrer"
 			>
 				{illust.title}
 			</a>

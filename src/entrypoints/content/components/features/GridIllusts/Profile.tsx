@@ -21,6 +21,7 @@ export const Profile = ({ illust }: Props) => {
 						href={`/users/${illust.userId}`}
 						title={illust.userName}
 						target={settings?.openInNewTab ? "_blank" : undefined}
+						rel="noreferrer"
 					>
 						<img
 							className="h-[24px] w-[24px] rounded-full"
@@ -34,6 +35,7 @@ export const Profile = ({ illust }: Props) => {
 						className="overflow-hidden text-ellipsis whitespace-nowrap"
 						href={`/users/${illust.userId}`}
 						target={settings?.openInNewTab ? "_blank" : undefined}
+						rel="noreferrer"
 					>
 						{illust.userName}
 					</a>

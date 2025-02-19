@@ -14,6 +14,7 @@ export const R18Tag = ({ novel }: Props) => {
 					className="break-words font-bold text-[var(--charcoal-r18)]"
 					href={`/tags/${novel.xRestrict === 1 ? "R-18" : "R-18G"}/novels`}
 					target={settings?.openInNewTab ? "_blank" : undefined}
+					rel="noreferrer"
 				>
 					{novel.xRestrict === 1 ? "R-18" : "R-18G"}
 				</a>
@@ -49,6 +50,7 @@ export const OtherTag = ({ novel }: Props) => {
 						className="break-words text-[var(--charcoal-link1)] before:content-['#']"
 						href={`/tags/${encodeURIComponent(tag)}/novels`}
 						target={settings?.openInNewTab ? "_blank" : undefined}
+						rel="noreferrer"
 					>
 						{tag}
 					</a>
