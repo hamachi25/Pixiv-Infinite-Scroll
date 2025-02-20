@@ -3,9 +3,12 @@ on:
     workflow_dispatch:
         inputs:
             dryRun:
-                default: false
+                default: true
                 type: boolean
                 description: Skip submission and perform a dry run
+    push:
+        branches:
+            - workflow
 
 jobs:
     submit:
