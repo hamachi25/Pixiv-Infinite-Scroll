@@ -50,10 +50,11 @@
 		"wxt": "^0.19.26"
 	},
 	"lint-staged": {
-		"src/**/*.{ts,tsx}": [
-			"eslint --fix"
+		"*.{js,ts,tsx}": [
+			"eslint --fix",
+			"prettier --write"
 		],
-		"src/**/*": [
+		"*.{cjs,md}": [
 			"prettier --write"
 		]
 	}
