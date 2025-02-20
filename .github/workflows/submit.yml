@@ -1,4 +1,6 @@
 name: Submit for Review
+
+# https://github.com/aklinker1/github-better-line-counts/blob/main/.github/workflows/submit.yml
 on:
     workflow_dispatch:
         inputs:
@@ -28,6 +30,7 @@ jobs:
                   node-version: 20
                   cache: "pnpm"
 
+            # https://github.com/GuiEpi/plex-skipper/blob/main/.github/workflows/deploy.yml
             - name: Get version
               id: get_version
               run: |
