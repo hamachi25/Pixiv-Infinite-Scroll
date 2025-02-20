@@ -1,73 +1,13 @@
-name: Submit for Review
+name: workflow dispatch
 on:
-    workflow_dispatch:
-        inputs:
-            dryRun:
-                default: false
-                type: boolean
-                description: Skip submission and perform a dry run
+    push:
+        branches:
+            - workflow
+    workflow_dispatch: {}
 
 jobs:
-    submit:
-        name: Submit
+    hello:
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-              with:
-                  fetch-depth: 0
-
-            - name: Setup PNPM
-              uses: pnpm/action-setup@v4
-              with:
-                  version: 9
-
-            - name: Setup NodeJS
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 20
-                  cache: "pnpm"
-
-            - name: Get version
-              id: get_version
-              run: |
-                  VERSION=$(jq -r .version package.json)
-                  echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-
-            - name: Install dependencies
-              run: pnpm install
-
-            - name: Build and Zip
-              run: |
-                  pnpm zip
-                  pnpm zip:firefox
-
-            - name: Upload Artifacts
-              uses: actions/upload-artifact@v4
-              with:
-                  include-hidden-files: true
-                  path: .output/*.zip
-                  if-no-files-found: error
-
-            - name: Submit
-              run: |
-                  pnpm wxt submit \
-                    --chrome-zip .output/*-chrome.zip \
-                    --firefox-zip .output/*-firefox.zip --firefox-sources-zip .output/*-sources.zip
-              env:
-                  DRY_RUN: ${{ inputs.dryRun }}
-                  CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
-                  CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
-                  CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
-                  CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
-                  FIREFOX_EXTENSION_ID: ${{ secrets.FIREFOX_EXTENSION_ID }}
-                  FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
-                  FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
-
-            - name: Release
-              if: ${{ !inputs.dryRun }}
-              uses: softprops/action-gh-release@v2
-              with:
-                  tag_name: v${{ steps.get_version.outputs.version }}
-                  name: v${{ steps.get_version.outputs.version }}
-                  generate_release_notes: true
+            - name: hello
+              run: "echo Hello"
