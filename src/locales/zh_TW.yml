@@ -1,5 +1,5 @@
 extension:
-    extDescription: 滾動時會自動加載下一頁，讓您舒適地瀏覽Pixiv的作品。
+    extDescription: 只需滾動，下一頁就會自動加載，讓您舒適地瀏覽pixiv作品。
 popup:
     report: 問題報告・功能建議
     openInNewTab:

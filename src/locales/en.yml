@@ -1,5 +1,5 @@
 extension:
-    extDescription: By scrolling, the next page is automatically loaded, making it easy to browse works on Pixiv.
+    extDescription: When you scroll, the next page loads automatically, allowing you to browse pixiv artworks comfortably.
 popup:
     report: Bug Report / Feature Request
     openInNewTab:

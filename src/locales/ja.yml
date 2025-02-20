@@ -1,5 +1,5 @@
 extension:
-    extDescription: スクロールすると次のページを自動的に読み込み、快適にPixivの作品を閲覧できます。
+    extDescription: スクロールするだけで次のページを自動読み込みし、快適にpixivの作品を閲覧できます。
 popup:
     report: 不具合報告・機能提案
     openInNewTab:
