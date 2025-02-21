@@ -4,7 +4,7 @@
 
 ![Pixiv Infinite Scroll](https://github.com/user-attachments/assets/b0212f9b-4232-4aa6-9da3-9a55065fc398)
 
-Pixiv Infinite ScrollはPixivに最適化された無限スクロール拡張機能です。
+Pixiv Infinite Scrollはpixivに最適化された無限スクロール拡張機能です。
 
 ## インストール
 
