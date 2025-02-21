@@ -56,6 +56,7 @@ jobs:
                   echo "newVersion=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
 
             - name: Push
+              if: ${{ !inputs.dryRun }}
               run: |
                   git push
                   git push --tags
