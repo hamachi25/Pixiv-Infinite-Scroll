@@ -1,4 +1,3 @@
-import { i18n } from "#i18n";
 import { settingsItem } from "@/utils/storage";
 import { GoReport } from "react-icons/go";
 
@@ -7,7 +6,9 @@ const formsLinks = {
 	en: "https://forms.gle/viWPDzAzzwkVxjD18",
 };
 
-const formsLink = navigator.language === "ja" ? formsLinks.ja : formsLinks.en;
+const lang = browser.i18n.getUILanguage();
+const formsLink = lang === "ja" ? formsLinks.ja : formsLinks.en;
+const isRTL = ["ar", "he", "fa", "ps", "ur", "sd"].includes(lang);
 
 const App = () => {
 	const [isChecked, setIsChecked] = useState(false);
@@ -25,7 +26,7 @@ const App = () => {
 	}, []);
 
 	return (
-		<>
+		<div dir={isRTL ? "rtl" : "ltr"}>
 			<div className="relative flex justify-between border-b border-[var(--border-noraml)] px-2 pb-2">
 				<div className="flex gap-3">
 					<h1 className="text-xl font-bold">Pixiv Infinite Scroll</h1>
@@ -40,7 +41,7 @@ const App = () => {
 				</div>
 				<div className="flex items-center">
 					<div
-						className="tooltip tooltip-left before:text-xs"
+						className={`tooltip before:text-xs ${isRTL ? "tooltip-right" : "tooltip-left"}`}
 						data-tip={i18n.t("popup.report")}
 					>
 						<button>
@@ -72,7 +73,7 @@ const App = () => {
 					/>
 				</label>
 			</div>
-		</>
+		</div>
 	);
 };
 export default App;

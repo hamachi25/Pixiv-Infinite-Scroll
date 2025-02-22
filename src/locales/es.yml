@@ -1,0 +1,6 @@
+description: Simplemente desplazándote, la siguiente página se cargará automáticamente, lo que te permitirá disfrutar cómodamente de las obras en pixiv.
+popup:
+    report: Informar de problemas / Sugerencias de funciones
+    openInNewTab:
+        title: Abrir enlace en una nueva pestaña
+        detail: Abrir ilustraciones y novelas en una nueva pestaña.
