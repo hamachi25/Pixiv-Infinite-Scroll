@@ -1,5 +1,4 @@
-extension:
-    extDescription: When you scroll, the next page loads automatically, allowing you to browse pixiv artworks comfortably.
+description: When you scroll, the next page loads automatically, allowing you to browse pixiv artworks comfortably.
 popup:
     report: Bug Report / Feature Request
     openInNewTab:

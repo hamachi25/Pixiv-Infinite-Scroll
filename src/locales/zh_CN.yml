@@ -1,5 +1,4 @@
-extension:
-    extDescription: 只需滚动，下一页就会自动加载，让您舒适地浏览pixiv作品。
+description: 只需滚动，下一页就会自动加载，让您舒适地浏览pixiv作品。
 popup:
     report: 问题报告和功能建议
     openInNewTab:
