@@ -3,6 +3,9 @@ changelog:
         - title: 🎉 Features
           labels:
               - feature
+        - title: ✨ Improvements
+          labels:
+              - improvement
         - title: 🐛 Bug Fixes
           labels:
               - bug
