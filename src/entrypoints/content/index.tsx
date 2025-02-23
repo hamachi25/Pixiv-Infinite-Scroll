@@ -5,6 +5,7 @@ import App from "./App";
 import ProfilePopup from "./pages/ProfilePopup.tsx";
 
 import { getElementSelectorByUrl } from "./utils/getElementSelectorByUrl";
+import { createStyleElement } from "./utils/createStyleElement";
 import { PAGE_REGEX } from "./constants/urlRegex";
 import { Context } from "./context";
 
@@ -14,9 +15,7 @@ export default defineContentScript({
 
 	async main(ctx) {
 		const anchor = getElementSelectorByUrl(location);
-
 		let ui = await mountUi(ctx, anchor);
-
 		if (isMatchUrl(location)) ui?.autoMount();
 
 		ctx.addEventListener(window, "wxt:locationchange", async ({ newUrl }) => {
@@ -27,8 +26,6 @@ export default defineContentScript({
 				ui?.remove();
 
 				const anchor = getElementSelectorByUrl(location);
-				if (!anchor) return;
-
 				ui = await mountUi(ctx, anchor);
 				ui.autoMount();
 			} else if (!isMatchFound) {
@@ -47,7 +44,18 @@ const mountUi = async (ctx: ContentScriptContext, anchor: string) => {
 		position: "inline",
 		append: "after",
 		anchor: anchor,
-		onMount: (container) => {
+		onMount: (container, _, shadowHost) => {
+			/*
+            / タグ検索ページでpixiv側の再レンダリングが起きて、既存の要素との順番が入れ替わることがあるので、
+            / タグ検索のみulの親要素に挿入する。
+            / https://github.com/hamachi25/Pixiv-Infinite-Scroll/issues/15
+            */
+			if (PAGE_REGEX.tagIllust.test(location.pathname)) {
+				const styleElement = createStyleElement();
+				document.head.append(styleElement);
+				shadowHost.classList.add("tag-illust");
+			}
+
 			const app = document.createElement("div");
 			container.append(app);
 
