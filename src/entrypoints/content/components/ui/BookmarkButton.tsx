@@ -15,11 +15,13 @@ interface Props {
 }
 
 export const BookmarkButton = ({ bookmarkData, work, type }: Props) => {
-	const [bookmarkId, setBookmarkId] = useState<string | undefined>(bookmarkData?.id);
+	const [isBookmarked, setIsBookmarked] = useState<boolean>(!!bookmarkData?.id || false);
+	const bookmarkId = useRef<string>(bookmarkData?.id);
 	const csrfToken = useContext(CsrfContext);
 	const isSensitive = useContext(SensitiveContext);
 
 	const addBookmark = async () => {
+		setIsBookmarked(true);
 		if (!csrfToken.current) {
 			await fetchOrigin().then((html) => {
 				const token = extractCsrfToken(html);
@@ -46,14 +48,19 @@ export const BookmarkButton = ({ bookmarkData, work, type }: Props) => {
 			headers,
 			body,
 		).then((data) => {
-			if (!data) return;
+			if (!data) {
+				setIsBookmarked(false);
+				return;
+			}
 
-			setBookmarkId(data.body.last_bookmark_id ?? data.body);
+			bookmarkId.current = data.body.last_bookmark_id ?? data.body;
 		});
 	};
 
 	const deleteBookmark = async () => {
-		if (!bookmarkId) return;
+		if (!bookmarkId.current) return;
+		setIsBookmarked(false);
+
 		if (!csrfToken.current) {
 			await fetchOrigin().then((html) => {
 				const token = extractCsrfToken(html);
@@ -69,7 +76,7 @@ export const BookmarkButton = ({ bookmarkData, work, type }: Props) => {
 			"x-csrf-token": csrfToken.current,
 		};
 		const body = new URLSearchParams({
-			[type === "illust" ? "bookmark_id" : "book_id"]: bookmarkId,
+			[type === "illust" ? "bookmark_id" : "book_id"]: bookmarkId.current,
 		});
 
 		postData(
@@ -77,15 +84,17 @@ export const BookmarkButton = ({ bookmarkData, work, type }: Props) => {
 			headers,
 			body,
 		).then((data) => {
-			if (!data) return;
+			if (!data) {
+				setIsBookmarked(true);
+				return;
+			}
 
-			const bookmarkId = data.body;
-			if (bookmarkId) setBookmarkId(undefined);
+			bookmarkId.current = data.body;
 		});
 	};
 
 	const showBookmarkButton = () => {
-		return !(isSensitive && (work.sl === 4 || work.sl === 6)) || bookmarkId;
+		return !(isSensitive && (work.sl === 4 || work.sl === 6)) || isBookmarked;
 	};
 
 	return (
@@ -94,9 +103,9 @@ export const BookmarkButton = ({ bookmarkData, work, type }: Props) => {
 				<button
 					className="absolute bottom-0 right-0 flex h-[32px] w-[32px] cursor-pointer justify-end"
 					type="button"
-					onClick={bookmarkId ? deleteBookmark : addBookmark}
+					onClick={isBookmarked ? deleteBookmark : addBookmark}
 				>
-					<Bookmark active={!!bookmarkId} />
+					<Bookmark active={isBookmarked} />
 				</button>
 			) : (
 				<div />
