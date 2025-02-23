@@ -13,6 +13,7 @@ export const FollowButton = ({ userId, following }: Props) => {
 	const csrfToken = useContext(CsrfContext);
 
 	const follow = async () => {
+		setIsFollowing(true);
 		if (!csrfToken.current) {
 			await fetchOrigin().then((html) => {
 				const token = extractCsrfToken(html);
@@ -38,12 +39,12 @@ export const FollowButton = ({ userId, following }: Props) => {
 		});
 
 		postData("https://www.pixiv.net/bookmark_add.php", headers, body).then((data) => {
-			if (!data) return;
-			setIsFollowing(true);
+			if (!data) setIsFollowing(false);
 		});
 	};
 
 	const unfollow = async () => {
+		setIsFollowing(false);
 		if (!csrfToken.current) {
 			await fetchOrigin().then((html) => {
 				const token = extractCsrfToken(html);
@@ -66,8 +67,7 @@ export const FollowButton = ({ userId, following }: Props) => {
 		});
 
 		postData("https://www.pixiv.net/rpc_group_setting.php", headers, body).then((data) => {
-			if (!data) return;
-			setIsFollowing(false);
+			if (!data) setIsFollowing(true);
 		});
 	};
 
