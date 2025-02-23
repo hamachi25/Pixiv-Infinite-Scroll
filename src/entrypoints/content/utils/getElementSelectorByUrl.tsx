@@ -3,7 +3,7 @@ import { PAGE_REGEX } from "../constants/urlRegex";
 const patterns: { pattern: RegExp; selector: string }[] = [
 	{
 		pattern: PAGE_REGEX.tagIllust,
-		selector: "section>div:nth-of-type(2)>div:nth-of-type(1):has(>ul)", // タグ検索のみulの親要素に挿入する
+		selector: "section>div:nth-of-type(2)>div:nth-of-type(1)>ul",
 	},
 	{
 		pattern: PAGE_REGEX.tagNovel,
