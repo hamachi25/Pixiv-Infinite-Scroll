@@ -164,6 +164,7 @@ const App = () => {
 		if (!workTag.current) return;
 
 		const anchor = getElementSelectorByUrl(location);
+		if (!anchor) return;
 		const firstPageElement = document.querySelector(anchor);
 		if (!firstPageElement) return;
 

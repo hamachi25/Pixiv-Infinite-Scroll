@@ -1,5 +1,5 @@
 import "./style.css";
-import type { ContentScriptContext } from "wxt/client";
+import type { ContentScriptContext, ShadowRootContentScriptUi } from "wxt/client";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import ProfilePopup from "./pages/ProfilePopup.tsx";
@@ -15,8 +15,11 @@ export default defineContentScript({
 
 	async main(ctx) {
 		const anchor = getElementSelectorByUrl(location);
-		let ui = await mountUi(ctx, anchor);
-		if (isMatchUrl(location)) ui?.autoMount();
+		let ui: ShadowRootContentScriptUi<ReactDOM.Root>;
+		if (anchor) {
+			ui = await mountUi(ctx, anchor);
+			if (isMatchUrl(location)) ui?.autoMount();
+		}
 
 		ctx.addEventListener(window, "wxt:locationchange", async ({ newUrl }) => {
 			const params = new URLSearchParams(newUrl.search);
@@ -26,6 +29,8 @@ export default defineContentScript({
 				ui?.remove();
 
 				const anchor = getElementSelectorByUrl(location);
+				if (!anchor) return;
+
 				ui = await mountUi(ctx, anchor);
 				ui.autoMount();
 			} else if (!isMatchFound) {
