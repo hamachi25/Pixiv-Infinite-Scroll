@@ -4,3 +4,27 @@ popup:
     openInNewTab:
         title: Link in einem neuen Tab öffnen
         detail: Illustrationen und Romane in einem neuen Tab öffnen.
+    mute:
+        title: Tags・Benutzer stummschalten
+        detail: Stummschaltungseinstellungen anwenden.
+        button: Stummschaltungseinstellungen
+options:
+    title: Stummschaltungseinstellungen
+    alreadyAdded: Bereits hinzugefügt
+    tag:
+        title: Tag stummschalten
+        detail: Geben Sie den Namen des Tags ein, das Sie stummschalten möchten.
+        inputName: Tag-Name
+        exampleName: "Beispiel: "
+        addButtonText: Hinzufügen
+        delButtonText: Tag löschen
+    user:
+        title: Benutzer stummschalten
+        detail: Geben Sie die Benutzer-ID und optional den Benutzernamen ein, den Sie stummschalten möchten.
+        inputId: Benutzer-ID
+        exampleId: "Beispiel: "
+        inputIdError: Bitte geben Sie nur Ziffern ein.
+        inputName: Benutzername (optional)
+        exampleName: "Beispiel: "
+        addButtonText: Hinzufügen
+        delButtonText: Benutzer löschen

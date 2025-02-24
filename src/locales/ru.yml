@@ -4,3 +4,27 @@ popup:
     openInNewTab:
         title: Открыть ссылку в новой вкладке
         detail: Открыть иллюстрации и новеллы в новой вкладке.
+    mute:
+        title: Отключить теги и пользователей
+        detail: Применить настройки отключения.
+        button: Настройки отключения
+options:
+    title: Настройки отключения
+    alreadyAdded: Уже добавлено
+    tag:
+        title: Отключить теги
+        detail: Введите название тега, который хотите отключить.
+        inputName: Название тега
+        exampleName: "Пример: "
+        addButtonText: Добавить
+        delButtonText: Удалить тег
+    user:
+        title: Отключить пользователя
+        detail: Введите ID пользователя и (опционально) его имя.
+        inputId: ID пользователя
+        exampleId: "Пример: "
+        inputIdError: Введите только цифры.
+        inputName: Имя пользователя (опционально)
+        exampleName: "Пример: "
+        addButtonText: Добавить
+        delButtonText: Удалить пользователя

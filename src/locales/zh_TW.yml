@@ -4,6 +4,30 @@ popup:
     openInNewTab:
         title: 在新標籤頁打開鏈接
         detail: 在新標籤頁打開插圖和小說。
+    mute:
+        title: 靜音標籤/用戶
+        detail: 應用靜音設置。
+        button: 靜音設置
+options:
+    title: 靜音設定
+    alreadyAdded: 已經添加
+    tag:
+        title: 標籤靜音
+        detail: 請輸入要靜音的標籤名稱。
+        inputName: 標籤名稱
+        exampleName: 例：
+        addButtonText: 新增
+        delButtonText: 刪除標籤
+    user:
+        title: 使用者靜音
+        detail: 請輸入要靜音的使用者ID和使用者名稱（可選）。
+        inputId: 使用者ID
+        exampleId: 例：
+        inputIdError: 請輸入半形數字。
+        inputName: 使用者名稱（可選）
+        exampleName: 例：
+        addButtonText: 新增
+        delButtonText: 刪除使用者
 following:
     follow: 加關注
     following: 關注中
@@ -22,3 +46,5 @@ illust:
     restrict: 瀏覽受限（含成人內容）
 profilePopup:
     view: 查看個人資料
+mute:
+    muted: 屏蔽中

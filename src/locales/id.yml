@@ -1,0 +1,30 @@
+description: Hanya dengan menggulir, halaman berikutnya akan dimuat secara otomatis, memungkinkan Anda untuk melihat karya di pixiv dengan nyaman.
+popup:
+    report: Laporan Bug / Saran Fitur
+    openInNewTab:
+        title: Buka tautan di tab baru
+        detail: Buka ilustrasi / novel di tab baru.
+    mute:
+        title: Bisukan Tag / Pengguna
+        detail: Terapkan pengaturan bisu.
+        button: Pengaturan Bisu
+options:
+    title: Pengaturan Bisu
+    alreadyAdded: Sudah ditambahkan
+    tag:
+        title: Bisukan Tag
+        detail: Masukkan nama tag yang ingin Anda bisukan.
+        inputName: Nama Tag
+        exampleName: "Contoh: "
+        addButtonText: Tambah
+        delButtonText: Hapus Tag
+    user:
+        title: Bisukan Pengguna
+        detail: Masukkan ID pengguna dan nama pengguna (opsional) yang ingin Anda bisukan.
+        inputId: ID Pengguna
+        exampleId: "Contoh: "
+        inputIdError: Masukkan angka dalam format setengah lebar.
+        inputName: Nama Pengguna (opsional)
+        exampleName: "Contoh: "
+        addButtonText: Tambah
+        delButtonText: Hapus Pengguna

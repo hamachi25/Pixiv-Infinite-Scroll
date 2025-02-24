@@ -4,3 +4,27 @@ popup:
     openInNewTab:
         title: Ouvrir le lien dans un nouvel onglet
         detail: Ouvrir les illustrations et les romans dans un nouvel onglet.
+    mute:
+        title: Mettre en sourdine les tags et utilisateurs
+        detail: Applique les paramètres de mise en sourdine.
+        button: Paramètres de sourdine
+options:
+    title: Paramètres de sourdine
+    alreadyAdded: Déjà ajouté
+    tag:
+        title: Mettre un tag en sourdine
+        detail: Saisissez le nom du tag à mettre en sourdine.
+        inputName: Nom du tag
+        exampleName: "Exemple : "
+        addButtonText: Ajouter
+        delButtonText: Supprimer le tag
+    user:
+        title: Mettre un utilisateur en sourdine
+        detail: Saisissez l'ID utilisateur et le nom d'utilisateur (facultatif) à mettre en sourdine.
+        inputId: ID utilisateur
+        exampleId: "Exemple : "
+        inputIdError: Veuillez saisir des chiffres uniquement.
+        inputName: Nom d'utilisateur (facultatif)
+        exampleName: "Exemple : "
+        addButtonText: Ajouter
+        delButtonText: Supprimer l'utilisateur

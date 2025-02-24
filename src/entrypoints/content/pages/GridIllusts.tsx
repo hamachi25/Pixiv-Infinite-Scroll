@@ -1,9 +1,9 @@
-import type { Work } from "@content/type";
+import type { Work } from "@/types/works";
 import { GridIllustsContainer } from "../components/features/GridIllusts/GridIllustsContainer";
 
 interface Props {
 	illusts: Work[];
-	type: string;
+	type: "user" | "bookmark" | "other";
 }
 
 const GridIllusts = ({ illusts, type }: Props) => {

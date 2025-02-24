@@ -1,0 +1,30 @@
+description: Basta rolar para carregar automaticamente a próxima página e visualizar confortavelmente as obras no pixiv.
+popup:
+    report: Relatar problema / Sugerir recurso
+    openInNewTab:
+        title: Abrir link numa nova aba
+        detail: Abre a ilustração ou a novel numa nova aba.
+    mute:
+        title: Silenciar tags/usuários
+        detail: Aplica as configurações de silenciamento.
+        button: Configurações de silenciamento
+options:
+    title: Configurações de silenciamento
+    alreadyAdded: Já foi adicionado
+    tag:
+        title: Silenciar tags
+        detail: Insira o nome da tag que deseja silenciar.
+        inputName: Nome da tag
+        exampleName: "Exemplo: "
+        addButtonText: Adicionar
+        delButtonText: Remover tag
+    user:
+        title: Silenciar usuários
+        detail: Insira o ID do usuário e, opcionalmente, o nome do usuário que deseja silenciar.
+        inputId: ID do usuário
+        exampleId: "Exemplo: "
+        inputIdError: Insira apenas números.
+        inputName: Nome do usuário (opcional)
+        exampleName: "Exemplo: "
+        addButtonText: Adicionar
+        delButtonText: Remover usuário

@@ -13,17 +13,14 @@ import { extractWorkTag } from "./utils/extractWorkTag";
 import { generateRequestUrl } from "./utils/generateRequestUrl";
 import { getElementSelectorByUrl } from "./utils/getElementSelectorByUrl";
 
-import type { WorkTag, Work, UserWorks } from "@content/type";
-import { PAGE_REGEX } from "./constants/urlRegex";
+import type { WorkTag, UserWorks } from "@content/type";
+import type { Work } from "@/types/works";
+import { PAGE_REGEX } from "@/constants/urlRegex.ts";
 import { fetchData } from "./fetch/fetch";
+import { MuteContext } from "./context";
 
 const InnerContent = ({ works }: { works: Work[] }) => {
 	const pathName = location.pathname;
-
-	// フォロー中
-	if (PAGE_REGEX.following.test(pathName)) {
-		return <Following profiles={works} />;
-	}
 
 	// ユーザーの小説一覧
 	if (PAGE_REGEX.userNovel.test(pathName)) {
@@ -45,9 +42,19 @@ const InnerContent = ({ works }: { works: Work[] }) => {
 		return <Novels novels={works} type="bookmark" />;
 	}
 
+	// フォロー中
+	if (PAGE_REGEX.following.test(pathName)) {
+		return <Following profiles={works} />;
+	}
+
 	// ユーザーのイラスト一覧
 	if (PAGE_REGEX.userIllust.test(pathName)) {
 		return <GridIllusts illusts={works} type="user" />;
+	}
+
+	// ブックマークのイラスト
+	if (PAGE_REGEX.bookmarkIllust.test(pathName)) {
+		return <GridIllusts illusts={works} type="bookmark" />;
 	}
 
 	return <GridIllusts illusts={works} type="other" />;
@@ -97,7 +104,9 @@ const App = () => {
 	const workTag = useRef<WorkTag | undefined>(undefined);
 	const page = useRef(2);
 
-	const loadMore = () => {
+	const muteSettings = useContext(MuteContext);
+
+	const loadMore = async () => {
 		if (hasMore === undefined) return;
 
 		setHasMore(true);
@@ -113,7 +122,7 @@ const App = () => {
 				return;
 			}
 
-			const transformedData = transformData(data, location);
+			const transformedData = transformData(data, location, muteSettings);
 			setWorks((prevWorks) => [...prevWorks, transformedData]);
 			page.current += 1;
 
@@ -125,39 +134,48 @@ const App = () => {
 		});
 	};
 
-	useEffect(() => {
-		(async () => {
-			const tag = extractWorkTag(location);
-			if (!tag) return;
-			workTag.current = tag;
+	const firstPageRequest = async () => {
+		if (page.current !== 2) return;
 
-			const pageFromUrl = tag.param.p;
-			if (pageFromUrl) page.current = Number(pageFromUrl) + 1;
+		setHasMore(true);
 
-			// ユーザーのイラスト・小説のidをまとめて取得
-			if (
-				PAGE_REGEX.userIllust.test(location.pathname) ||
-				PAGE_REGEX.userNovel.test(location.pathname)
-			) {
-				if (!tag.path.other) return;
+		const tag = extractWorkTag(location);
+		if (!tag) return;
+		workTag.current = tag;
 
-				const targetUrl = `https://www.pixiv.net/ajax/user/${tag.path.other[0]}/profile/all?sensitiveFilterMode=userSetting`;
-				await fetchData(targetUrl).then((data) => {
-					const { illusts, manga, novels } = data.body;
+		const pageFromUrl = tag.param.p;
+		if (pageFromUrl) page.current = Number(pageFromUrl) + 1;
 
-					const combined = { ...illusts, ...manga };
-					const sortedKeys = Object.keys(combined).sort((a, b) => Number(b) - Number(a));
-
-					userWorks.current = {
-						illusts: Object.keys(illusts).reverse(),
-						manga: Object.keys(manga).reverse(),
-						illustManga: sortedKeys,
-						novels: Object.keys(novels).reverse(),
-					};
-				});
+		// ユーザーのイラスト・小説のidをまとめて取得
+		if (
+			PAGE_REGEX.userIllust.test(location.pathname) ||
+			PAGE_REGEX.userNovel.test(location.pathname)
+		) {
+			if (!tag.path.other) {
+				setHasMore(false);
+				return;
 			}
-		})();
-	}, []);
+
+			const targetUrl = `https://www.pixiv.net/ajax/user/${tag.path.other[0]}/profile/all?sensitiveFilterMode=userSetting`;
+			await fetchData(targetUrl).then((data) => {
+				if (!data) {
+					setHasMore(false);
+					return;
+				}
+
+				const { illusts, manga, novels } = data.body;
+				const combined = { ...illusts, ...manga };
+				const sortedKeys = Object.keys(combined).sort((a, b) => Number(b) - Number(a));
+
+				userWorks.current = {
+					illusts: Object.keys(illusts).reverse(),
+					manga: Object.keys(manga).reverse(),
+					illustManga: sortedKeys,
+					novels: Object.keys(novels).reverse(),
+				};
+			});
+		}
+	};
 
 	// 1ページ目にURLを書き換えるIntersectionObserverを追加
 	useEffect(() => {
@@ -194,11 +212,53 @@ const App = () => {
 		return () => observer.disconnect();
 	}, [workTag.current]);
 
+	// muteのオンオフをリアルタイムで反映
+	useEffect(() => {
+		setWorks((prevWorks) =>
+			prevWorks.map((work) =>
+				work.map((item) => {
+					if (item.isMuted !== undefined) {
+						item.isMuted = !item.isMuted;
+					}
+
+					item.illusts?.forEach((illust) => {
+						if (illust.isMuted !== undefined) {
+							illust.isMuted = !illust.isMuted;
+						}
+					});
+					item.novels?.forEach((novel) => {
+						if (novel.isMuted !== undefined) {
+							novel.isMuted = !novel.isMuted;
+						}
+					});
+
+					return item;
+				}),
+			),
+		);
+	}, [muteSettings.isMute]);
+
+	// ユーザー作品ページでミュートを行うと、空のdivが追加されるので非表示
+	useEffect(() => {
+		if (
+			!PAGE_REGEX.userIllust.test(location.pathname) &&
+			!PAGE_REGEX.userNovel.test(location.pathname)
+		) {
+			return;
+		}
+
+		const element = document.querySelector("div:empty:has(+div>div>ul)");
+		if (element) {
+			(element as HTMLElement).style.display = "none";
+		}
+	}, []);
+
 	const { ref } = useInView({
 		rootMargin: "50% 0px",
-		onChange: (inView) => {
+		onChange: async (inView) => {
 			if (inView) {
-				loadMore();
+				await firstPageRequest();
+				await loadMore();
 			}
 		},
 	});
