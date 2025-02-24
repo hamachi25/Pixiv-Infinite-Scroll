@@ -19,11 +19,11 @@ jobs:
                   mode: exactly
                   count: 1
                   labels: |
-                      - bug
-                      - feature
-                      - improvement
-                      - documentation
-                      - maintenance
-                      - translation
+                      bug
+                      feature
+                      improvement
+                      documentation
+                      maintenance
+                      translation
                   add_comment: true
                   message: "This PR is being prevented from merging because the label is missing."
