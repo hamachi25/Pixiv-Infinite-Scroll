@@ -29,6 +29,17 @@ export const UserMuteSection = ({ content }: Props) => {
 				})),
 			);
 		});
+
+		const unwatch = userMuteSettings.watch((users) => {
+			setUsers(
+				users.map((user) => ({
+					id: crypto.randomUUID(),
+					userId: user.id,
+					userName: user.name,
+				})),
+			);
+		});
+		return () => unwatch();
 	}, []);
 
 	const addUser = ({ userId, userName }: FormType) => {

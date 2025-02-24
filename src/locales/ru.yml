@@ -10,6 +10,8 @@ popup:
         button: Настройки отключения
 options:
     title: Настройки отключения
+    import: Импорт
+    export: Экспорт
     alreadyAdded: Уже добавлено
     tag:
         title: Отключить теги

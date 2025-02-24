@@ -10,6 +10,8 @@ popup:
         button: Mute Settings
 options:
     title: Mute Settings
+    import: Import
+    export: Export
     alreadyAdded: Already added
     tag:
         title: Mute Tag

@@ -10,6 +10,8 @@ popup:
         button: Pengaturan Bisu
 options:
     title: Pengaturan Bisu
+    import: Impor
+    export: Ekspor
     alreadyAdded: Sudah ditambahkan
     tag:
         title: Bisukan Tag

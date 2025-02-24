@@ -10,6 +10,8 @@ popup:
         button: إعدادات الكتم
 options:
     title: إعدادات الكتم
+    import: استيراد
+    export: تصدير
     alreadyAdded: تمت الإضافة بالفعل
     tag:
         title: كتم العلامات

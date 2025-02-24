@@ -10,6 +10,8 @@ popup:
         button: การตั้งค่าปิดเสียง
 options:
     title: การตั้งค่าปิดเสียง
+    import: นำเข้า
+    export: ส่งออก
     alreadyAdded: มีการเพิ่มแล้ว
     tag:
         title: ปิดเสียงแท็ก

@@ -10,6 +10,8 @@ popup:
         button: 静音设置
 options:
     title: 静音设置
+    import: 导入
+    export: 导出
     alreadyAdded: 已经添加
     tag:
         title: 静音标签

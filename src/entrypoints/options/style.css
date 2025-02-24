@@ -18,8 +18,8 @@
 		:root {
 			--text-normal: rgb(223, 223, 223);
 			--text-pale: rgb(171, 178, 190);
-			--delete-button: rgba(255, 255, 255, 0.2);
-			--delete-button-hover: rgba(255, 255, 255, 0.3);
+			--delete-button: rgba(255, 255, 255, 0.1);
+			--delete-button-hover: rgba(255, 255, 255, 0.2);
 			--border-noraml: rgba(255, 255, 255, 0.3);
 		}
 	}

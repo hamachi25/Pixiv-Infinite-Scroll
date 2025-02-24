@@ -10,6 +10,8 @@ popup:
         button: Cài đặt tắt tiếng
 options:
     title: Cài đặt tắt tiếng
+    import: Nhập
+    export: Xuất
     alreadyAdded: Đã được thêm vào
     tag:
         title: Tắt tiếng thẻ

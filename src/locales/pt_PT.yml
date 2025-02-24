@@ -10,6 +10,8 @@ popup:
         button: Configurações de silenciamento
 options:
     title: Configurações de silenciamento
+    import: Importar
+    export: Exportar
     alreadyAdded: Já foi adicionado
     tag:
         title: Silenciar tags

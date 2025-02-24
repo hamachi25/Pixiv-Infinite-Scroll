@@ -10,6 +10,8 @@ popup:
         button: म्यूट सेटिंग
 options:
     title: म्यूट सेटिंग
+    import: आयात करें
+    export: निर्यात करें
     alreadyAdded: पहले से जोड़ा जा चुका है
     tag:
         title: टैग म्यूट करें

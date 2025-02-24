@@ -10,6 +10,8 @@ popup:
         button: Stummschaltungseinstellungen
 options:
     title: Stummschaltungseinstellungen
+    import: Importieren
+    export: Exportieren
     alreadyAdded: Bereits hinzugefügt
     tag:
         title: Tag stummschalten

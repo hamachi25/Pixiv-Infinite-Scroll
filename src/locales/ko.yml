@@ -10,6 +10,8 @@ popup:
         button: 음소거 설정
 options:
     title: 뮤트 설정
+    import: 가져오기
+    export: 내보내기
     alreadyAdded: 이미 추가되었습니다
     tag:
         title: 태그 뮤트

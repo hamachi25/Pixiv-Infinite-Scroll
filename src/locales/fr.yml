@@ -10,6 +10,8 @@ popup:
         button: Paramètres de sourdine
 options:
     title: Paramètres de sourdine
+    import: Importer
+    export: Exporter
     alreadyAdded: Déjà ajouté
     tag:
         title: Mettre un tag en sourdine

@@ -1,3 +1,5 @@
+import { ExportButton } from "./components/ui/ExportButton";
+import { ImportButton } from "./components/ui/ImportButton";
 import { TagMuteSection } from "./components/TagMuteSection";
 import { UserMuteSection } from "./components/UserMuteSection";
 
@@ -31,7 +33,13 @@ const App = () => {
 			className="mx-auto flex h-screen max-w-[65rem] flex-col p-6"
 			dir={isRTL ? "rtl" : "ltr"}
 		>
-			<h1 className="text-xl font-bold">{i18n.t("options.title")}</h1>
+			<div className="flex items-center justify-between">
+				<h1 className="text-xl font-bold">{i18n.t("options.title")}</h1>
+				<div className="flex gap-4">
+					<ImportButton />
+					<ExportButton />
+				</div>
+			</div>
 			<div className="divider" />
 			<div className="flex w-full flex-1 gap-4 overflow-hidden">
 				<TagMuteSection content={muteSectionContent.tags} />

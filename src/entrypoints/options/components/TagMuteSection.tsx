@@ -23,6 +23,11 @@ export const TagMuteSection = ({ content }: Props) => {
 		tagMuteSettings.getValue().then((value) => {
 			setTags(value.map((tag) => ({ id: crypto.randomUUID(), tagName: tag })));
 		});
+
+		const unwatch = tagMuteSettings.watch((tags) => {
+			setTags(tags.map((tag) => ({ id: crypto.randomUUID(), tagName: tag })));
+		});
+		return () => unwatch();
 	}, []);
 
 	const addTag = ({ tag }: FormType) => {

@@ -10,6 +10,8 @@ popup:
         button: ミュート設定
 options:
     title: ミュート設定
+    import: インポート
+    export: エクスポート
     alreadyAdded: 既に追加されています
     tag:
         title: タグをミュート
