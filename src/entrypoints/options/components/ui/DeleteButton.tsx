@@ -15,7 +15,7 @@ export const DeleteButton = ({ content, item, handleDeleteItem }: Props) => {
 			className="btn btn-circle h-9 min-h-9 w-9 bg-[var(--delete-button)] hover:bg-[var(--delete-button-hover)]"
 			onClick={() => handleDeleteItem(item.id)}
 		>
-			<RiDeleteBin6Line size={18} />
+			<RiDeleteBin6Line size={17} />
 		</button>
 	);
 };
