@@ -3,9 +3,15 @@ export default defineContentScript({
 	runAt: "document_start",
 
 	async main() {
-		let currentSettings = await settingsItem.getValue();
-		let currentTags = await tagMuteSettings.getValue();
-		let currentUsers = await userMuteSettings.getValue();
+		injectScript("/getFetchRequest.js", {
+			keepInDom: true,
+		});
+
+		let [currentSettings, currentTags, currentUsers] = await Promise.all([
+			settingsItem.getValue(),
+			tagMuteSettings.getValue(),
+			userMuteSettings.getValue(),
+		]);
 
 		settingsItem.watch((settings) => {
 			currentSettings = settings;
@@ -15,10 +21,6 @@ export default defineContentScript({
 		});
 		userMuteSettings.watch((users) => {
 			currentUsers = users;
-		});
-
-		await injectScript("/getFetchRequest.js", {
-			keepInDom: true,
 		});
 
 		pisSettingsMessenger.onMessage("muteSettings", () => {
