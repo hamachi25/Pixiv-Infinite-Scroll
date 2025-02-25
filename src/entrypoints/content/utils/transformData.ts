@@ -10,30 +10,43 @@ const isIllustItem = (item: Work | AdContainer): item is Work => {
 	return !("isAdContainer" in item);
 };
 
+/*
+ *ミュート設定のオンオフで、リアルタイムで表示を切り替えている
+ *切り替える必要があるのは、isMuteがtrueの場合のみ
+ *isMuteがfalseの場合は、そもそも切り替える必要がないので、undefinedにしておく
+ */
 const filterMuted = (
 	item: Work,
 	muteSettings: MuteSettings,
 	type: "following" | "normal",
 ): boolean | undefined => {
-	// フォロー中ページは、作品にのみミュート適用
+	// フォロー中ページでは、ユーザーにはミュートしない
 	const pathName = location.pathname;
 	if (type === "normal" && PAGE_REGEX.following.test(pathName)) {
 		return undefined;
 	}
 
-	/*
-	 *ミュート設定のオンオフで、リアルタイムで表示を切り替えている
-	 *切り替える必要があるのは、isMuteがtrueの場合のみ
-	 *isMuteがfalseの場合は、そもそも切り替える必要がないので、undefinedにしておく
-	 */
-	const isMute =
-		muteSettings.users.some((user) => user.id === item.userId) ||
-		muteSettings.tags.some((tag) => item?.tags?.includes(tag));
+	const mutedUserIds = new Set(muteSettings.users.map((user) => user.id));
+	const mutedTags = new Set(muteSettings.tags);
 
-	if (!isMute) return undefined;
-	if (!muteSettings.isMute && isMute) return false;
+	// ユーザーがミュートされている場合
+	if (mutedUserIds.has(item.userId)) {
+		if (!muteSettings.isMute) return false;
+		return true;
+	}
 
-	return isMute;
+	// タグが存在しない場合
+	if (!item.tags || item.tags.length === 0) {
+		return undefined;
+	}
+
+	// ミュートされたタグが含まれているか確認
+	const isMute = item.tags.some((tag) => mutedTags.has(tag));
+	if (!isMute) {
+		return undefined;
+	} else {
+		return true;
+	}
 };
 
 export const transformData = (

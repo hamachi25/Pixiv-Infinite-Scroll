@@ -12,6 +12,14 @@ export default defineUnlistedScript(() => {
 				return response;
 			}
 
+			const muteSettings = await pisSettingsMessenger.sendMessage("muteSettings", null);
+			if (
+				!muteSettings.isMute ||
+				(muteSettings.tags.length === 0 && muteSettings.users.length === 0)
+			) {
+				return response;
+			}
+
 			const clonedResponse = response.clone();
 			let jsonResponse;
 			try {
@@ -20,9 +28,6 @@ export default defineUnlistedScript(() => {
 				console.error("JSON parse error:", jsonError);
 				return response;
 			}
-
-			const muteSettings = await pisSettingsMessenger.sendMessage("muteSettings", null);
-			if (!muteSettings.isMute) return response;
 
 			const filteredResponse = await filterFirstPageWorks(jsonResponse, muteSettings);
 

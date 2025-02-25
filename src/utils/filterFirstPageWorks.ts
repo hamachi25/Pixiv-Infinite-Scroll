@@ -2,11 +2,25 @@ import { PAGE_REGEX } from "@/constants/urlRegex";
 import { Work } from "@/types/works";
 import { TagMute, UserMute } from "@/types/storage";
 
-const filterMuted = (work: Work, muteSettings: { tags: string[]; users: UserMute[] }) => {
-	return (
-		!muteSettings.users.some((user) => user.id === work.userId) &&
-		!muteSettings.tags.some((tag) => work.tags?.includes(tag))
-	);
+const filterMuted = (
+	work: Work,
+	muteSettings: { tags: string[]; users: UserMute[]; isMute: boolean },
+): boolean => {
+	const mutedUserIds = new Set(muteSettings.users.map((user) => user.id));
+	const mutedTags = new Set(muteSettings.tags);
+
+	// ユーザーがミュートされている場合
+	if (mutedUserIds.has(work.userId)) {
+		return false;
+	}
+
+	// タグが存在しない場合
+	if (!work.tags || work.tags.length === 0) {
+		return true;
+	}
+
+	// ミュートされたタグが含まれているか確認
+	return !work.tags.some((tag) => mutedTags.has(tag));
 };
 
 export const filterFirstPageWorks = async (
