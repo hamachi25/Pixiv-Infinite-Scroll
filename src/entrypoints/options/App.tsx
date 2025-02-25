@@ -4,7 +4,7 @@ import { TagMuteSection } from "./components/TagMuteSection";
 import { UserMuteSection } from "./components/UserMuteSection";
 
 const lang = browser.i18n.getUILanguage();
-const isRTL = ["ar", "he", "fa", "ps", "ur", "sd"].includes(lang);
+const isRTL = ["ar"].includes(lang);
 
 const muteSectionContent = {
 	tags: {

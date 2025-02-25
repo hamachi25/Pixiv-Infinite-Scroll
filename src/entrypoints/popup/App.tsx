@@ -8,7 +8,7 @@ const formsLinks = {
 
 const lang = browser.i18n.getUILanguage();
 const formsLink = lang === "ja" ? formsLinks.ja : formsLinks.en;
-const isRTL = ["ar", "he", "fa", "ps", "ur", "sd"].includes(lang);
+const isRTL = ["ar"].includes(lang);
 
 const App = () => {
 	const [openInNewTab, setOpenInNewTab] = useState(false);
