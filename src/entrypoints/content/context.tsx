@@ -1,23 +1,34 @@
 import { createContext } from "react";
-import type { Settings } from "@/types/storage";
+import type { Settings, TagMute, UserMute } from "@/types/storage";
 import { settingsItem } from "@/utils/storage";
 import { fetchOrigin } from "./fetch/fetch";
 import { getElementSelectorByUrl } from "./utils/getElementSelectorByUrl";
 import { extractCsrfToken, extractIsSensitive } from "./utils/extractDataFromOrigin";
-import { PAGE_REGEX } from "./constants/urlRegex";
+import { PAGE_REGEX } from "@/constants/urlRegex";
 
 interface HTMLAnchorElementWithHandleClick extends HTMLAnchorElement {
 	_handleClick?: (e: MouseEvent) => void;
 }
 
 export const SettingContext = createContext<Settings | undefined>(undefined);
+export const MuteContext = createContext<{
+	isMute: boolean;
+	tags: TagMute[];
+	users: UserMute[];
+}>({
+	isMute: false,
+	tags: [],
+	users: [],
+});
 export const SensitiveContext = createContext<boolean>(false);
 export const CsrfContext = createContext<React.RefObject<string | undefined>>({
 	current: undefined,
 });
 
 export const Context = ({ children }: { children: React.ReactNode }) => {
-	const [settings, setSettings] = useState<Settings | undefined>(undefined);
+	const [settings, setSettings] = useState<Settings>({ openInNewTab: false, mute: false });
+	const [tagMute, setTagMute] = useState<string[]>(["null"]);
+	const [userMute, setUserMute] = useState<UserMute[]>([]);
 	const [isSensitive, setIsSensitive] = useState<boolean>(false);
 	const csrfToken = useRef<string | undefined>(undefined);
 
@@ -28,6 +39,28 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
 
 		const unwatch = settingsItem.watch((settings) => {
 			if (settings) setSettings(settings);
+		});
+		return () => unwatch();
+	}, []);
+
+	// ミュート設定
+	useEffect(() => {
+		tagMuteSettings.getValue().then((tags) => {
+			setTagMute(tags);
+		});
+
+		const unwatch = tagMuteSettings.watch((tags) => {
+			if (tags) setTagMute(tags);
+		});
+		return () => unwatch();
+	}, []);
+	useEffect(() => {
+		userMuteSettings.getValue().then((users) => {
+			if (users.length > 0) setUserMute(users);
+		});
+
+		const unwatch = userMuteSettings.watch((users) => {
+			if (users) setUserMute(users);
 		});
 		return () => unwatch();
 	}, []);
@@ -80,9 +113,11 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
 
 	return (
 		<SettingContext value={settings}>
-			<SensitiveContext value={isSensitive}>
-				<CsrfContext value={csrfToken}>{children}</CsrfContext>
-			</SensitiveContext>
+			<MuteContext value={{ isMute: settings.mute, tags: tagMute, users: userMute }}>
+				<SensitiveContext value={isSensitive}>
+					<CsrfContext value={csrfToken}>{children}</CsrfContext>
+				</SensitiveContext>
+			</MuteContext>
 		</SettingContext>
 	);
 };

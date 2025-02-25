@@ -1,4 +1,4 @@
-import { Work } from "../type";
+import type { Work } from "@/types/works";
 import { useStore } from "@content/store";
 
 export const handleProfileMouseEnter = (e: React.MouseEvent<HTMLDivElement>, work: Work) => {

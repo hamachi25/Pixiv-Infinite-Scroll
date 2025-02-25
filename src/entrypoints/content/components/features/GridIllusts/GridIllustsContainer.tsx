@@ -1,4 +1,4 @@
-import type { Work } from "@content/type";
+import type { Work } from "@/types/works";
 import { GridImage } from "../../ui/GridImage";
 import { BookmarkButton } from "../../ui/BookmarkButton";
 import { DeletedIllust } from "../../icons/illust/DeletedIllust";
@@ -9,18 +9,21 @@ import { Profile } from "./Profile";
 
 interface Props {
 	illusts: Work[];
-	type: string;
+	type: "user" | "bookmark" | "other";
 }
 
 export const GridIllustsContainer = ({ illusts, type }: Props) => {
+	const filteredIllusts =
+		type === "other" ? illusts.filter((illust) => !illust.isMuted) : illusts;
+
 	return (
 		<ul className="mt-[24px] grid grid-cols-[repeat(auto-fit,184px)] gap-[24px]">
-			{illusts.map((illust) => (
+			{filteredIllusts.map((illust) => (
 				<li key={illust.id}>
 					<div className="relative">
 						{/* メイン画像 */}
 						{!illust.maskReason ? (
-							<GridImage illust={illust} />
+							<GridImage illust={illust} type={type} />
 						) : (
 							// R18・R18G・削除済み
 							<div className="flex h-[184px] w-[184px] items-center justify-center rounded-[8px] bg-[var(--charcoal-background2)]">
@@ -53,7 +56,7 @@ export const GridIllustsContainer = ({ illusts, type }: Props) => {
 						<BookmarkButton
 							bookmarkData={illust.bookmarkData}
 							work={illust}
-							type="illust"
+							type={type === "bookmark" ? "bookmark" : "illust"}
 						/>
 					</div>
 
@@ -61,7 +64,7 @@ export const GridIllustsContainer = ({ illusts, type }: Props) => {
 					<WorkTitle illust={illust} />
 
 					{/* プロフィール */}
-					{type === "other" && <Profile illust={illust} />}
+					{type !== "user" && <Profile illust={illust} />}
 				</li>
 			))}
 		</ul>

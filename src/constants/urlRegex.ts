@@ -10,6 +10,16 @@ export const PAGE_REGEX = {
 	userNovel: /\/users\/\d+\/novels/,
 };
 
+export const API_REGEX = {
+	top: /\/ajax\/top\/(illust|manga)\?.+/,
+	bookmark: /\/ajax\/user\/\d+\/(novels|illusts)\/bookmarks\?.+/,
+	following: /\/ajax\/user\/\d+\/following\?.+/,
+	new: /\/ajax\/follow_latest\/(illust|novel)\?.+/,
+	tag: /\/ajax\/search\/(artworks|illustrations|manga|novels)\/.+\?/,
+	userTag: /\/ajax\/user\/\d+\/(illustmanga|illusts|manga|novels)\/tag\?.+/,
+	userWorks: /\/ajax\/user\/\d+\/profile\/(illusts|novels)\?.+/,
+};
+
 export const URL_SELECTORS: { pattern: RegExp; selector: string }[] = [
 	{
 		pattern: PAGE_REGEX.tagIllust,

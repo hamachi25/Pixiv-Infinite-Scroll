@@ -1,4 +1,4 @@
-import type { Work } from "@content/type";
+import type { Work } from "@/types/works";
 import { FollowingContainer } from "../components/features/Following/FollowingContainer";
 
 interface Props {

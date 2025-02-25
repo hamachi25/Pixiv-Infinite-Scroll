@@ -1,4 +1,4 @@
-import type { Work } from "@content/type";
+import type { Work } from "@/types/works";
 import { SettingContext } from "@content/context";
 
 interface Props {
@@ -17,7 +17,11 @@ export const WorkTitle = ({ illust }: Props) => {
 					target={settings?.openInNewTab ? "_blank" : undefined}
 					rel="noreferrer"
 				>
-					{illust.title}
+					{illust.isMuted ? (
+						<span className="text-[var(--charcoal-text3)]">{i18n.t("mute.muted")}</span>
+					) : (
+						illust.title
+					)}
 				</a>
 			) : (
 				// R18・R18G・削除済み

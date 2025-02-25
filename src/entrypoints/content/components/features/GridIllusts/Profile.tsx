@@ -1,4 +1,4 @@
-import type { Work } from "@content/type";
+import type { Work } from "@/types/works";
 import { SettingContext } from "@content/context";
 import { handleProfileMouseEnter, handleProfileMouseLeave } from "../../../utils/profilePopup";
 

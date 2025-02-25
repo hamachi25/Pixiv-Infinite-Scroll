@@ -1,4 +1,5 @@
-import type { Work, NovelType } from "@content/type";
+import type { NovelType } from "@content/type";
+import type { Work } from "@/types/works";
 import { NovelContainer } from "../components/features/Novel/NovelContainer";
 
 interface Props {
@@ -7,9 +8,12 @@ interface Props {
 }
 
 const Novels = ({ novels, type }: Props) => {
+	const filteredNovels =
+		type === "tag" || type === "newNovel" ? novels.filter((novel) => !novel.isMuted) : novels;
+
 	return (
 		<ul className="-mx-[12px] flex flex-wrap @container">
-			{novels.map((novel) => (
+			{filteredNovels.map((novel) => (
 				<NovelContainer key={novel.id} novel={novel} type={type} />
 			))}
 		</ul>
