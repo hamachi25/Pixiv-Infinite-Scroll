@@ -98,7 +98,7 @@ export const UserMuteSection = ({ content }: Props) => {
 						{...register("userId", {
 							required: true,
 							pattern: {
-								value: /\d+/,
+								value: /^\d+$/,
 								message: i18n.t("options.user.inputIdError"),
 							},
 							validate: (value) =>
