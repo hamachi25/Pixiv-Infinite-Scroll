@@ -13,7 +13,13 @@ export default defineUnlistedScript(() => {
 			}
 
 			const clonedResponse = response.clone();
-			const jsonResponse = await clonedResponse.json();
+			let jsonResponse;
+			try {
+				jsonResponse = await clonedResponse.json();
+			} catch (jsonError) {
+				console.error("JSON parse error:", jsonError);
+				return response;
+			}
 
 			const muteSettings = await pisSettingsMessenger.sendMessage("muteSettings", null);
 			if (!muteSettings.isMute) return response;
