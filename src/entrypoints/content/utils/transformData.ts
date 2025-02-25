@@ -31,7 +31,12 @@ export const transformData = (data: any, location: Location): Work[] => {
 	}
 
 	if (PAGE_REGEX.userIllust.test(pathName) || PAGE_REGEX.userNovel.test(pathName)) {
-		illustData = Object.values(data.body.works).reverse(); // オブジェクトになっているので配列にする
+		const tagWorks = /\/users\/\d+\/(illustrations|manga|artworks|novels)\/.+/;
+		if (tagWorks.test(pathName)) {
+			illustData = data.body.works;
+		} else {
+			illustData = Object.values(data.body.works).reverse(); // オブジェクトになっているので配列にする
+		}
 	}
 
 	if (PAGE_REGEX.tagIllust.test(pathName)) {
