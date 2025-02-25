@@ -42,12 +42,14 @@ export const filterFirstPageWorks = async (
 		data.body.thumbnails.novel = data.body.thumbnails.novel.filter((work: Work) =>
 			filterMuted(work, muteSettings),
 		);
+		return data;
 	}
 
 	if (PAGE_REGEX.newIllust.test(pathName)) {
 		data.body.thumbnails.illust = data.body.thumbnails.illust.filter((work: Work) =>
 			filterMuted(work, muteSettings),
 		);
+		return data;
 	}
 
 	if (PAGE_REGEX.following.test(pathName)) {
@@ -61,6 +63,7 @@ export const filterFirstPageWorks = async (
 				.filter((novel: Work) => filterMuted(novel, muteSettings));
 			return user;
 		});
+		return data;
 	}
 
 	if (PAGE_REGEX.userIllust.test(pathName) || PAGE_REGEX.userNovel.test(pathName)) {
@@ -79,6 +82,7 @@ export const filterFirstPageWorks = async (
 				);
 			}
 		}
+		return data;
 	}
 
 	if (PAGE_REGEX.tagIllust.test(pathName)) {
@@ -95,12 +99,14 @@ export const filterFirstPageWorks = async (
 		} else if (data.body.manga?.data) {
 			data.body.manga.data = filteredWorks;
 		}
+		return data;
 	}
 
 	if (PAGE_REGEX.tagNovel.test(pathName)) {
 		data.body.novel.data = data.body.novel.data.filter((work: Work) =>
 			filterMuted(work, muteSettings),
 		);
+		return data;
 	}
 
 	// トップページからフォロー新着に移動すると、データがそのまま使用されるため、ここでフィルタリング
@@ -109,6 +115,7 @@ export const filterFirstPageWorks = async (
 		data.body.thumbnails.illust = data.body.thumbnails.illust.filter((work: Work) =>
 			filterMuted(work, muteSettings),
 		);
+		return data;
 	}
 
 	return data;

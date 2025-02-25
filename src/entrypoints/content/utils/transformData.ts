@@ -17,7 +17,11 @@ const isIllustItem = (item: Work | AdContainer): item is Work => {
  */
 const filterMuted = (
 	item: Work,
-	muteSettings: MuteSettings,
+	mutedItems: {
+		mutedUserIds: Set<string>;
+		mutedTags: Set<string>;
+		isMute: boolean;
+	},
 	type: "following" | "normal",
 ): boolean | undefined => {
 	// フォロー中ページでは、ユーザーにはミュートしない
@@ -26,12 +30,9 @@ const filterMuted = (
 		return undefined;
 	}
 
-	const mutedUserIds = new Set(muteSettings.users.map((user) => user.id));
-	const mutedTags = new Set(muteSettings.tags);
-
 	// ユーザーがミュートされている場合
-	if (mutedUserIds.has(item.userId)) {
-		if (!muteSettings.isMute) return false;
+	if (mutedItems.mutedUserIds.has(item.userId)) {
+		if (!mutedItems.isMute) return false;
 		return true;
 	}
 
@@ -41,10 +42,11 @@ const filterMuted = (
 	}
 
 	// ミュートされたタグが含まれているか確認
-	const isMute = item.tags.some((tag) => mutedTags.has(tag));
+	const isMute = item.tags.some((tag) => mutedItems.mutedTags.has(tag));
 	if (!isMute) {
 		return undefined;
 	} else {
+		if (!mutedItems.isMute) return false;
 		return true;
 	}
 };
@@ -55,6 +57,10 @@ export const transformData = (
 	location: Location,
 	muteSettings: MuteSettings,
 ): Work[] => {
+	const mutedUserIds = new Set(muteSettings.users.map((user) => user.id));
+	const mutedTags = new Set(muteSettings.tags);
+	const mutedItems = { mutedUserIds, mutedTags, isMute: muteSettings.isMute };
+
 	const pathName = location.pathname;
 	let illustData = null;
 
@@ -105,11 +111,11 @@ export const transformData = (
 		userComment: item.userComment,
 		illusts: item.illusts?.map((illust) => ({
 			...illust,
-			isMuted: filterMuted(illust, muteSettings, "following"),
+			isMuted: filterMuted(illust, mutedItems, "following"),
 		})),
 		novels: item.novels?.map((novel) => ({
 			...novel,
-			isMuted: filterMuted(novel, muteSettings, "following"),
+			isMuted: filterMuted(novel, mutedItems, "following"),
 		})),
 		commission: item.commission,
 
@@ -122,6 +128,6 @@ export const transformData = (
 		description: item.description,
 		seriesTitle: item.seriesTitle,
 		seriesId: item.seriesId,
-		isMuted: filterMuted(item, muteSettings, "normal"),
+		isMuted: filterMuted(item, mutedItems, "normal"),
 	}));
 };
