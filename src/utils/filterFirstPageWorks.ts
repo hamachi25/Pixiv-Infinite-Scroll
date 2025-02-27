@@ -4,13 +4,14 @@ import { TagMute, UserMute } from "@/types/storage";
 
 const filterMuted = (
 	work: Work,
-	muteSettings: { tags: string[]; users: UserMute[]; isMute: boolean },
+	mutedItems: {
+		mutedUserIds: Set<string>;
+		mutedTags: Set<string>;
+		isMute: boolean;
+	},
 ): boolean => {
-	const mutedUserIds = new Set(muteSettings.users.map((user) => user.id));
-	const mutedTags = new Set(muteSettings.tags);
-
 	// ユーザーがミュートされている場合
-	if (mutedUserIds.has(work.userId)) {
+	if (mutedItems.mutedUserIds.has(work.userId)) {
 		return false;
 	}
 
@@ -20,7 +21,7 @@ const filterMuted = (
 	}
 
 	// ミュートされたタグが含まれているか確認
-	return !work.tags.some((tag) => mutedTags.has(tag));
+	return !work.tags.some((tag) => mutedItems.mutedTags.has(tag));
 };
 
 export const filterFirstPageWorks = async (
@@ -38,16 +39,20 @@ export const filterFirstPageWorks = async (
 		return data;
 	}
 
+	const mutedUserIds = new Set(muteSettings.users.map((user) => user.id));
+	const mutedTags = new Set(muteSettings.tags);
+	const mutedItems = { mutedUserIds, mutedTags, isMute: muteSettings.isMute };
+
 	if (PAGE_REGEX.newNovel.test(pathName)) {
 		data.body.thumbnails.novel = data.body.thumbnails.novel.filter((work: Work) =>
-			filterMuted(work, muteSettings),
+			filterMuted(work, mutedItems),
 		);
 		return data;
 	}
 
 	if (PAGE_REGEX.newIllust.test(pathName)) {
 		data.body.thumbnails.illust = data.body.thumbnails.illust.filter((work: Work) =>
-			filterMuted(work, muteSettings),
+			filterMuted(work, mutedItems),
 		);
 		return data;
 	}
@@ -57,10 +62,10 @@ export const filterFirstPageWorks = async (
 		data.body.users = data.body.users.map((user: any) => {
 			user.illusts = user.illusts
 				.map((illust: Work) => illust)
-				.filter((illust: Work) => filterMuted(illust, muteSettings));
+				.filter((illust: Work) => filterMuted(illust, mutedItems));
 			user.novels = user.novels
 				.map((novel: Work) => novel)
-				.filter((novel: Work) => filterMuted(novel, muteSettings));
+				.filter((novel: Work) => filterMuted(novel, mutedItems));
 			return user;
 		});
 		return data;
@@ -70,14 +75,12 @@ export const filterFirstPageWorks = async (
 		// ユーザー一覧のタグ絞りの場合
 		const userTag = /\/users\/\d+\/(illustrations|manga|artworks)\/.+/;
 		if (userTag.test(pathName)) {
-			data.body.works = data.body.works.filter((work: Work) =>
-				filterMuted(work, muteSettings),
-			);
+			data.body.works = data.body.works.filter((work: Work) => filterMuted(work, mutedItems));
 		} else {
 			if (data.body.works) {
 				data.body.works = Object.fromEntries(
 					Object.entries(data.body.works).filter(([, work]) =>
-						filterMuted(work as Work, muteSettings),
+						filterMuted(work as Work, mutedItems),
 					),
 				);
 			}
@@ -90,7 +93,7 @@ export const filterFirstPageWorks = async (
 			data.body.illustManga?.data ??
 			data.body.illust?.data ??
 			data.body.manga?.data
-		)?.filter((work: Work) => filterMuted(work, muteSettings));
+		)?.filter((work: Work) => filterMuted(work, mutedItems));
 
 		if (data.body.illustManga?.data) {
 			data.body.illustManga.data = filteredWorks;
@@ -104,7 +107,7 @@ export const filterFirstPageWorks = async (
 
 	if (PAGE_REGEX.tagNovel.test(pathName)) {
 		data.body.novel.data = data.body.novel.data.filter((work: Work) =>
-			filterMuted(work, muteSettings),
+			filterMuted(work, mutedItems),
 		);
 		return data;
 	}
@@ -113,7 +116,7 @@ export const filterFirstPageWorks = async (
 	const topPageRegex = /^\/(illustration|manga)?$/;
 	if (topPageRegex.test(pathName)) {
 		data.body.thumbnails.illust = data.body.thumbnails.illust.filter((work: Work) =>
-			filterMuted(work, muteSettings),
+			filterMuted(work, mutedItems),
 		);
 		return data;
 	}
