@@ -6,7 +6,7 @@ import ProfilePopup from "./pages/ProfilePopup.tsx";
 
 import { getElementSelectorByUrl } from "./utils/getElementSelectorByUrl";
 import { createStyleElement } from "./utils/createStyleElement";
-import { PAGE_REGEX } from "./constants/urlRegex";
+import { PAGE_REGEX } from "@/constants/urlRegex.ts";
 import { Context } from "./context";
 
 export default defineContentScript({

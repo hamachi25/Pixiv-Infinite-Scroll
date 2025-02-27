@@ -1,9 +1,33 @@
-description: When you scroll, the next page loads automatically, allowing you to browse pixiv artworks comfortably.
+description: By simply scrolling, the next page is automatically loaded, allowing you to browse pixiv works seamlessly.
 popup:
-    report: Bug Report / Feature Request
+    report: Bug Report/Feature Request
     openInNewTab:
         title: Open link in a new tab
         detail: Open illustrations and novels in a new tab.
+    mute:
+        title: Mute Tag/User
+        detail: Apply mute settings.
+        button: Mute Settings
+options:
+    title: Mute Settings
+    import: Import
+    export: Export
+    alreadyAdded: Already added
+    example: "e.g. "
+    tag:
+        title: Mute Tag
+        detail: Enter the tag name you want to mute.
+        inputName: Tag Name
+        addButtonText: Add
+        delButtonText: Delete Tag
+    user:
+        title: Mute User
+        detail: Enter the user ID and user name (optional) you want to mute.
+        inputId: User ID
+        inputIdError: Please enter a number.
+        inputName: User Name (optional)
+        addButtonText: Add
+        delButtonText: Delete User
 following:
     follow: Follow
     following: Following
@@ -22,3 +46,5 @@ illust:
     restrict: Restricted (Adult Content)
 profilePopup:
     view: View Profile
+mute:
+    muted: Muted

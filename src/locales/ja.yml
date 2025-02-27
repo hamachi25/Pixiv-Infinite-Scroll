@@ -1,9 +1,33 @@
-description: スクロールするだけで次のページを自動読み込みし、快適にpixivの作品を閲覧できます。
+description: スクロールするだけで次のページが自動で読み込まれ、途切れることなくpixivの作品を閲覧できます。
 popup:
     report: 不具合報告・機能提案
     openInNewTab:
         title: リンクを新しいタブで開く
         detail: イラスト・小説を新しいタブで開きます。
+    mute:
+        title: タグ・ユーザーをミュート
+        detail: ミュート設定を適用します。
+        button: ミュート設定
+options:
+    title: ミュート設定
+    import: インポート
+    export: エクスポート
+    alreadyAdded: 既に追加されています
+    example: 例：
+    tag:
+        title: タグをミュート
+        detail: ミュートしたいタグ名を入力してください。
+        inputName: タグ名
+        addButtonText: 追加
+        delButtonText: タグを削除
+    user:
+        title: ユーザーをミュート
+        detail: ミュートしたいユーザーIDとユーザー名（任意）を入力してください。
+        inputId: ユーザーID
+        inputIdError: 半角数字を入力してください。
+        inputName: ユーザー名（任意）
+        addButtonText: 追加
+        delButtonText: ユーザーを削除
 following:
     follow: フォローする
     following: フォロー中
@@ -22,3 +46,5 @@ illust:
     restrict: 閲覧制限中
 profilePopup:
     view: プロフィールを見る
+mute:
+    muted: ミュート中

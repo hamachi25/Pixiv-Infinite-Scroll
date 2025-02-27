@@ -1,6 +1,30 @@
-description: Durch einfaches Scrollen wird die nächste Seite automatisch geladen, sodass Sie bequem die Werke auf pixiv durchsuchen können.
+description: Durch einfaches Scrollen wird die nächste Seite automatisch geladen, sodass du ohne Unterbrechung Werke auf pixiv durchstöbern kannst.
 popup:
-    report: Problem melden / Funktion vorschlagen
+    report: Problem melden/Funktion vorschlagen
     openInNewTab:
         title: Link in einem neuen Tab öffnen
         detail: Illustrationen und Romane in einem neuen Tab öffnen.
+    mute:
+        title: Tags/Benutzer stummschalten
+        detail: Stummschalteinstellungen anwenden.
+        button: Stummschalteinstellungen
+options:
+    title: Stummschalteinstellungen
+    import: Importieren
+    export: Exportieren
+    alreadyAdded: Bereits hinzugefügt
+    example: "z.B. "
+    tag:
+        title: Tag stummschalten
+        detail: Geben Sie den Namen des Tags ein, das Sie stummschalten möchten.
+        inputName: Tag-Name
+        addButtonText: Hinzufügen
+        delButtonText: Tag löschen
+    user:
+        title: Benutzer stummschalten
+        detail: Benutzer-ID und optional den Benutzernamen eingeben.
+        inputId: Benutzer-ID
+        inputIdError: Bitte geben Sie nur Ziffern ein.
+        inputName: Benutzername (optional)
+        addButtonText: Hinzufügen
+        delButtonText: Benutzer löschen

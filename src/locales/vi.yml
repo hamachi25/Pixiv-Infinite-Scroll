@@ -1,0 +1,30 @@
+description: Chỉ cần cuộn để tải trang tiếp theo tự động và xem các tác phẩm trên pixiv mà không bị gián đoạn.
+popup:
+    report: Báo cáo lỗi/Đề xuất tính năng
+    openInNewTab:
+        title: Mở liên kết trong tab mới
+        detail: Mở hình minh họa / tiểu thuyết trong tab mới.
+    mute:
+        title: Tắt tiếng thẻ/người dùng
+        detail: Áp dụng cài đặt tắt tiếng.
+        button: Cài đặt tắt tiếng
+options:
+    title: Cài đặt tắt tiếng
+    import: Nhập
+    export: Xuất
+    alreadyAdded: Đã được thêm vào
+    example: "ví dụ: "
+    tag:
+        title: Tắt tiếng thẻ
+        detail: Nhập tên thẻ bạn muốn tắt tiếng.
+        inputName: Tên thẻ
+        addButtonText: Thêm
+        delButtonText: Xóa thẻ
+    user:
+        title: Tắt tiếng người dùng
+        detail: Nhập ID người dùng và tên người dùng (tùy chọn) bạn muốn tắt tiếng.
+        inputId: ID người dùng
+        inputIdError: Vui lòng nhập số.
+        inputName: Tên người dùng (tùy chọn)
+        addButtonText: Thêm
+        delButtonText: Xóa người dùng

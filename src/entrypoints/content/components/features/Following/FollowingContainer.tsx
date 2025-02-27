@@ -1,4 +1,4 @@
-import type { Work } from "@content/type";
+import type { Work } from "@/types/works";
 import { NovelContainer } from "../Novel/NovelContainer";
 import { GridImage } from "../../ui/GridImage";
 import { BookmarkButton } from "../../ui/BookmarkButton";
@@ -74,7 +74,7 @@ export const FollowingContainer = ({ profiles }: Props) => {
 										{profile.illusts?.map((illust) => (
 											<li key={illust.id} className="w-[184px] min-w-[184px]">
 												<div className="relative">
-													<GridImage illust={illust} />
+													<GridImage illust={illust} type="following" />
 													<BookmarkButton
 														bookmarkData={illust.bookmarkData}
 														work={illust}

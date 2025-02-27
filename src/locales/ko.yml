@@ -1,9 +1,33 @@
-description: 스크롤하기만 하면 다음 페이지가 자동으로 로드되어 편하게 pixiv 작품을 감상할 수 있습니다.
+description: 스크롤만 하면 다음 페이지가 자동으로 로드되어 끊김 없이 Pixiv의 작품을 감상할 수 있습니다.
 popup:
     report: 버그 신고 및 기능 제안
     openInNewTab:
         title: 링크를 새 탭에서 열기
         detail: 일러스트 및 소설을 새 탭에서 엽니다.
+    mute:
+        title: 태그/사용자 음소거
+        detail: 음소거 설정을 적용합니다.
+        button: 음소거 설정
+options:
+    title: 뮤트 설정
+    import: 가져오기
+    export: 내보내기
+    alreadyAdded: 이미 추가되었습니다
+    example: "예: "
+    tag:
+        title: 태그 뮤트
+        detail: 뮤트하고 싶은 태그명을 입력하세요.
+        inputName: 태그명
+        addButtonText: 추가
+        delButtonText: 태그 삭제
+    user:
+        title: 사용자 뮤트
+        detail: 뮤트하고 싶은 사용자 ID와 사용자명(선택)을 입력하세요.
+        inputId: 사용자 ID
+        inputIdError: 숫자를 입력하세요.
+        inputName: 사용자명(선택)
+        addButtonText: 추가
+        delButtonText: 사용자 삭제
 following:
     follow: 팔로우하기
     following: 팔로우 중
@@ -22,3 +46,5 @@ illust:
     restrict: 열람 제한 중
 profilePopup:
     view: 프로필 보기
+mute:
+    muted: 뮤트중

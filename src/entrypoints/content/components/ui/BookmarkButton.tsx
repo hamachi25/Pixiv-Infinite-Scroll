@@ -1,4 +1,4 @@
-import type { Work } from "@content/type";
+import type { Work } from "@/types/works";
 import { postData } from "../../fetch/post";
 import { CsrfContext, SensitiveContext } from "@content/context";
 import { fetchOrigin } from "../../fetch/fetch";
@@ -11,7 +11,7 @@ interface Props {
 		private: boolean;
 	} | null;
 	work: Work;
-	type: "illust" | "novel";
+	type: "illust" | "bookmark" | "novel";
 }
 
 export const BookmarkButton = ({ bookmarkData, work, type }: Props) => {
@@ -94,7 +94,10 @@ export const BookmarkButton = ({ bookmarkData, work, type }: Props) => {
 	};
 
 	const showBookmarkButton = () => {
-		return !(isSensitive && (work.sl === 4 || work.sl === 6)) || isBookmarked;
+		return (
+			(!(isSensitive && (work.sl === 4 || work.sl === 6)) || isBookmarked) &&
+			(type === "novel" || type === "bookmark" || !work.isMuted)
+		);
 	};
 
 	return (

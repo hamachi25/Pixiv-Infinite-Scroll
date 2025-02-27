@@ -1,0 +1,30 @@
+description: การเลื่อนหน้าจอจะโหลดหน้าถัดไปโดยอัตโนมัติ ทำให้คุณสามารถดูผลงานใน pixiv ได้อย่างต่อเนื่อง
+popup:
+    report: รายงานข้อผิดพลาดและข้อเสนอแนะ
+    openInNewTab:
+        title: เปิดลิงก์ในแท็บใหม่
+        detail: เปิดภาพประกอบและนิยายในแท็บใหม่
+    mute:
+        title: ปิดเสียงแท็กและผู้ใช้
+        detail: ใช้การตั้งค่าปิดเสียง
+        button: การตั้งค่าปิดเสียง
+options:
+    title: การตั้งค่าปิดเสียง
+    import: นำเข้า
+    export: ส่งออก
+    alreadyAdded: มีการเพิ่มแล้ว
+    example: "เช่น: "
+    tag:
+        title: ปิดเสียงแท็ก
+        detail: กรุณาใส่ชื่อแท็กที่ต้องการปิดเสียง
+        inputName: ชื่อแท็ก
+        addButtonText: เพิ่ม
+        delButtonText: ลบแท็ก
+    user:
+        title: ปิดเสียงผู้ใช้
+        detail: กรุณาใส่ ID ผู้ใช้และชื่อผู้ใช้ (ถ้ามี) ที่ต้องการปิดเสียง
+        inputId: ID ผู้ใช้
+        inputIdError: กรุณาใส่ตัวเลขเท่านั้น
+        inputName: ชื่อผู้ใช้ (ถ้ามี)
+        addButtonText: เพิ่ม
+        delButtonText: ลบผู้ใช้
