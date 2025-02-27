@@ -9,7 +9,7 @@ Pixiv Infinite Scroll is an infinite scroll extension optimized for pixiv.
 <a href="https://chromewebstore.google.com/detail/pixiv-infinite-scroll/ihbbldgmjgjfpglmceokpdjenkjedcnb"><img alt="Chrome WebStore" width="191.8" height="58" src="https://developer.chrome.com/static/docs/webstore/branding/image/UV4C4ybeBTsZt43U4xis.png"></a>
 <a href="https://addons.mozilla.org/ja/firefox/addon/pixiv-infinite-scroll/"><img alt="Firefox Browser ADD-ONS" width="172" height="60" src="https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png"></a>
 
-## Currently supported pages
+## Supported pages
 
 - Tag Search
 - User Profile
@@ -17,9 +17,7 @@ Pixiv Infinite Scroll is an infinite scroll extension optimized for pixiv.
 - Latest by followed
 - Bookmarks
 
-If there are any unsupported pages, please make a feature request.
-
-## Bug Reports / Feature Requests
+## Bug Reports/Feature Requests
 
 - [GitHub Issue](https://github.com/hamachi25/Pixiv-Infinite-Scroll/issues)
 - [Google Form](https://forms.gle/nWLZzi86qnWaAyEs7)
@@ -74,6 +72,21 @@ pnpm build
 pnpm build:firefox
 ```
 
+### ZIP
+
+```shell
+# Chrome
+pnpm zip
+```
+
+```shell
+# Firefox
+pnpm zip:firefox
+```
+
 ## Translation
 
 If you would like to help with translation, please check [src/locales/](https://github.com/hamachi25/Pixiv-Infinite-Scroll/tree/main/src/locales).
+
+Please follow Conventional Commits for commit messages.
+Example: `fix: fix english translation`

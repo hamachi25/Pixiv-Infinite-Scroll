@@ -19,8 +19,6 @@ Pixiv Infinite Scrollはpixivに最適化された無限スクロール拡張機
 - フォロー新着
 - ブックマーク
 
-対応していないページがあれば、機能提案までお願します。
-
 ## 不具合報告・機能提案
 
 - [GitHub Issue](https://github.com/hamachi25/Pixiv-Infinite-Scroll/issues)
@@ -76,6 +74,21 @@ pnpm build
 pnpm build:firefox
 ```
 
+### ZIP
+
+```shell
+# Chrome
+pnpm zip
+```
+
+```shell
+# Firefox
+pnpm zip:firefox
+```
+
 ## 翻訳
 
 翻訳にご協力頂ける方は、[src/locales/](https://github.com/hamachi25/Pixiv-Infinite-Scroll/tree/main/src/locales)をご確認ください。
+
+Conventional Commitsに従ってコミットメッセージを書いてください。
+例：`fix: 英訳を修正`
