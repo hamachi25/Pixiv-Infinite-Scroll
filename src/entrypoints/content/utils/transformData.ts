@@ -97,6 +97,8 @@ export const transformData = (
 		illustData = data.body.novel.data;
 	}
 
+	const shouldFilterMuted = muteSettings.tags.length > 0 || muteSettings.users.length > 0;
+
 	return (illustData || []).filter(isIllustItem).map((item: Work) => ({
 		id: item.id,
 		title: item.title,
@@ -116,11 +118,11 @@ export const transformData = (
 		userComment: item.userComment,
 		illusts: item.illusts?.map((illust) => ({
 			...illust,
-			isMuted: filterMuted(illust, mutedItems, "following"),
+			isMuted: shouldFilterMuted ? filterMuted(illust, mutedItems, "following") : undefined,
 		})),
 		novels: item.novels?.map((novel) => ({
 			...novel,
-			isMuted: filterMuted(novel, mutedItems, "following"),
+			isMuted: shouldFilterMuted ? filterMuted(novel, mutedItems, "following") : undefined,
 		})),
 		commission: item.commission,
 
@@ -133,6 +135,6 @@ export const transformData = (
 		description: item.description,
 		seriesTitle: item.seriesTitle,
 		seriesId: item.seriesId,
-		isMuted: filterMuted(item, mutedItems, "normal"),
+		isMuted: shouldFilterMuted ? filterMuted(item, mutedItems, "normal") : undefined,
 	}));
 };
