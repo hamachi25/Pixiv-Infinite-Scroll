@@ -1,4 +1,4 @@
-description: スクロールするだけで次のページを自動読み込みし、快適にpixivの作品を閲覧できます。
+description: スクロールするだけで次のページが自動で読み込まれ、途切れることなくpixivの作品を閲覧できます。
 popup:
     report: 不具合報告・機能提案
     openInNewTab:
@@ -13,21 +13,19 @@ options:
     import: インポート
     export: エクスポート
     alreadyAdded: 既に追加されています
+    example: 例：
     tag:
         title: タグをミュート
         detail: ミュートしたいタグ名を入力してください。
         inputName: タグ名
-        exampleName: 例：
         addButtonText: 追加
         delButtonText: タグを削除
     user:
         title: ユーザーをミュート
         detail: ミュートしたいユーザーIDとユーザー名（任意）を入力してください。
         inputId: ユーザーID
-        exampleId: 例：
         inputIdError: 半角数字を入力してください。
         inputName: ユーザー名（任意）
-        exampleName: 例：
         addButtonText: 追加
         delButtonText: ユーザーを削除
 following:

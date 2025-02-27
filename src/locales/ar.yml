@@ -1,11 +1,11 @@
-description: بمجرد التمرير، سيتم تحميل الصفحة التالية تلقائيًا، مما يتيح لك تصفح الأعمال على pixiv بكل راحة.
+description: يتم تحميل الصفحة التالية تلقائيًا أثناء التمرير، مما يتيح لك تصفح أعمال pixiv دون انقطاع.
 popup:
-    report: الإبلاغ عن مشكلة / اقتراح ميزة
+    report: الإبلاغ عن مشكلة/اقتراح ميزة
     openInNewTab:
         title: فتح الرابط في علامة تبويب جديدة
         detail: فتح الرسوم التوضيحية والروايات في علامة تبويب جديدة.
     mute:
-        title: كتم العلامات・المستخدمين
+        title: كتم العلامات/المستخدمين
         detail: سيتم تطبيق إعدادات الكتم.
         button: إعدادات الكتم
 options:
@@ -13,20 +13,18 @@ options:
     import: استيراد
     export: تصدير
     alreadyAdded: تمت الإضافة بالفعل
+    example: "مثلًا: "
     tag:
         title: كتم العلامات
         detail: أدخل اسم العلامة التي تريد كتمها.
         inputName: اسم العلامة
-        exampleName: "مثال: "
         addButtonText: إضافة
         delButtonText: حذف العلامة
     user:
         title: كتم المستخدمين
         detail: أدخل معرف المستخدم واسم المستخدم (اختياري) الذي تريد كتمه.
         inputId: معرف المستخدم
-        exampleId: "مثال: "
         inputIdError: يرجى إدخال أرقام فقط.
         inputName: اسم المستخدم (اختياري)
-        exampleName: "مثال: "
         addButtonText: إضافة
         delButtonText: حذف المستخدم

@@ -113,7 +113,7 @@ export const UserMuteSection = ({ content }: Props) => {
 					)}
 				</label>
 				<label className="flex-1">
-					<p className="mb-1 text-sm font-bold">{content.inputName}</p>
+					<p className="mb-1 whitespace-nowrap text-sm font-bold">{content.inputName}</p>
 					<input
 						className="input input-bordered h-12 w-full"
 						type="text"

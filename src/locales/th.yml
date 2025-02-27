@@ -1,4 +1,4 @@
-description: เพียงแค่เลื่อนหน้าจอ ระบบจะโหลดหน้าถัดไปโดยอัตโนมัติ ทำให้คุณสามารถดูผลงานใน pixiv ได้อย่างสะดวกสบาย
+description: การเลื่อนหน้าจอจะโหลดหน้าถัดไปโดยอัตโนมัติ ทำให้คุณสามารถดูผลงานใน pixiv ได้อย่างต่อเนื่อง
 popup:
     report: รายงานข้อผิดพลาดและข้อเสนอแนะ
     openInNewTab:
@@ -13,20 +13,18 @@ options:
     import: นำเข้า
     export: ส่งออก
     alreadyAdded: มีการเพิ่มแล้ว
+    example: "เช่น: "
     tag:
         title: ปิดเสียงแท็ก
         detail: กรุณาใส่ชื่อแท็กที่ต้องการปิดเสียง
         inputName: ชื่อแท็ก
-        exampleName: "ตัวอย่าง: "
         addButtonText: เพิ่ม
         delButtonText: ลบแท็ก
     user:
         title: ปิดเสียงผู้ใช้
         detail: กรุณาใส่ ID ผู้ใช้และชื่อผู้ใช้ (ถ้ามี) ที่ต้องการปิดเสียง
         inputId: ID ผู้ใช้
-        exampleId: "ตัวอย่าง: "
         inputIdError: กรุณาใส่ตัวเลขเท่านั้น
         inputName: ชื่อผู้ใช้ (ถ้ามี)
-        exampleName: "ตัวอย่าง: "
         addButtonText: เพิ่ม
         delButtonText: ลบผู้ใช้

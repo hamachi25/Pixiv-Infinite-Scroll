@@ -1,4 +1,4 @@
-description: 스크롤하기만 하면 다음 페이지가 자동으로 로드되어 편하게 pixiv 작품을 감상할 수 있습니다.
+description: 스크롤만 하면 다음 페이지가 자동으로 로드되어 끊김 없이 Pixiv의 작품을 감상할 수 있습니다.
 popup:
     report: 버그 신고 및 기능 제안
     openInNewTab:
@@ -13,21 +13,19 @@ options:
     import: 가져오기
     export: 내보내기
     alreadyAdded: 이미 추가되었습니다
+    example: "예: "
     tag:
         title: 태그 뮤트
         detail: 뮤트하고 싶은 태그명을 입력하세요.
         inputName: 태그명
-        exampleName: "예: "
         addButtonText: 추가
         delButtonText: 태그 삭제
     user:
         title: 사용자 뮤트
         detail: 뮤트하고 싶은 사용자 ID와 사용자명(선택)을 입력하세요.
         inputId: 사용자 ID
-        exampleId: "예: "
         inputIdError: 숫자를 입력하세요.
         inputName: 사용자명(선택)
-        exampleName: "예: "
         addButtonText: 추가
         delButtonText: 사용자 삭제
 following:

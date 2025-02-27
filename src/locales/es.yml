@@ -1,6 +1,6 @@
-description: Simplemente desplazándote, la siguiente página se cargará automáticamente, lo que te permitirá disfrutar cómodamente de las obras en pixiv.
+description: Solo con desplazarte, la siguiente página se cargará automáticamente, permitiéndote ver las obras de pixiv sin interrupciones.
 popup:
-    report: Informar de problemas / Sugerencias de funciones
+    report: Informar de problemas/Sugerencias de funciones
     openInNewTab:
         title: Abrir enlace en una nueva pestaña
         detail: Abrir ilustraciones y novelas en una nueva pestaña.
@@ -13,20 +13,18 @@ options:
     import: Importar
     export: Exportar
     alreadyAdded: Ya ha sido añadido
+    example: "p. ej. "
     tag:
         title: Silenciar etiquetas
         detail: Ingrese el nombre de la etiqueta que desea silenciar.
         inputName: Nombre de la etiqueta
-        exampleName: "Ejemplo: "
         addButtonText: Agregar
         delButtonText: Eliminar etiqueta
     user:
         title: Silenciar usuarios
         detail: Ingrese el ID de usuario y el nombre de usuario (opcional) que desea silenciar.
         inputId: ID de usuario
-        exampleId: "Ejemplo: "
         inputIdError: Ingrese solo números.
         inputName: Nombre de usuario (opcional)
-        exampleName: "Ejemplo: "
         addButtonText: Agregar
         delButtonText: Eliminar usuario

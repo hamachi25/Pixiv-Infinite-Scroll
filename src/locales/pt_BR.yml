@@ -1,6 +1,6 @@
-description: Basta rolar para carregar automaticamente a próxima página e visualizar as obras do pixiv com mais conforto.
+description: Rolando a página, a próxima página é carregada automaticamente, permitindo que você veja as obras do pixiv sem interrupções.
 popup:
-    report: Relatar problema / Sugerir recurso
+    report: Relatar problema/Sugerir recurso
     openInNewTab:
         title: Abrir link em uma nova aba
         detail: Abrir ilustrações e novels em uma nova aba.
@@ -13,20 +13,18 @@ options:
     import: Importar
     export: Exportar
     alreadyAdded: Já foi adicionado
+    example: "ex. "
     tag:
         title: Silenciar Tag
         detail: Insira o nome da tag que deseja silenciar.
         inputName: Nome da Tag
-        exampleName: "Exemplo: "
         addButtonText: Adicionar
         delButtonText: Remover Tag
     user:
         title: Silenciar Usuário
         detail: Insira o ID do usuário e o nome do usuário (opcional) que deseja silenciar.
         inputId: ID do Usuário
-        exampleId: "Exemplo: "
         inputIdError: Insira apenas números.
         inputName: Nome do Usuário (Opcional)
-        exampleName: "Exemplo: "
         addButtonText: Adicionar
         delButtonText: Remover Usuário

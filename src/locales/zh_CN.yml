@@ -1,4 +1,4 @@
-description: 只需滚动，下一页就会自动加载，让您舒适地浏览pixiv作品。
+description: 只需滚动即可自动加载下一页，无缝浏览pixiv的作品。
 popup:
     report: 问题报告和功能建议
     openInNewTab:
@@ -13,21 +13,19 @@ options:
     import: 导入
     export: 导出
     alreadyAdded: 已经添加
+    example: "例如: "
     tag:
         title: 静音标签
         detail: 请输入要静音的标签名。
         inputName: 标签名
-        exampleName: 例：
         addButtonText: 添加
         delButtonText: 删除标签
     user:
         title: 静音用户
         detail: 请输入要静音的用户ID和用户名（可选）。
         inputId: 用户ID
-        exampleId: 例：
         inputIdError: 请输入半角数字。
         inputName: 用户名（可选）
-        exampleName: 例：
         addButtonText: 添加
         delButtonText: 删除用户
 following:
