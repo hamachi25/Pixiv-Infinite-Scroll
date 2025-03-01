@@ -55,16 +55,14 @@ const App = () => {
 						className={`tooltip before:text-xs ${isRTL ? "tooltip-right" : "tooltip-left"}`}
 						data-tip={i18n.t("popup.report")}
 					>
-						<button>
-							<a
-								className="text-[var(--text-pale)]"
-								href={formsLink}
-								target="_blank"
-								rel="noreferrer"
-							>
-								<GoReport size={21} />
-							</a>
-						</button>
+						<a
+							className="text-[var(--text-pale)]"
+							href={formsLink}
+							target="_blank"
+							rel="noreferrer"
+						>
+							<GoReport size={21} />
+						</a>
 					</div>
 				</div>
 			</div>
@@ -99,17 +97,15 @@ const App = () => {
 						onChange={handleMuteCheckbox}
 					/>
 				</label>
-				<button className="btn h-11 min-h-11 p-0">
-					<a
-						className="flex h-full w-full items-center justify-center gap-1"
-						href={browser.runtime.getURL("/options.html")}
-						target="_blank"
-						rel="noreferrer"
-					>
-						{i18n.t("popup.mute.button")}
-						<GoLinkExternal size={14} />
-					</a>
-				</button>
+				<a
+					className="p-0flex btn h-11 min-h-11 w-full items-center justify-center gap-1"
+					href={browser.runtime.getURL("/options.html")}
+					target="_blank"
+					rel="noreferrer"
+				>
+					{i18n.t("popup.mute.button")}
+					<GoLinkExternal size={14} />
+				</a>
 			</div>
 		</div>
 	);
