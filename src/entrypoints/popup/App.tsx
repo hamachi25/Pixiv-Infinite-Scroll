@@ -1,19 +1,18 @@
 import { settingsItem } from "@/utils/storage";
 import { GoReport, GoLinkExternal } from "react-icons/go";
-
-const formsLinks = {
-	ja: "https://forms.gle/nWLZzi86qnWaAyEs7",
-	en: "https://forms.gle/viWPDzAzzwkVxjD18",
-};
-
-const lang = browser.i18n.getUILanguage();
-const formsLink = lang === "ja" ? formsLinks.ja : formsLinks.en;
-const isRTL = ["ar"].includes(lang);
+import { getBrowserInfo } from "./utils/getBrowserInfo";
+import { getFormsUrl } from "./utils/getFormsUrl";
 
 const App = () => {
 	const [openInNewTab, setOpenInNewTab] = useState(false);
 	const [isMute, setIsMute] = useState(false);
+
+	const lang = browser.i18n.getUILanguage();
+	const isRTL = ["ar"].includes(lang);
+
 	const { version } = browser.runtime.getManifest();
+	const browserInfo = getBrowserInfo();
+	const formsUrl = getFormsUrl(browserInfo, lang, version);
 
 	const handleNewtabCheckbox = () => {
 		setOpenInNewTab((prev) => {
@@ -57,7 +56,7 @@ const App = () => {
 					>
 						<a
 							className="text-[var(--text-pale)]"
-							href={formsLink}
+							href={formsUrl}
 							target="_blank"
 							rel="noreferrer"
 						>

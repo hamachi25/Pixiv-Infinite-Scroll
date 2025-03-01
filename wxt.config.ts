@@ -18,5 +18,6 @@ export default defineConfig({
 	},
 	alias: {
 		"@content": "src/entrypoints/content",
+		"@popup": "src/entrypoints/popup",
 	},
 });
