@@ -1,4 +1,5 @@
 import type { Work } from "@/types/works";
+import { muteStore } from "@content/store";
 import { GridImage } from "../../ui/GridImage";
 import { BookmarkButton } from "../../ui/BookmarkButton";
 import { DeletedIllust } from "../../icons/illust/DeletedIllust";
@@ -16,10 +17,19 @@ export const GridIllustsContainer = ({ illusts, type }: Props) => {
 	const filteredIllusts =
 		type === "other" ? illusts.filter((illust) => !illust.isMuted) : illusts;
 
+	const { muteDialog, setMuteContent } = muteStore();
+
 	return (
 		<ul className="mt-[24px] grid grid-cols-[repeat(auto-fit,184px)] gap-[24px]">
 			{filteredIllusts.map((illust) => (
-				<li key={illust.id}>
+				<li
+					key={illust.id}
+					onContextMenu={(event) => {
+						event.preventDefault();
+						setMuteContent(illust);
+						muteDialog.current?.showModal();
+					}}
+				>
 					<div className="relative">
 						{/* メイン画像 */}
 						{!illust.maskReason ? (

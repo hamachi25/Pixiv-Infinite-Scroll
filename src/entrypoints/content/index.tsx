@@ -3,6 +3,7 @@ import type { ContentScriptContext, ShadowRootContentScriptUi } from "wxt/client
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import ProfilePopup from "./pages/ProfilePopup.tsx";
+import MuteDialog from "./pages/MuteDialog.tsx";
 
 import { getElementSelectorByUrl } from "./utils/getElementSelectorByUrl";
 import { createStyleElement } from "./utils/createStyleElement";
@@ -69,6 +70,7 @@ const mountUi = async (ctx: ContentScriptContext, anchor: string) => {
 				<Context>
 					<App />
 					<ProfilePopup />
+					<MuteDialog />
 				</Context>,
 			);
 			return root;
