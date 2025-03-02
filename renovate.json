@@ -2,6 +2,6 @@
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"extends": ["config:recommended"],
 	"timezone": "Asia/Tokyo",
-	"schedule": ["after 10pm and before 5am every weekend"],
+	"schedule": ["after 10pm every weekend", "before 5am every weekend"],
 	"labels": ["maintenance"]
 }
