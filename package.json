@@ -12,7 +12,8 @@
 		"zip:firefox": "wxt zip -b firefox",
 		"compile": "tsc --noEmit",
 		"postinstall": "wxt prepare",
-		"prepare": "husky"
+		"prepare": "husky",
+		"lint": "eslint . --ext .js,.ts,.tsx"
 	},
 	"dependencies": {
 		"@webext-core/messaging": "^2.2.0",
