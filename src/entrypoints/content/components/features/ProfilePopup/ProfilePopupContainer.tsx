@@ -133,7 +133,7 @@ export const ProfilePopupContainer = () => {
 
 				<ViewProfile profileFetchData={profileFetchData} />
 
-				<div className="mb-[24px] mt-[12px]">
+				<div className="mt-[12px] mb-[24px]">
 					<FollowButton
 						userId={profileFetchData.userId}
 						following={profileFetchData.isFollowed}

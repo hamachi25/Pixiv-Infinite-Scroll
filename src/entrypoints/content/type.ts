@@ -72,6 +72,7 @@ export type ProfileWork = {
 	alt: string;
 	title: string;
 	pageCount?: number;
+	workType: string;
 };
 
 export type MuteSettings = {
