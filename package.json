@@ -13,7 +13,7 @@
 		"compile": "tsc --noEmit",
 		"postinstall": "wxt prepare",
 		"prepare": "husky",
-		"lint": "eslint . --ext .js,.ts,.tsx"
+		"lint": "eslint src/**/*.{js,ts,tsx}"
 	},
 	"dependencies": {
 		"@webext-core/messaging": "^2.2.0",
