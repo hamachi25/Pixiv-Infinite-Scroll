@@ -10,7 +10,7 @@ body:
       validations:
           required: true
 
-    - type: input
+    - type: textarea
       id: additionalContext
       attributes:
           label: Additional context / 追加情報

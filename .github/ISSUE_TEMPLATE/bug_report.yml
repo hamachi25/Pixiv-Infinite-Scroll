@@ -7,6 +7,27 @@ body:
           value: |
               Thank you for reporting the bug. Please fill in the following information.
 
+    - type: input
+      id: extVersion
+      attributes:
+          label: Extension Version / 拡張機能のバージョン
+          description: The version of the extension you are using.
+          placeholder: 2.2.0
+      validations:
+          required: true
+
+    - type: dropdown
+      id: browsers
+      attributes:
+          label: Browser
+          options:
+              - Chrome
+              - Edge
+              - Firefox
+              - Other
+      validations:
+          required: true
+
     - type: textarea
       id: description
       attributes:
@@ -25,27 +46,5 @@ body:
               2. Click on '....'
               3. Scroll down to '....'
               4. See error
-      validations:
-          required: true
-
-    - type: input
-      id: extVersion
-      attributes:
-          label: Extension Version / 拡張機能のバージョン
-          description: The version of the extension you are using.
-          placeholder: 2.2.0
-      validations:
-          required: true
-
-    - type: dropdown
-      id: browsers
-      attributes:
-          label: Browser
-          multiple: true
-          options:
-              - Chrome
-              - Edge
-              - Firefox
-              - Other
       validations:
           required: true
