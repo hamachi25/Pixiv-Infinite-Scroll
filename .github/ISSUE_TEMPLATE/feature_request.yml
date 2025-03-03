@@ -1,0 +1,17 @@
+name: Feature request / 機能提案
+description: Suggest an idea for this project
+
+body:
+    - type: textarea
+      id: details
+      attributes:
+          label: Feature Details / 機能の詳細
+          description: Describe your feature request in detail.
+      validations:
+          required: true
+
+    - type: input
+      id: additionalContext
+      attributes:
+          label: Additional context / 追加情報
+          description: Add any other context or screenshots about the feature request here.
