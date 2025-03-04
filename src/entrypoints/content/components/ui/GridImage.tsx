@@ -21,8 +21,8 @@ export const GridImage = ({ illust, type }: Props) => {
 			rel="noreferrer"
 		>
 			{illust.isMuted && type !== "bookmark" ? (
-				<div className="flex h-[184px] w-[184px] items-center justify-center rounded-[8px] bg-[var(--charcoal-background2)]">
-					<div className="-mb-[1px] flex h-[122px] w-[122px] select-none flex-col items-center justify-center gap-[4px] text-[var(--charcoal-text4)]">
+				<div className="flex h-[184px] w-[184px] items-center justify-center rounded-[8px] bg-(--charcoal-background2)">
+					<div className="-mb-[1px] flex h-[122px] w-[122px] flex-col items-center justify-center gap-[4px] text-(--charcoal-text4) select-none">
 						<MutedImage className="h-[48px] w-[48px]" />
 					</div>
 				</div>
@@ -48,10 +48,10 @@ export const GridImage = ({ illust, type }: Props) => {
 						)}
 					</div>
 
-					<div className="pointer-events-none absolute left-0 right-0 top-0 flex items-start px-[4px] pt-[4px]">
+					<div className="pointer-events-none absolute top-0 right-0 left-0 flex items-start px-[4px] pt-[4px]">
 						{/* R18 */}
 						{illust.xRestrict !== 0 && (
-							<span className="rounded-[4px] bg-[var(--charcoal-r18)] px-[4px] text-[10px] font-bold text-[var(--charcoal-text5)]">
+							<span className="rounded-[4px] bg-(--charcoal-r18) px-[4px] text-[10px] font-bold text-(--charcoal-text5)">
 								{illust.xRestrict === 1 ? "R-18" : "R-18G"}
 							</span>
 						)}

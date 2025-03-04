@@ -9,7 +9,7 @@ export const AddButton = ({ content }: Props) => {
 		<input
 			type="submit"
 			value={content.addButtonText}
-			className="btn mt-auto h-12 min-h-12 bg-[var(--add-button)] text-[var(--text-normal-2)] hover:bg-[var(--add-button-hover)]"
+			className="btn btn-primary mt-auto h-12"
 		/>
 	);
 };

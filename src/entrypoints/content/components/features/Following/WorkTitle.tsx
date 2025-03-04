@@ -10,13 +10,13 @@ export const WorkTitle = ({ illust }: Props) => {
 	return (
 		<div className="mt-[4px] flex">
 			<a
-				className="overflow-hidden text-ellipsis whitespace-nowrap text-[14px] font-bold"
+				className="overflow-hidden text-[14px] font-bold text-ellipsis whitespace-nowrap"
 				href={`/artworks/${illust.id}`}
 				target={settings?.openInNewTab ? "_blank" : undefined}
 				rel="noreferrer"
 			>
 				{illust.isMuted ? (
-					<span className="text-[var(--charcoal-text3)]">{i18n.t("mute.muted")}</span>
+					<span className="text-(--charcoal-text3)">{i18n.t("mute.muted")}</span>
 				) : (
 					illust.title
 				)}

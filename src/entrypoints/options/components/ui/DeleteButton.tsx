@@ -12,7 +12,7 @@ export const DeleteButton = ({ content, item, handleDeleteItem }: Props) => {
 		<button
 			type="button"
 			title={content.delButtonText}
-			className="btn btn-circle h-9 min-h-9 w-9 bg-[var(--delete-button)] hover:bg-[var(--delete-button-hover)]"
+			className="btn btn-circle h-9 w-9"
 			onClick={() => handleDeleteItem(item.id)}
 		>
 			<RiDeleteBin6Line size={17} />

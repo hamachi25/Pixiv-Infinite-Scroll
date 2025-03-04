@@ -34,7 +34,7 @@ export const Profile = ({ novel, type }: Props) => {
 				</a>
 			)}
 			<a
-				className={`${type === "bookmark" ? "text-[14px]" : "text-[12px]"} overflow-hidden text-ellipsis whitespace-nowrap text-[var(--charcoal-text2)]`}
+				className={`${type === "bookmark" ? "text-[14px]" : "text-[12px]"} overflow-hidden text-ellipsis whitespace-nowrap text-(--charcoal-text2)`}
 				href={`/users/${novel.userId}`}
 				target={settings?.openInNewTab ? "_blank" : undefined}
 				rel="noreferrer"

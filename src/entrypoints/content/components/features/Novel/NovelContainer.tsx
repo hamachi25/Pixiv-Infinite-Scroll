@@ -22,7 +22,7 @@ export const NovelContainer = ({ novel, type }: Props) => {
 		<li
 			key={novel.id}
 			// TODO: 読みにくいのでなんとかしたい
-			className={`${type === "follow" && "!w-[392px]"} ${type === "tag" ? "w-[600px]" : "w-[392px]"} ${type === "newNovel" || type === "bookmark" ? "@[1040px]:w-[496px] @[1248px]:w-[392px]" : "max-lg:w-[496px]"} ${type !== "follow" && type !== "tag" && "mx-[12px] my-[20px] border-b border-[var(--charcoal-border-default)] pb-[23px]"} ${type === "tag" && "mx-[12px] my-[20px]"}`}
+			className={`${type === "follow" && "!w-[392px]"} ${type === "tag" ? "w-[600px]" : "w-[392px]"} ${type === "newNovel" || type === "bookmark" ? "@[1040px]:w-[496px] @[1248px]:w-[392px]" : "max-[1367px]:w-[496px]"} ${type !== "follow" && type !== "tag" && "mx-[12px] my-[20px] border-b border-solid border-(--charcoal-border-default) pb-[23px]"} ${type === "tag" && "mx-[12px] my-[20px]"}`}
 		>
 			<div
 				className={`${type !== "tag" && "w-[392px]"} relative flex h-full min-h-[112px] pr-[40px]`}
@@ -34,7 +34,7 @@ export const NovelContainer = ({ novel, type }: Props) => {
 					{novel.isMuted ? (
 						<>
 							<a
-								className={`${type !== "tag" && "whitespace-nowrap text-[16px]"} my-auto overflow-hidden text-ellipsis font-bold text-[var(--charcoal-text3)]`}
+								className={`${type !== "tag" && "text-[16px] whitespace-nowrap"} my-auto overflow-hidden font-bold text-ellipsis text-(--charcoal-text3)`}
 								href={`/novel/show.php?id=${novel.id}`}
 								title={novel.title}
 								target={settings?.openInNewTab ? "_blank" : undefined}
@@ -70,7 +70,7 @@ export const NovelContainer = ({ novel, type }: Props) => {
 
 							{description && (
 								<div
-									className="max-h-[66px] overflow-hidden text-[var(--charcoal-text2)]"
+									className="max-h-[66px] overflow-hidden text-(--charcoal-text2)"
 									title={description}
 									style={{
 										display: "-webkit-box",

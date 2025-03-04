@@ -8,8 +8,8 @@ export const SectionTitle = ({ content }: Props) => {
 	return (
 		<>
 			<h2 className="text-base font-bold">{content.title}</h2>
-			<p className="text-[var(--text-pale)]">{content.description}</p>
-			<div className="divider mb-0 mt-1" />
+			<p className="text-sm text-(--text-pale)">{content.description}</p>
+			<div className="divider mt-1 mb-0" />
 		</>
 	);
 };

@@ -71,7 +71,7 @@ export const UserMuteSection = ({ content }: Props) => {
 	};
 
 	return (
-		<div className="flex w-1/2 flex-col rounded-lg border border-[var(--border-noraml)] p-4">
+		<div className="flex w-1/2 flex-col rounded-lg border border-solid border-(--border-noraml) p-4">
 			<SectionTitle content={content} />
 
 			{/* 一覧 */}
@@ -79,7 +79,7 @@ export const UserMuteSection = ({ content }: Props) => {
 				{users.map((item) => (
 					<li
 						key={item.id}
-						className="flex items-center border-b border-[var(--border-noraml)] px-4 py-2"
+						className="flex items-center border-b border-solid border-(--border-noraml) px-4 py-2"
 					>
 						<p className="flex-1 text-base">{item.userName || item.userId}</p>
 						<DeleteButton content={content} item={item} handleDeleteItem={deleteUser} />
@@ -88,7 +88,7 @@ export const UserMuteSection = ({ content }: Props) => {
 			</ul>
 
 			{/* 追加ボタン */}
-			<form className="mb-2 mt-auto flex w-full gap-4" onSubmit={handleSubmit(addUser)}>
+			<form className="mt-auto mb-2 flex w-full gap-4" onSubmit={handleSubmit(addUser)}>
 				<label className="relative flex flex-1 flex-col justify-end">
 					<p className="mb-1 text-sm font-bold">{content.inputId}</p>
 					<input
@@ -113,7 +113,7 @@ export const UserMuteSection = ({ content }: Props) => {
 					)}
 				</label>
 				<label className="flex-1">
-					<p className="mb-1 whitespace-nowrap text-sm font-bold">{content.inputName}</p>
+					<p className="mb-1 text-sm font-bold whitespace-nowrap">{content.inputName}</p>
 					<input
 						className="input input-bordered h-12 w-full"
 						type="text"
