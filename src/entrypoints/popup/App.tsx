@@ -44,7 +44,7 @@ const App = () => {
 					<a
 						className="self-end text-base text-[var(--text-pale)]"
 						target="_blank"
-						href={`https://github.com/hamachi25/Pixiv-Infinite-Scroll/releases/tag/${version}`}
+						href={`https://github.com/hamachi25/Pixiv-Infinite-Scroll/releases/tag/v${version}`}
 						rel="noreferrer"
 					>
 						v{version}
