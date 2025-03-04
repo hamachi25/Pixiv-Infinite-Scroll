@@ -23,7 +23,7 @@ export const GridIllustsContainer = ({ illusts, type }: Props) => {
 					<div className="relative">
 						{/* メイン画像 */}
 						{!illust.maskReason ? (
-							<GridImage illust={illust} type={type} />
+							<GridImage illust={illust} />
 						) : (
 							// R18・R18G・削除済み
 							<div className="flex h-[184px] w-[184px] items-center justify-center rounded-[8px] bg-(--charcoal-background2)">

@@ -97,7 +97,11 @@ export const transformData = (
 		illustData = data.body.novel.data;
 	}
 
-	const shouldFilterMuted = muteSettings.tags.length > 0 || muteSettings.users.length > 0;
+	// ブックマークを除外
+	const shouldFilterMuted =
+		(!(PAGE_REGEX.bookmarkIllust.test(pathName) || PAGE_REGEX.bookmarkNovel.test(pathName)) &&
+			muteSettings.tags.length > 0) ||
+		muteSettings.users.length > 0;
 
 	return (illustData || []).filter(isIllustItem).map((item: Work) => ({
 		id: item.id,

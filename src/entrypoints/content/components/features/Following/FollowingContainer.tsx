@@ -74,7 +74,7 @@ export const FollowingContainer = ({ profiles }: Props) => {
 										{profile.illusts?.map((illust) => (
 											<li key={illust.id} className="w-[184px] min-w-[184px]">
 												<div className="relative">
-													<GridImage illust={illust} type="following" />
+													<GridImage illust={illust} />
 													<BookmarkButton
 														bookmarkData={illust.bookmarkData}
 														work={illust}

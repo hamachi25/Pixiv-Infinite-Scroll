@@ -7,10 +7,9 @@ import { MutedImage } from "../icons/MutedImage";
 
 interface Props {
 	illust: Work;
-	type: string;
 }
 
-export const GridImage = ({ illust, type }: Props) => {
+export const GridImage = ({ illust }: Props) => {
 	const settings = useContext(SettingContext);
 	const isSensitive = useContext(SensitiveContext);
 
@@ -20,7 +19,7 @@ export const GridImage = ({ illust, type }: Props) => {
 			target={settings?.openInNewTab ? "_blank" : undefined}
 			rel="noreferrer"
 		>
-			{illust.isMuted && type !== "bookmark" ? (
+			{illust.isMuted ? (
 				<div className="flex h-[184px] w-[184px] items-center justify-center rounded-[8px] bg-(--charcoal-background2)">
 					<div className="-mb-[1px] flex h-[122px] w-[122px] flex-col items-center justify-center gap-[4px] text-(--charcoal-text4) select-none">
 						<MutedImage className="h-[48px] w-[48px]" />
