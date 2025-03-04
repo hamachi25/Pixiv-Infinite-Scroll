@@ -8,7 +8,7 @@ interface Props {
 
 export const NovelInfo = ({ novel, readingTime }: Props) => {
 	return (
-		<div className="my-[4px] flex gap-[8px] text-[12px] text-[var(--charcoal-text3)]">
+		<div className="my-[4px] flex gap-[8px] text-[12px] text-(--charcoal-text3)">
 			{/* 文字数 */}
 			{novel.textCount !== undefined && (
 				<span>{i18n.t("novel.character", [novel.textCount.toLocaleString()])}</span>

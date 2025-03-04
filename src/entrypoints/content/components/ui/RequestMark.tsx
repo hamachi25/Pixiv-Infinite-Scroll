@@ -14,7 +14,7 @@ export const RequestMark = ({ acceptRequest, userId }: Props) => {
 		<>
 			{acceptRequest ? (
 				<a
-					className="flex items-center gap-[2px] text-[var(--charcoal-request)]"
+					className="flex items-center gap-[2px] text-(--charcoal-request)"
 					href={`/users/${userId}/request`}
 					target={settings?.openInNewTab ? "_blank" : undefined}
 					rel="noreferrer"
@@ -23,7 +23,7 @@ export const RequestMark = ({ acceptRequest, userId }: Props) => {
 					<div className="text-[12px] font-bold">{i18n.t("request.accept")}</div>
 				</a>
 			) : (
-				<span className="flex items-center gap-[2px] text-[var(--charcoal-text3)]">
+				<span className="flex items-center gap-[2px] text-(--charcoal-text3)">
 					<StopRequest />
 					<div className="text-[12px] font-bold">{i18n.t("request.closed")}</div>
 				</span>

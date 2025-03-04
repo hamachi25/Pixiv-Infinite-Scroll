@@ -16,9 +16,9 @@ export const PageHeader = ({ workTag, index, location }: Props) => {
 	const newUrl = oldUrl.toString();
 
 	return (
-		<div className="mb-[20px] mt-[30px] border-t border-current text-center text-[24px]">
+		<div className="mt-[30px] mb-[20px] border-t border-solid border-current text-center text-[24px]">
 			<a
-				className="block w-full rounded-[4px] transition-colors duration-200 hover:bg-[var(--charcoal-surface1-hover)]"
+				className="block w-full rounded-[4px] transition-colors duration-200 hover:bg-(--charcoal-surface1-hover)"
 				href={newUrl}
 				target="_blank"
 				rel="noreferrer"

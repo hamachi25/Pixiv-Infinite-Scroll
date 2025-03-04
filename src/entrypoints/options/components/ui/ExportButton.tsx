@@ -18,7 +18,7 @@ export const ExportButton = () => {
 	};
 
 	return (
-		<button className="btn btn-outline" onClick={handleClick}>
+		<button className="btn btn-soft" onClick={handleClick}>
 			<GoUpload size={20} />
 			{i18n.t("options.export")}
 		</button>

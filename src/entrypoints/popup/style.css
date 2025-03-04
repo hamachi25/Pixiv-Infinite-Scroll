@@ -1,21 +1,37 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+	name: "light";
+	default: true;
+	prefersdark: false;
+	color-scheme: "light";
+	--color-primary: oklch(62% 0.214 259.815);
+	--color-primary-content: oklch(97% 0.014 254.604);
+}
+
+@plugin "daisyui/theme" {
+	name: "dark";
+	default: false;
+	prefersdark: true;
+	color-scheme: "dark";
+	--color-base-100: oklch(25.33% 0.016 252.42);
+	--color-base-200: oklch(23.26% 0.014 253.1);
+	--color-base-300: oklch(21.15% 0.012 254.09);
+	--color-base-content: oklch(92% 0.013 255.508);
+	--color-primary: oklch(62% 0.214 259.815);
+	--color-primary-content: oklch(96% 0.018 272.314);
+}
 
 @layer base {
 	:root {
-		--pixiv-blue: #0096fa;
-		--text-normal: rgb(43, 36, 66);
 		--text-pale: rgb(99, 104, 110);
-		--checkbox-border: rgba(0, 0, 0, 0.5);
 		--border-noraml: rgba(0, 0, 0, 0.2);
 	}
 
 	@media (prefers-color-scheme: dark) {
 		:root {
-			--text-normal: white;
 			--text-pale: rgb(171, 178, 190);
-			--checkbox-border: rgba(255, 255, 255, 0.5);
 			--border-noraml: rgba(255, 255, 255, 0.3);
 		}
 	}
@@ -23,6 +39,5 @@
 	body {
 		width: 390px;
 		padding: 1rem;
-		color: var(--text-normal);
 	}
 }

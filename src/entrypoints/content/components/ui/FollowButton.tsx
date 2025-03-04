@@ -76,8 +76,8 @@ export const FollowButton = ({ userId, following }: Props) => {
 			type="button"
 			className={`h-[40px] rounded-full px-[24px] font-bold transition-[color,background-color,box-shadow] ${
 				isFollowing
-					? "bg-[var(--charcoal-surface3)] text-[var(--charcoal-text2)] hover:bg-[var(--charcoal-surface3-hover)] hover:text-[var(--charcoal-text2-hover)]"
-					: "bg-[var(--charcoal-brand)] text-[var(--charcoal-text5)] hover:bg-[var(--charcoal-brand-hover)] hover:text-[var(--charcoal-text5-hover)]"
+					? "bg-(--charcoal-surface3) text-(--charcoal-text2) hover:bg-(--charcoal-surface3-hover) hover:text-(--charcoal-text2-hover)"
+					: "bg-(--charcoal-brand) text-(--charcoal-text5) hover:bg-(--charcoal-brand-hover) hover:text-(--charcoal-text5-hover)"
 			} `}
 			onClick={isFollowing ? unfollow : follow}
 		>

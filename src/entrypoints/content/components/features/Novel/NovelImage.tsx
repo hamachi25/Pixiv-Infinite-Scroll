@@ -16,8 +16,8 @@ export const NovelImage = ({ novel }: Props) => {
 			rel="noreferrer"
 		>
 			{novel.isMuted ? (
-				<div className="flex h-[112px] w-[80px] items-center justify-center rounded-[8px] bg-[var(--charcoal-background2)]">
-					<div className="-mb-[1px] flex h-[112px] w-[80px] select-none flex-col items-center justify-center gap-[4px] text-[var(--charcoal-text4)]">
+				<div className="flex h-[112px] w-[80px] items-center justify-center rounded-[8px] bg-(--charcoal-background2)">
+					<div className="-mb-[1px] flex h-[112px] w-[80px] flex-col items-center justify-center gap-[4px] text-(--charcoal-text4) select-none">
 						<MutedImage className="h-[24px] w-[24px]" />
 					</div>
 				</div>

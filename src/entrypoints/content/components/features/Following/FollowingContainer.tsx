@@ -28,7 +28,7 @@ export const FollowingContainer = ({ profiles }: Props) => {
 				return (
 					<div
 						key={profile.userId}
-						className="border-b border-[var(--charcoal-border-default)] py-[24px]"
+						className="border-b border-solid border-(--charcoal-border-default) py-[24px]"
 					>
 						<div className="flex">
 							{/* プロフィール */}
@@ -49,7 +49,7 @@ export const FollowingContainer = ({ profiles }: Props) => {
 										)}
 
 										{comment && (
-											<div className="mt-[16px] break-all text-[12px]">
+											<div className="mt-[16px] text-[12px] break-all">
 												{comment?.length > 99
 													? `${comment.substring(0, 99)}…`
 													: comment}

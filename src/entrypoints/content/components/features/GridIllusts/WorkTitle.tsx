@@ -12,13 +12,13 @@ export const WorkTitle = ({ illust }: Props) => {
 		<div className="mt-[4px] flex">
 			{!illust.maskReason ? (
 				<a
-					className="overflow-hidden text-ellipsis whitespace-nowrap font-bold visited:text-[var(--charcoal-text1Visited)]"
+					className="overflow-hidden font-bold text-ellipsis whitespace-nowrap visited:text-(--charcoal-text1Visited)"
 					href={`/artworks/${illust.id}`}
 					target={settings?.openInNewTab ? "_blank" : undefined}
 					rel="noreferrer"
 				>
 					{illust.isMuted ? (
-						<span className="text-[var(--charcoal-text3)]">{i18n.t("mute.muted")}</span>
+						<span className="text-(--charcoal-text3)">{i18n.t("mute.muted")}</span>
 					) : (
 						illust.title
 					)}
@@ -29,7 +29,7 @@ export const WorkTitle = ({ illust }: Props) => {
 					{illust.maskReason === "unknown" ? (
 						<span className="font-bold">-----</span>
 					) : (
-						<span className="font-bold text-[var(--charcoal-text3)]">
+						<span className="font-bold text-(--charcoal-text3)">
 							{i18n.t("illust.restrict")}
 						</span>
 					)}
