@@ -73,7 +73,7 @@ export const filterFirstPageWorks = async (
 
 	if (PAGE_REGEX.userIllust.test(pathName) || PAGE_REGEX.userNovel.test(pathName)) {
 		// ユーザー一覧のタグ絞りの場合
-		const userTag = /\/users\/\d+\/(illustrations|manga|artworks)\/.+/;
+		const userTag = /\/users\/\d+\/(illustrations|manga|artworks|novels)\/.+/;
 		if (userTag.test(pathName)) {
 			data.body.works = data.body.works.filter((work: Work) => filterMuted(work, mutedItems));
 		} else {
