@@ -107,7 +107,7 @@ export const ProfilePopupContainer = () => {
 
 	return (
 		<div
-			className="absolute z-10 box-content flex w-[336px] flex-col rounded-[8px] border border-[var(--charcoal-border-default)] bg-[var(--charcoal-surface1)] pt-[24px]"
+			className="absolute z-10 box-content flex w-[336px] flex-col rounded-[8px] border border-solid border-(--charcoal-border-default) bg-(--charcoal-surface1) pt-[24px]"
 			style={position}
 			ref={popupRef}
 			onMouseEnter={handleMouseEnter}
@@ -115,7 +115,7 @@ export const ProfilePopupContainer = () => {
 		>
 			<BackgroundImage profileFetchData={profileFetchData} />
 
-			<div className="pointer-events-none flex flex-col items-center px-[24px] text-center [&>*]:pointer-events-auto">
+			<div className="pointer-events-none flex flex-col items-center px-[24px] text-center *:pointer-events-auto">
 				<Profile profileFetchData={profileFetchData} />
 
 				{profileFetchData.commission && (
@@ -128,7 +128,7 @@ export const ProfilePopupContainer = () => {
 				)}
 
 				{profileFetchData.comment && (
-					<p className="text-[var(--charcoal-text2)]">{filteredComments}</p>
+					<p className="text-(--charcoal-text2)">{filteredComments}</p>
 				)}
 
 				<ViewProfile profileFetchData={profileFetchData} />

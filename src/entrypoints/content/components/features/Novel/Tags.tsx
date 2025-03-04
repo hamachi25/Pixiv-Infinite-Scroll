@@ -11,7 +11,7 @@ export const R18Tag = ({ novel }: Props) => {
 		novel.xRestrict !== 0 && (
 			<li className="inline">
 				<a
-					className="break-words font-bold text-[var(--charcoal-r18)]"
+					className="font-bold break-words text-(--charcoal-r18)"
 					href={`/tags/${novel.xRestrict === 1 ? "R-18" : "R-18G"}/novels`}
 					target={settings?.openInNewTab ? "_blank" : undefined}
 					rel="noreferrer"
@@ -29,7 +29,7 @@ export const OriginalTag = ({ novel }: Props) => {
 		novel.isOriginal && (
 			<li className="inline">
 				<a
-					className="break-words font-bold text-[var(--charcoal-link1)]"
+					className="font-bold break-words text-(--charcoal-link1)"
 					href="/tags/%E3%82%AA%E3%83%AA%E3%82%B8%E3%83%8A%E3%83%AB/novels"
 					target={settings?.openInNewTab ? "_blank" : undefined}
 				>
@@ -47,7 +47,7 @@ export const OtherTag = ({ novel }: Props) => {
 			{novel.tags?.map((tag) => (
 				<li className="inline" key={tag}>
 					<a
-						className="break-words text-[var(--charcoal-link1)] before:content-['#']"
+						className="break-words text-(--charcoal-link1) before:content-['#']"
 						href={`/tags/${encodeURIComponent(tag)}/novels`}
 						target={settings?.openInNewTab ? "_blank" : undefined}
 						rel="noreferrer"

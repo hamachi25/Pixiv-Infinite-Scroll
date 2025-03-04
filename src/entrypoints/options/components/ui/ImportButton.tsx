@@ -27,7 +27,7 @@ export const ImportButton = () => {
 
 	return (
 		<>
-			<button className="btn btn-outline" onClick={() => ref.current?.click()}>
+			<button className="btn btn-soft" onClick={() => ref.current?.click()}>
 				<GoDownload size={20} />
 				{i18n.t("options.import")}
 			</button>

@@ -1,4 +1,5 @@
 import { defineConfig } from "wxt";
+import Tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
 	srcDir: "src",
@@ -19,4 +20,8 @@ export default defineConfig({
 	alias: {
 		"@content": "src/entrypoints/content",
 	},
+	vite: () => ({
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		plugins: [Tailwindcss() as any],
+	}),
 });

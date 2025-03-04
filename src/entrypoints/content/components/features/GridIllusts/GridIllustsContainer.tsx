@@ -26,8 +26,8 @@ export const GridIllustsContainer = ({ illusts, type }: Props) => {
 							<GridImage illust={illust} type={type} />
 						) : (
 							// R18・R18G・削除済み
-							<div className="flex h-[184px] w-[184px] items-center justify-center rounded-[8px] bg-[var(--charcoal-background2)]">
-								<div className="-mb-[1px] flex h-[122px] w-[122px] select-none flex-col items-center justify-center gap-[4px] text-[var(--charcoal-text4)]">
+							<div className="flex h-[184px] w-[184px] items-center justify-center rounded-[8px] bg-(--charcoal-background2)">
+								<div className="-mb-[1px] flex h-[122px] w-[122px] flex-col items-center justify-center gap-[4px] text-(--charcoal-text4) select-none">
 									{illust.maskReason === "unknown" ? (
 										<DeletedIllust />
 									) : (

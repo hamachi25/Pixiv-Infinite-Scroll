@@ -23,7 +23,7 @@ export const Profile = ({ profileFetchData }: Props) => {
 				/>
 			</a>
 			<a
-				className="mt-[4px] text-[16px] font-bold text-[var(--charcoal-text1)]"
+				className="mt-[4px] text-[16px] font-bold text-(--charcoal-text1)"
 				href={`/users/${profileFetchData.userId}`}
 				target={settings?.openInNewTab ? "_blank" : undefined}
 				rel="noreferrer"

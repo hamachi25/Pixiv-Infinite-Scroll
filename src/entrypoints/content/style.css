@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
 	* {
@@ -19,23 +17,26 @@
 	}
 
 	body {
-		@apply relative bg-[var(--charcoal-background1)] text-[var(--charcoal-text1)];
+		position: relative;
+		background-color: var(--charcoal-background1);
+		color: var(--charcoal-text1);
+		font-size: 14px;
 	}
+}
+
+@utility following-blur {
+	mask-image: linear-gradient(to right, rgb(0, 0, 0) calc(100% - 72px), transparent);
 }
 
 @layer utilities {
-	.following-blur {
-		mask-image: linear-gradient(to right, rgb(0, 0, 0) calc(100% - 72px), transparent);
-	}
-}
-
-@keyframes charcoal-loading-spinner-icon-scale-out {
-	0% {
-		transform: scale(0);
-		opacity: 1;
-	}
-	to {
-		transform: scale(1);
-		opacity: 0;
+	@keyframes charcoal-loading-spinner-icon-scale-out {
+		0% {
+			transform: scale(0);
+			opacity: 1;
+		}
+		to {
+			transform: scale(1);
+			opacity: 0;
+		}
 	}
 }

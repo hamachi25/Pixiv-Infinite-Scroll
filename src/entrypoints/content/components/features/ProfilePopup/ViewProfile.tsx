@@ -10,7 +10,7 @@ export const ViewProfile = ({ profileFetchData }: Props) => {
 
 	return (
 		<a
-			className="text-[var(--charcoal-text3)]"
+			className="text-(--charcoal-text3)"
 			href={`/users/${profileFetchData.userId}`}
 			target={settings?.openInNewTab ? "_blank" : undefined}
 			rel="noreferrer"
