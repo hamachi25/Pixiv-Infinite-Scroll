@@ -2,20 +2,18 @@ import { settingsItem } from "@/utils/storage";
 import { GoLinkExternal } from "react-icons/go";
 import { Header } from "./components/Header";
 import { ToggleSetting } from "./components/ToggleSetting";
-
-const formsLinks = {
-	ja: "https://forms.gle/nWLZzi86qnWaAyEs7",
-	en: "https://forms.gle/viWPDzAzzwkVxjD18",
-};
+import { getBrowserInfo } from "./utils/getBrowserInfo";
+import { createFormsLink } from "./utils/createFormsLink";
 
 const lang = browser.i18n.getUILanguage();
-const formsLink = lang === "ja" ? formsLinks.ja : formsLinks.en;
+const { version } = browser.runtime.getManifest();
+const browserInfo = getBrowserInfo();
+const formsLink = createFormsLink({ lang, version, browserInfo });
 const isRTL = ["ar"].includes(lang);
 
 const App = () => {
 	const [openInNewTab, setOpenInNewTab] = useState(false);
 	const [isMute, setIsMute] = useState(false);
-	const { version } = browser.runtime.getManifest();
 
 	const handleNewtabCheckbox = () => {
 		setOpenInNewTab((prev) => {
