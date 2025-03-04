@@ -103,8 +103,19 @@ const App = () => {
 	const userWorks = useRef<UserWorks>({}); // ユーザーの作品一覧
 	const workTag = useRef<WorkTag | undefined>(undefined);
 	const page = useRef(2);
+	const inView = useRef(false);
 
 	const muteSettings = useContext(MuteContext);
+
+	// Intersection Observer発火後にmuteSettingsが読み込まれた場合
+	useEffect(() => {
+		(async () => {
+			if (muteSettings.tags[0] !== "null" && inView.current) {
+				await firstPageRequest();
+				await loadMore();
+			}
+		})();
+	}, [muteSettings.tags]);
 
 	const loadMore = async () => {
 		if (hasMore === undefined) return;
@@ -255,8 +266,9 @@ const App = () => {
 
 	const { ref } = useInView({
 		rootMargin: "50% 0px",
-		onChange: async (inView) => {
-			if (inView) {
+		onChange: async (isInView) => {
+			inView.current = isInView;
+			if (isInView && muteSettings.tags[0] !== "null") {
 				await firstPageRequest();
 				await loadMore();
 			}
