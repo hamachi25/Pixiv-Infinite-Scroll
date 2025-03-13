@@ -21,7 +21,6 @@ export default defineConfig({
 		"@content": "src/entrypoints/content",
 	},
 	vite: () => ({
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		plugins: [Tailwindcss() as any],
+		plugins: [Tailwindcss()],
 	}),
 });
