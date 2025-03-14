@@ -24,8 +24,20 @@
 	}
 }
 
-@utility following-blur {
+@utility hidden-scrollbar {
+	scrollbar-width: none;
+}
+
+@utility following-blur-right {
 	mask-image: linear-gradient(to right, rgb(0, 0, 0) calc(100% - 72px), transparent);
+}
+
+@utility following-blur-left-on {
+	mask: linear-gradient(to right, transparent, rgb(0, 0, 0) 72px) 0px 0px;
+}
+
+@utility following-blur-left-off {
+	mask: linear-gradient(to right, transparent, rgb(0, 0, 0) 72px) -72px 0px;
 }
 
 @layer utilities {
