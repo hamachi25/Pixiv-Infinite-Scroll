@@ -3,7 +3,6 @@ import Tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
 	srcDir: "src",
-	extensionApi: "chrome",
 	modules: ["@wxt-dev/module-react", "@wxt-dev/i18n/module", "@wxt-dev/auto-icons"],
 	manifest: {
 		name: "Pixiv Infinite Scroll",

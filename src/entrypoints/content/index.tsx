@@ -1,5 +1,5 @@
 import "./style.css";
-import type { ContentScriptContext, ShadowRootContentScriptUi } from "wxt/client";
+import type { ContentScriptContext, ShadowRootContentScriptUi } from "#imports";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import ProfilePopup from "./pages/ProfilePopup.tsx";
@@ -46,6 +46,7 @@ const isMatchUrl = (url: Location) =>
 const mountUi = async (ctx: ContentScriptContext, anchor: string) => {
 	const ui = await createShadowRootUi(ctx, {
 		name: "pixiv-infinite-scroll",
+		inheritStyles: true,
 		position: "inline",
 		append: "after",
 		anchor: anchor,
