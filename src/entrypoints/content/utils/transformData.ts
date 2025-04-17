@@ -127,6 +127,7 @@ export const transformData = (
 			...novel,
 			isMuted: shouldFilterMuted ? filterMuted(novel, mutedItems, "following") : undefined,
 		})),
+		following: item.following,
 		commission: item.commission,
 
 		// 小説
