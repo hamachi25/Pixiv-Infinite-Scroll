@@ -31,11 +31,11 @@ export const URL_SELECTORS: { pattern: RegExp; selector: string }[] = [
 	},
 	{
 		pattern: PAGE_REGEX.newIllust,
-		selector: "section>div:nth-of-type(4)>div>div>div>ul",
+		selector: "section>div>div>div>div>div>ul",
 	},
 	{
 		pattern: PAGE_REGEX.newNovel,
-		selector: "section>div:nth-of-type(4)>div>div>div>ul",
+		selector: "section>div>div>div>div>div>ul",
 	},
 	{
 		pattern: PAGE_REGEX.bookmarkIllust,
@@ -47,7 +47,7 @@ export const URL_SELECTORS: { pattern: RegExp; selector: string }[] = [
 	},
 	{
 		pattern: PAGE_REGEX.following,
-		selector: "section>div:last-of-type",
+		selector: "section:has(>div:last-of-type)", // 親要素に挿入
 	},
 	{
 		pattern: PAGE_REGEX.userIllust,
