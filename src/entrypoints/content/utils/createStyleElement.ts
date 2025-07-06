@@ -9,6 +9,10 @@ const styles = `
     		width: 1016px;
     	}
     }
+
+    html:has(dialog:popover-open) {
+		overflow: hidden;
+	}
 `;
 
 export const createStyleElement = () => {

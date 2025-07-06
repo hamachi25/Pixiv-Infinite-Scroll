@@ -6,6 +6,7 @@ import { R18Illust } from "../../icons/illust/R18Illust";
 
 import { WorkTitle } from "./WorkTitle";
 import { Profile } from "./Profile";
+import { OpenMuteModalButton } from "@content/components/ui/OpenMuteModalButton";
 
 interface Props {
 	illusts: Work[];
@@ -52,6 +53,7 @@ export const GridIllustsContainer = ({ illusts, type }: Props) => {
 								</div>
 							</div>
 						)}
+						<OpenMuteModalButton work={illust} />
 						{/* ブックマークボタン */}
 						<BookmarkButton
 							bookmarkData={illust.bookmarkData}
