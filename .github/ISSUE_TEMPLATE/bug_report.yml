@@ -29,14 +29,6 @@ body:
           required: true
 
     - type: textarea
-      id: description
-      attributes:
-          label: Bug Summary / バグの概要
-          description: A clear and concise description of what the bug is.
-      validations:
-          required: true
-
-    - type: textarea
       id: reproduction
       attributes:
           label: To Reproduce / 再現手順
