@@ -48,7 +48,7 @@
 		"tailwindcss": "^4.1.11",
 		"typescript": "^5.8.3",
 		"typescript-eslint": "^8.37.0",
-		"wxt": "^0.20.7"
+		"wxt": "^0.21.5"
 	},
 	"lint-staged": {
 		"*.{js,ts,tsx}": [
