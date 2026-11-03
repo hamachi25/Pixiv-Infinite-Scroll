@@ -1,4 +1,4 @@
-import { PAGE_REGEX } from "@/constants/urlRegex";
+import { PAGE_REGEX, getPagePath } from "@/constants/urlRegex";
 import { Work } from "@/types/works";
 import { TagMute, UserMute } from "@/types/storage";
 
@@ -33,7 +33,7 @@ export const filterFirstPageWorks = async (
 		isMute: boolean;
 	},
 ) => {
-	const pathName = location.pathname;
+	const pathName = getPagePath(location);
 
 	if (muteSettings.tags.length === 0 && muteSettings.users.length === 0) {
 		return data;

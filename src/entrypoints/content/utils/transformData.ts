@@ -1,6 +1,6 @@
 import type { Work } from "@/types/works";
 import type { MuteSettings } from "@content/type";
-import { PAGE_REGEX } from "@/constants/urlRegex";
+import { PAGE_REGEX, getPagePath } from "@/constants/urlRegex";
 
 type AdContainer = {
 	isAdContainer: true;
@@ -25,7 +25,7 @@ const filterMuted = (
 	type: "following" | "normal",
 ): boolean | undefined => {
 	// フォロー中ページでは、ユーザーにはミュートしない
-	const pathName = location.pathname;
+	const pathName = getPagePath(location);
 	if (type === "normal" && PAGE_REGEX.following.test(pathName)) {
 		return undefined;
 	}
@@ -61,7 +61,7 @@ export const transformData = (
 	const mutedTags = new Set(muteSettings.tags);
 	const mutedItems = { mutedUserIds, mutedTags, isMute: muteSettings.isMute };
 
-	const pathName = location.pathname;
+	const pathName = getPagePath(location);
 	let illustData = null;
 
 	if (PAGE_REGEX.newNovel.test(pathName)) {

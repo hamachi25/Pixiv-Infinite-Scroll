@@ -1,7 +1,8 @@
 import type { WorkTag } from "@content/type";
+import { getPagePath, isSearchPage } from "@/constants/urlRegex";
 
 export const extractWorkTag = (url: Location): WorkTag | null => {
-	const path = url.pathname.replace("/en", "").split("/").filter(Boolean);
+	const path = getPagePath(url).replace("/en", "").split("/").filter(Boolean);
 
 	if (path.length === 0) return null;
 
@@ -18,11 +19,31 @@ export const extractWorkTag = (url: Location): WorkTag | null => {
 		illustTag.param[key] = decodeURIComponent(value);
 	});
 
+	if (isSearchPage(url)) convertSearchParams(illustTag);
+
 	const tag = extractTagFromPath(url);
 	if (tag) illustTag.param["tag"] = tag;
 
 	return illustTag;
 };
+
+/**
+ * 新しいタグ検索URL(/search?q=タグ&s_mode=tag&type=artwork)のパラメータをAPI用に変換する
+ */
+function convertSearchParams(illustTag: WorkTag) {
+	const param = illustTag.param;
+
+	// 検索ワードはパスに含まれている
+	delete param.q;
+
+	// typeはカテゴリ(artwork, illust, manga, novel)を表すので、generateRequestUrlのデフォルト値を使う
+	delete param.type;
+
+	// s_mode: tag → s_tag, tag_full → s_tag_full, tc → s_tc
+	if (param.s_mode && !param.s_mode.startsWith("s_")) {
+		param.s_mode = `s_${param.s_mode}`;
+	}
+}
 
 /**
  * URLのPathからタグを取得する

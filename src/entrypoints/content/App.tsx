@@ -15,12 +15,12 @@ import { getElementSelectorByUrl } from "./utils/getElementSelectorByUrl";
 
 import type { WorkTag, UserWorks } from "@content/type";
 import type { Work } from "@/types/works";
-import { PAGE_REGEX } from "@/constants/urlRegex.ts";
+import { PAGE_REGEX, getPagePath } from "@/constants/urlRegex.ts";
 import { fetchData } from "./fetch/fetch";
 import { MuteContext } from "./context";
 
 const InnerContent = ({ works }: { works: Work[] }) => {
-	const pathName = location.pathname;
+	const pathName = getPagePath(location);
 
 	// ユーザーの小説一覧
 	if (PAGE_REGEX.userNovel.test(pathName)) {
@@ -159,8 +159,8 @@ const App = () => {
 
 		// ユーザーのイラスト・小説のidをまとめて取得
 		if (
-			PAGE_REGEX.userIllust.test(location.pathname) ||
-			PAGE_REGEX.userNovel.test(location.pathname)
+			PAGE_REGEX.userIllust.test(getPagePath(location)) ||
+			PAGE_REGEX.userNovel.test(getPagePath(location))
 		) {
 			if (!tag.path.other) {
 				setHasMore(false);
@@ -252,8 +252,8 @@ const App = () => {
 	// ユーザー作品ページでミュートを行うと、空のdivが追加されるので非表示
 	useEffect(() => {
 		if (
-			!PAGE_REGEX.userIllust.test(location.pathname) &&
-			!PAGE_REGEX.userNovel.test(location.pathname)
+			!PAGE_REGEX.userIllust.test(getPagePath(location)) &&
+			!PAGE_REGEX.userNovel.test(getPagePath(location))
 		) {
 			return;
 		}

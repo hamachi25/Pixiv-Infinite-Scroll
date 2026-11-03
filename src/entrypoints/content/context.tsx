@@ -4,7 +4,7 @@ import { settingsItem } from "@/utils/storage";
 import { fetchOrigin } from "./fetch/fetch";
 import { getElementSelectorByUrl } from "./utils/getElementSelectorByUrl";
 import { extractCsrfToken, extractIsSensitive } from "./utils/extractDataFromOrigin";
-import { PAGE_REGEX } from "@/constants/urlRegex";
+import { PAGE_REGEX, getPagePath } from "@/constants/urlRegex";
 
 interface HTMLAnchorElementWithHandleClick extends HTMLAnchorElement {
 	_handleClick?: (e: MouseEvent) => void;
@@ -67,7 +67,7 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
 
 	// センシティブ作品の表示設定を取得
 	useEffect(() => {
-		const pathname = location.pathname;
+		const pathname = getPagePath(location);
 		if (!PAGE_REGEX.newIllust.test(pathname) && !PAGE_REGEX.bookmarkIllust.test(pathname)) {
 			return;
 		}
