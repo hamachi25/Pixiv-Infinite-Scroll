@@ -35,6 +35,7 @@ export const FollowingItem = ({ profile }: Props) => {
 	};
 
 	const comment = profile.userComment;
+	const firstNovel = profile.novels?.[0];
 	const displaySingleNovelItem =
 		profile.illusts &&
 		profile.illusts.length >= 1 &&
@@ -117,8 +118,8 @@ export const FollowingItem = ({ profile }: Props) => {
 												type="follow"
 											/>
 										))}
-									{displaySingleNovelItem && profile.novels && (
-										<NovelContainer novel={profile.novels[0]} type="follow" />
+									{displaySingleNovelItem && firstNovel && (
+										<NovelContainer novel={firstNovel} type="follow" />
 									)}
 								</ul>
 							</div>

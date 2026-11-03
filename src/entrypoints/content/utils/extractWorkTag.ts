@@ -4,11 +4,12 @@ import { getPagePath, isSearchPage } from "@/constants/urlRegex";
 export const extractWorkTag = (url: Location): WorkTag | null => {
 	const path = getPagePath(url).replace("/en", "").split("/").filter(Boolean);
 
-	if (path.length === 0) return null;
+	const type = path[0];
+	if (!type) return null;
 
 	const illustTag: WorkTag = {
 		path: {
-			type: path[0],
+			type,
 			other: path.slice(1),
 		},
 		param: {},
@@ -61,9 +62,9 @@ function extractTagFromPath(url: Location): string | null {
 	const bookmarksMatch = path.match(patterns.bookmarks);
 	const userIllustMatch = path.match(patterns.userIllust);
 
-	if (followingMatch) return decodeURIComponent(followingMatch[1]);
-	if (bookmarksMatch) return decodeURIComponent(bookmarksMatch[1]);
-	if (userIllustMatch) return decodeURIComponent(userIllustMatch[1]);
+	if (followingMatch?.[1]) return decodeURIComponent(followingMatch[1]);
+	if (bookmarksMatch?.[1]) return decodeURIComponent(bookmarksMatch[1]);
+	if (userIllustMatch?.[1]) return decodeURIComponent(userIllustMatch[1]);
 
 	return null;
 }

@@ -10,8 +10,8 @@ export const ImportButton = () => {
 	const ref = useRef<HTMLInputElement>(null);
 
 	const getFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (!e.target.files) return;
-		const file = e.target.files[0];
+		const file = e.target.files?.[0];
+		if (!file) return;
 
 		const reader = new FileReader();
 		reader.onload = (event) => {

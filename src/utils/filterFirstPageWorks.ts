@@ -1,6 +1,6 @@
 import { PAGE_REGEX, getPagePath } from "@/constants/urlRegex";
-import { Work } from "@/types/works";
-import { TagMute, UserMute } from "@/types/storage";
+import type { Work } from "@/types/works";
+import type { TagMute, UserMute } from "@/types/storage";
 
 const filterMuted = (
 	work: Work,

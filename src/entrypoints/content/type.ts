@@ -1,4 +1,4 @@
-import { UserMute } from "@/types/storage";
+import type { UserMute } from "@/types/storage";
 
 export type WorkTag = {
 	path: {
