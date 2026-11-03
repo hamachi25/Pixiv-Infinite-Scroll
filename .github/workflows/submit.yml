@@ -10,10 +10,6 @@ on:
                 default: false
                 type: boolean
                 description: Skip submission and perform a dry run
-            skipSubmit:
-                default: false
-                type: boolean
-                description: Skip submission for review
             bump_type:
                 description: "v[major].[minor].[patch]"
                 required: true
@@ -40,7 +36,7 @@ jobs:
             - name: Setup NodeJS
               uses: actions/setup-node@v4
               with:
-                  node-version: 20
+                  node-version: 24
                   cache: "pnpm"
 
             - name: Install dependencies
@@ -82,14 +78,20 @@ jobs:
                     --firefox-zip .output/*-firefox.zip --firefox-sources-zip .output/*-sources.zip
               env:
                   DRY_RUN: ${{ inputs.dryRun }}
+                  CHROME_API_VERSION: v2
                   CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
-                  CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
-                  CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
-                  CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
-                  CHROME_SKIP_SUBMIT_REVIEW: ${{ inputs.skipSubmit }}
+                  CHROME_PUBLISHER_ID: ${{ secrets.CHROME_PUBLISHER_ID }}
+                  CHROME_SERVICE_ACCOUNT_CLIENT_EMAIL: ${{ secrets.CHROME_SERVICE_ACCOUNT_CLIENT_EMAIL }}
+                  CHROME_SERVICE_ACCOUNT_PRIVATE_KEY: ${{ secrets.CHROME_SERVICE_ACCOUNT_PRIVATE_KEY }}
+                  CHROME_CANCEL_PENDING: ${{ secrets.CHROME_CANCEL_PENDING }}
+                  CHROME_SKIP_REVIEW: ${{ secrets.CHROME_SKIP_REVIEW }}
+                  CHROME_PUBLISH_TYPE: ${{ secrets.CHROME_PUBLISH_TYPE }}
+                  CHROME_DEPLOY_PERCENTAGE: ${{ secrets.CHROME_DEPLOY_PERCENTAGE }}
                   FIREFOX_EXTENSION_ID: ${{ secrets.FIREFOX_EXTENSION_ID }}
                   FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
                   FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
+                  FIREFOX_CHANNEL: ${{ secrets.FIREFOX_CHANNEL }}
+                  FIREFOX_SKIP_SUBMIT_REVIEW: ${{ secrets.FIREFOX_SKIP_SUBMIT_REVIEW }}
 
             - name: Release
               if: ${{ !inputs.dryRun }}
