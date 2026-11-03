@@ -35,12 +35,12 @@ export default defineContentScript({
 
 		ctx.addEventListener(window, "wxt:locationchange", async ({ newUrl }) => {
 			const params = new URLSearchParams(newUrl.search);
-			const isMatchFound = isMatchUrl(location);
+			const isMatchFound = isMatchUrl(newUrl);
 
 			if (isMatchFound && !params.has("p")) {
 				ui?.remove();
 
-				anchor = getElementSelectorByUrl(location);
+				anchor = getElementSelectorByUrl(newUrl);
 				if (!anchor) return;
 
 				ui = await mountUi(ctx, anchor);
@@ -52,7 +52,7 @@ export default defineContentScript({
 	},
 });
 
-const isMatchUrl = (url: Location) =>
+const isMatchUrl = (url: Location | URL) =>
 	Object.values(PAGE_REGEX).some((pattern) => pattern.test(getPagePath(url)));
 
 const mountUi = async (ctx: ContentScriptContext, anchor: string) => {
